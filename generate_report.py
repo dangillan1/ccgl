@@ -661,10 +661,12 @@ def main():
     now = datetime.now()
     gen_time = now.strftime("%B %d, %Y · %I:%M %p")
 
-    # Calculate facility health
-    rooms = state.get("current_readings", {}).get("rooms", {})
-    scores = [health_score(rooms[rn]) for rn in ["Flower 1", "Flower 2", "Mom", "Cure Room", "Dry Room"] if rn in rooms]
-    overall = int(sum(scores) / len(scores)) if scores else 80
+    # Calculate facility health — use module uptime (matches System Health section)
+    fac = state.get("facility_health", {})
+    mod_online = fac.get("modules_online", 22)
+    mod_offline = fac.get("modules_offline", 6)
+    mod_total = mod_online + mod_offline
+    overall = int(mod_online / mod_total * 100) if mod_total > 0 else 80
     h_color = C["good"] if overall >= 80 else C["warning"] if overall >= 60 else C["critical"]
 
     # Growth stages for header
