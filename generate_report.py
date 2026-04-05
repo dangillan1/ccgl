@@ -116,12 +116,10 @@ def build_alerts(state):
     </div>
     <div class="alert-metrics">
         <div class="alert-metric"><div class="alert-metric-value" style="color:{C['warning']}">{hum:.1f}%</div><div class="alert-metric-label">Current RH</div></div>
-        <div class="alert-metric"><div class="alert-metric-value" style="color:{C['good']}">45-55%</div><div class="alert-metric-label">Target RH</div></div>
         <div class="alert-metric"><div class="alert-metric-value" style="color:{C['warning']}">{vpd:.2f}</div><div class="alert-metric-label">VPD (kPa)</div></div>
-        <div class="alert-metric"><div class="alert-metric-value" style="color:{C['good']}">1.0-1.5</div><div class="alert-metric-label">Target VPD</div></div>
     </div>
-    <div class="alert-description">Flower 1 humidity is {hum - 55:.0f} percentage points above optimal ceiling. At Week 4 flower with dense bud sites forming, this creates a prime environment for Botrytis cinerea (bud rot). VPD at {vpd:.2f} kPa is below the 1.0 minimum — transpiration is suppressed, moisture pooling in the canopy.</div>
-    <div class="alert-ai"><strong>🧠 AI Analysis:</strong> The 6h trend shows humidity dropped 24.9% from 96.2%, suggesting a dehumidification cycle kicked in but hasn't achieved target. The gap between current ({hum:.1f}%) and optimal (55%) requires approximately 30% more dehumidification capacity. Cross-referencing with substrate VWC — wet media is contributing to room humidity through evapotranspiration.</div>
+    <div class="alert-description">Flower 1 humidity elevated at {hum:.1f}% during Week 4 flower with dense bud sites forming. VPD at {vpd:.2f} kPa — low transpiration increases moisture risk in the canopy.</div>
+    <div class="alert-ai"><strong>🧠 AI Analysis:</strong> Humidity trend suggests dehumidification is running but hasn't stabilized. Substrate VWC contributing to room humidity through evapotranspiration.</div>
     <div class="alert-action">🎯 <strong>Action:</strong> Increase dehumidifier runtime. Add supplemental exhaust during lights-on (7 AM - 7 PM). Position portable dehu at canopy height for maximum moisture capture.</div>
 </div>\n'''
 
@@ -554,7 +552,7 @@ def build_priorities(state):
         {"level": "urgent", "tag": "URGENT", "title": "Hand Water Mother Room Immediately",
          "desc": "Substrate VWC at 9.8% — approaching permanent wilt point. Hand water to field capacity. Check irrigation timer and every emitter."},
         {"level": "urgent", "tag": "URGENT", "title": "Increase Flower 1 Dehumidification",
-         "desc": "Humidity at 71.3% (target 45-55%) with VPD at 0.97 kPa. Deploy additional dehu capacity and increase exhaust fan runtime during lights-on."},
+         "desc": "Humidity elevated with low VPD. Deploy additional dehu capacity and increase exhaust fan runtime during lights-on."},
         {"level": "high", "tag": "HIGH", "title": "Pre-Condition Dry Room for F2 Harvest",
          "desc": "F2 harvest ~April 13. Dry Room needs to reach 60°F / 60% RH. Begin conditioning 48h before harvest."},
         {"level": "high", "tag": "HIGH", "title": "Begin F2 Trichome Monitoring",

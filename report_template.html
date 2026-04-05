@@ -7,6 +7,7 @@
     <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{background:#0a1628;color:#d0d8e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;height:100%;line-height:1.7}
+body.auth-locked{overflow:hidden;position:fixed;width:100%;height:100%}
 body{display:flex;font-size:13px}
 .sidebar{position:fixed;left:0;top:0;width:220px;height:100vh;background:#071318;border-right:1px solid #1a3050;overflow-y:auto;padding:24px 16px;z-index:1000}
 .sidebar-brand{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:32px}
@@ -318,7 +319,7 @@ body{background:white;color:black}
 }
 </style>
 </head>
-<body>
+<body class="auth-locked">
     <!-- Password Gate -->
     <div id="authOverlay" style="position:fixed;inset:0;z-index:9999;background:#0a1628;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px;padding:20px;padding-bottom:15vh">
         <img src="{{LOGO_DATA_URI}}" alt="CCGL" style="width:110px;height:110px;border-radius:20px">
@@ -449,8 +450,8 @@ document.addEventListener('DOMContentLoaded', function() {
             authOverlayEl.style.transition='opacity .4s';
             setTimeout(()=>{
                 authOverlayEl.style.display='none';
+                document.body.classList.remove('auth-locked');
                 window.scrollTo(0,0);
-                document.body.style.zoom='1';
                 var vp=document.querySelector('meta[name="viewport"]');
                 if(vp) vp.setAttribute('content','width=device-width,initial-scale=1.0,maximum-scale=1.0');
                 setTimeout(()=>{if(vp) vp.setAttribute('content','width=device-width,initial-scale=1.0');},100);
@@ -463,7 +464,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(()=>{authError.textContent='';authInput.style.borderColor='#1a3050'},2000);
         }
     }
-    if(sessionStorage.getItem('ccgl_auth')==='1'){authOverlayEl.style.display='none';window.scrollTo(0,0);}
+    if(sessionStorage.getItem('ccgl_auth')==='1'){authOverlayEl.style.display='none';document.body.classList.remove('auth-locked');window.scrollTo(0,0);}
     if(authBtn) authBtn.addEventListener('click', tryAuth);
     if(authInput) authInput.addEventListener('keydown', function(e){if(e.key==='Enter')tryAuth()});
 
