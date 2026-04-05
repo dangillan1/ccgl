@@ -1,6 +1,9 @@
 # Archive reports (generated hourly, don't need in repo)
 reports/*.html
 
+# Setup script (one-time use)
+setup-repo.sh
+
 # macOS
 .DS_Store
 
