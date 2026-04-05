@@ -183,7 +183,7 @@ def build_room_cards(state):
     for rn in room_order:
         if rn not in rooms: continue
         rd = rooms[rn]
-        sensors = rd.get("sensors", {})
+        sensors = rd
         hs = health_score(rd)
         stage = stages.get(rn, "Active" if rn != "Dry Room" else "Idle")
 
@@ -227,7 +227,7 @@ def build_room_cards(state):
 
 
 def build_feed_section(state):
-    feed = state.get("current_readings", {}).get("rooms", {}).get("Central Feed System", {}).get("sensors", {})
+    feed = state.get("current_readings", {}).get("rooms", {}).get("Central Feed System", {})
     trends = state.get("trends", {}).get("Central Feed System", {})
     tank = state.get("tank_sensors", {})
 
@@ -247,10 +247,10 @@ def build_feed_section(state):
 
     # Get substrate data for cross-room comparison
     rooms = state.get("current_readings", {}).get("rooms", {})
-    f1_ec = rooms.get("Flower 1", {}).get("sensors", {}).get("Substrate EC", {}).get("value", 0)
-    f1_vwc = rooms.get("Flower 1", {}).get("sensors", {}).get("Substrate VWC", {}).get("value", 0)
-    mom_ec = rooms.get("Mom", {}).get("sensors", {}).get("Substrate EC", {}).get("value", 0)
-    mom_vwc = rooms.get("Mom", {}).get("sensors", {}).get("Substrate VWC", {}).get("value", 0)
+    f1_ec = rooms.get("Flower 1", {}).get("Substrate EC", {}).get("value", 0)
+    f1_vwc = rooms.get("Flower 1", {}).get("Substrate VWC", {}).get("value", 0)
+    mom_ec = rooms.get("Mom", {}).get("Substrate EC", {}).get("value", 0)
+    mom_vwc = rooms.get("Mom", {}).get("Substrate VWC", {}).get("value", 0)
 
     html = f'''<div class="feed-grid">
     <div class="feed-card">
@@ -295,10 +295,8 @@ def build_feed_section(state):
 </div>
 
 <div class="card">
-    <details open>
-        <summary>⚙ Fertigation Intelligence Deep Dive</summary>
-        <div style="padding:0">
-            <div class="card-grid" style="margin-top:8px">
+    <h3>⚙ Fertigation Intelligence Deep Dive</h3>
+    <div class="card-grid">
                 <div class="insight-card" style="border-left-color:{C['cyan']}">
                     <h4>📊 Substrate Cross-Room Comparison</h4>
                     <div class="dive-metrics">
@@ -319,9 +317,7 @@ def build_feed_section(state):
                     <p><strong>Mom Feed-to-Runoff:</strong> Feed EC 0.08 vs substrate EC {mom_ec:.2f} — low ratio consistent with dry-down flushing nutrients.</p>
                     <div class="callout callout-teal"><strong>System Limitation:</strong> Injector dosing rates not available via GrowLink API.</div>
                 </div>
-            </div>
-        </div>
-    </details>
+    </div>
 </div>'''
 
     return html
@@ -335,7 +331,7 @@ def build_day_night(state):
     html = '<div class="dn-grid">\n'
 
     # Flower 1
-    f1 = rooms.get("Flower 1", {}).get("sensors", {})
+    f1 = rooms.get("Flower 1", {})
     f1_t = trends.get("Flower 1", {})
     f1_lights = "☀️ Lights ON" if 7 <= hour < 19 else "🌙 Lights OFF"
     f1_period = "Day Cycle" if 7 <= hour < 19 else "Night Cycle"
@@ -352,7 +348,7 @@ def build_day_night(state):
 </div>\n'''
 
     # Flower 2
-    f2 = rooms.get("Flower 2", {}).get("sensors", {})
+    f2 = rooms.get("Flower 2", {})
     f2_t = trends.get("Flower 2", {})
     f2_lights = "☀️ Lights ON" if 6 <= hour < 18 else "🌙 Lights OFF"
     f2_period = "Day Cycle" if 6 <= hour < 18 else "Night Cycle"
@@ -369,7 +365,7 @@ def build_day_night(state):
 </div>\n'''
 
     # Mom
-    mom = rooms.get("Mom", {}).get("sensors", {})
+    mom = rooms.get("Mom", {})
     mom_t = trends.get("Mom", {})
     mom_lights = "☀️ Lights ON" if 8 <= hour or hour < 2 else "🌙 Lights OFF"
     mom_period = "Day Cycle" if 8 <= hour or hour < 2 else "Night Cycle"
@@ -384,7 +380,7 @@ def build_day_night(state):
 </div>\n'''
 
     # Cure Room
-    cure = rooms.get("Cure Room", {}).get("sensors", {})
+    cure = rooms.get("Cure Room", {})
     html += f'''<div class="dn-card">
     <h4>🏺 Cure Room — Passive Monitoring</h4>
     <div class="dn-row"><span class="dn-label">Temperature</span><span class="dn-value" style="color:{C['good']}">{cure.get("Ambient Temperature", {}).get("value", 0):.1f}°F</span></div>
@@ -408,10 +404,10 @@ def build_deep_dive(state):
     rooms = state.get("current_readings", {}).get("rooms", {})
     dry = state.get("dry_room", {})
     anomalies = state.get("anomalies", [])
-    f1 = rooms.get("Flower 1", {}).get("sensors", {})
-    f2 = rooms.get("Flower 2", {}).get("sensors", {})
-    mom = rooms.get("Mom", {}).get("sensors", {})
-    cure = rooms.get("Cure Room", {}).get("sensors", {})
+    f1 = rooms.get("Flower 1", {})
+    f2 = rooms.get("Flower 2", {})
+    mom = rooms.get("Mom", {})
+    cure = rooms.get("Cure Room", {})
     stages = state.get("growth_stages", {})
 
     html = ''
