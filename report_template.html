@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCGL GrowLink Report</title>
+    <style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#0a1628;color:#d0d8e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;height:100%;line-height:1.7}
+body{display:flex;font-size:13px}
+.sidebar{position:fixed;left:0;top:0;width:220px;height:100vh;background:#071318;border-right:1px solid #1a3050;overflow-y:auto;padding:24px 16px;z-index:1000}
+.sidebar-brand{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:32px}
+.sidebar-brand img.brand-logo{width:64px;height:64px;border-radius:12px;border:1px solid #1a305066}
+.sidebar-brand img.brand-wordmark{width:140px;height:auto;opacity:0.9}
+.sidebar-nav{display:flex;flex-direction:column;gap:8px}
+.nav-link{display:block;padding:10px 12px;color:#7a8fa3;text-decoration:none;font-size:13px;border-radius:6px;transition:all .2s;border-left:3px solid transparent}
+.nav-link:hover{color:#4E9E8E}
+.nav-link.active{color:#4E9E8E;border-left:3px solid #4E9E8E;background:#0f1f35}
+.nav-divider{height:1px;background:#1a3050;margin:12px 0}
+.main-content{margin-left:220px;padding:32px;max-width:1200px;flex:1}
+.report-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:48px;padding:24px;border-bottom:2px solid #4E9E8E33;background:linear-gradient(180deg,#0f1f3533 0%,transparent 100%);border-radius:12px}
+.report-header h1{font-size:24px;font-weight:700;color:white;margin-bottom:8px}
+.header-meta{font-size:13px;color:#7a8fa3;margin-bottom:4px}
+.header-time{font-size:11px;color:#5a7088;text-transform:uppercase;letter-spacing:.5px}
+.header-health{display:flex;flex-direction:column;align-items:center;gap:8px}
+.health-number{font-size:32px;font-weight:700}
+.health-label{font-size:11px;color:#7a8fa3;text-transform:uppercase;letter-spacing:.5px}
+section{margin-bottom:48px}
+section h2{font-size:20px;color:#4E9E8E;font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid #4E9E8E33}
+
+/* Cards */
+.card{background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:24px;transition:all .3s;margin-bottom:16px}
+.card:hover{border-color:#4E9E8E44;box-shadow:0 4px 12px rgba(78,158,142,.1)}
+.card h3{font-size:15px;font-weight:600;color:white;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px;margin-bottom:20px}
+.card-status-dot{display:inline-block;width:12px;height:12px;border-radius:50%;flex-shrink:0}
+
+/* Alert Cards - Enhanced */
+.alert-card{border-left:4px solid #e74c3c;background:linear-gradient(135deg,#e74c3c08 0%,#0f1f35 100%)}
+.alert-card.warning{border-left-color:#f39c12;background:linear-gradient(135deg,#f39c1208 0%,#0f1f35 100%)}
+.alert-card.info{border-left-color:#4A90B5;background:linear-gradient(135deg,#4A90B508 0%,#0f1f35 100%)}
+.alert-card.good{border-left-color:#2ecc71;background:linear-gradient(135deg,#2ecc7108 0%,#0f1f35 100%)}
+.alert-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.alert-icon{font-size:24px;flex-shrink:0}
+.alert-title{font-size:14px;font-weight:600;color:white;flex:1}
+.alert-description{font-size:13px;color:#d0d8e0;margin-bottom:12px;line-height:1.6}
+.alert-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:12px}
+.alert-metric{background:#07131888;border-radius:8px;padding:10px 12px;text-align:center}
+.alert-metric-value{font-size:16px;font-weight:700;margin-bottom:2px}
+.alert-metric-label{font-size:10px;color:#7a8fa3;text-transform:uppercase;letter-spacing:.5px}
+.alert-action{padding:12px;background:#07131888;border-radius:8px;font-size:12px;color:#8DC63F;border-left:3px solid #8DC63F;margin-top:8px}
+.alert-ai{padding:12px;background:linear-gradient(135deg,#4E9E8E11 0%,#4A90B508 100%);border-radius:8px;font-size:12px;color:#d0d8e0;border-left:3px solid #4E9E8E;margin-top:8px;line-height:1.6}
+.alert-ai strong{color:#4E9E8E}
+
+/* Badges */
+.badge{display:inline-block;padding:3px 8px;border-radius:3px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.badge-critical{background:#e74c3c;color:white}
+.badge-warning{background:#f39c12;color:white}
+.badge-good{background:#2ecc71;color:white}
+.badge-info{background:#4A90B5;color:white}
+
+/* Growth stage */
+.growth-stage{display:inline-block;font-size:10px;padding:4px 8px;background:#4E9E8E22;border-radius:4px;color:#4E9E8E;text-transform:uppercase;letter-spacing:.5px;margin-left:auto;flex-shrink:0}
+
+/* Health bar */
+.health-bar{width:100%;height:8px;background:#071318;border-radius:4px;overflow:hidden;margin:12px 0 16px 0}
+.health-bar-fill{height:100%;transition:width .3s}
+.health-fill-good{background:linear-gradient(90deg,#4E9E8E,#8DC63F)}
+.health-fill-warning{background:linear-gradient(90deg,#f39c12,#e17055)}
+.health-fill-critical{background:linear-gradient(90deg,#e74c3c,#e84393)}
+
+/* Metric grid */
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:12px;margin-top:16px}
+.metric-item{background:#07131866;padding:12px;border-radius:8px;border-left:3px solid transparent}
+.metric-item.status-good{border-left-color:#2ecc71}
+.metric-item.status-warning{border-left-color:#f39c12}
+.metric-item.status-critical{border-left-color:#e74c3c}
+.metric-value{font-size:14px;font-weight:600;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.metric-label{font-size:10px;color:#7a8fa3;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.metric-range{font-size:9px;color:#5a7088}
+
+/* Executive grid */
+.exec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.exec-card{background:#07131888;border:1px solid #1a3050;border-radius:12px;padding:20px;text-align:center;transition:all .3s}
+.exec-card:hover{border-color:#4E9E8E44;transform:translateY(-2px)}
+.exec-number{font-size:28px;font-weight:700;color:#4E9E8E;margin-bottom:6px}
+.exec-label{font-size:11px;color:#7a8fa3;text-transform:uppercase;letter-spacing:.5px}
+
+/* Colored insight cards */
+.insight-card{background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:20px;border-left:4px solid #4E9E8E;margin-bottom:16px}
+.insight-card.f1{border-left-color:#f39c12}
+.insight-card.f2{border-left-color:#8DC63F}
+.insight-card.mom{border-left-color:#e74c3c}
+.insight-card.cure{border-left-color:#9b59b6}
+.insight-card.dry{border-left-color:#4A90B5}
+.insight-card.feed{border-left-color:#00cec9}
+.insight-card h4{font-size:14px;font-weight:600;color:white;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.insight-card p{font-size:12px;color:#d0d8e0;line-height:1.7;margin-bottom:10px}
+
+/* Callout box */
+.callout{padding:14px 16px;border-radius:8px;font-size:12px;line-height:1.6;margin:12px 0}
+.callout-warning{background:#f39c1211;border-left:3px solid #f39c12;color:#d0d8e0}
+.callout-critical{background:#e74c3c11;border-left:3px solid #e74c3c;color:#d0d8e0}
+.callout-good{background:#2ecc7111;border-left:3px solid #2ecc71;color:#d0d8e0}
+.callout-info{background:#4A90B511;border-left:3px solid #4A90B5;color:#d0d8e0}
+.callout-teal{background:#4E9E8E11;border-left:3px solid #4E9E8E;color:#d0d8e0}
+.callout strong{color:white}
+
+/* Rec box */
+.rec-box{padding:12px;background:#07131866;border-left:3px solid #8DC63F;border-radius:6px;font-size:12px;color:#d0d8e0;margin-top:12px}
+
+/* Priority list */
+.priority-card{background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:16px 20px;margin-bottom:10px;display:flex;align-items:flex-start;gap:16px;transition:all .3s}
+.priority-card:hover{border-color:#4E9E8E44;transform:translateX(4px)}
+.priority-num{font-size:20px;font-weight:800;min-width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.priority-urgent .priority-num{background:#e74c3c22;color:#e74c3c}
+.priority-high .priority-num{background:#f39c1222;color:#f39c12}
+.priority-medium .priority-num{background:#4A90B522;color:#4A90B5}
+.priority-low .priority-num{background:#4E9E8E22;color:#4E9E8E}
+.priority-content{flex:1}
+.priority-title{font-size:13px;font-weight:600;color:white;margin-bottom:4px}
+.priority-desc{font-size:12px;color:#7a8fa3;line-height:1.5}
+.priority-tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.priority-urgent .priority-tag{background:#e74c3c22;color:#e74c3c}
+.priority-high .priority-tag{background:#f39c1222;color:#f39c12}
+.priority-medium .priority-tag{background:#4A90B522;color:#4A90B5}
+.priority-low .priority-tag{background:#4E9E8E22;color:#4E9E8E}
+
+/* Day/Night analysis cards */
+.dn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
+.dn-card{background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:20px;border-top:3px solid #4E9E8E}
+.dn-card.alert-state{border-top-color:#f39c12}
+.dn-card h4{font-size:14px;font-weight:600;color:white;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.dn-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a305033;font-size:12px}
+.dn-row:last-child{border-bottom:none}
+.dn-label{color:#7a8fa3}
+.dn-value{font-weight:600}
+.dn-takeaway{padding:12px;background:#07131888;border-radius:8px;margin-top:14px;font-size:12px;line-height:1.6}
+.dn-takeaway strong{color:#4E9E8E}
+
+/* System health cards */
+.sys-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.sys-card{background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:20px;border-top:3px solid #4E9E8E}
+.sys-card.offline{border-top-color:#f39c12}
+.sys-card.issues{border-top-color:#e74c3c}
+.sys-card h4{font-size:14px;font-weight:600;color:white;margin-bottom:14px}
+.module-list{list-style:none;margin-top:8px}
+.module-list li{padding:8px 0;border-bottom:1px solid #1a305066;font-size:12px;color:#7a8fa3;display:flex;align-items:center;gap:8px}
+.module-list li:last-child{border-bottom:none}
+.module-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+
+/* Feed cards */
+.feed-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:20px}
+.feed-card{background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:20px;border-top:3px solid #4E9E8E;text-align:center;transition:all .3s}
+.feed-card:hover{border-color:#4E9E8E44;transform:translateY(-2px)}
+.feed-card.alert{border-top-color:#e74c3c}
+.feed-value{font-size:28px;font-weight:700;margin-bottom:4px}
+.feed-label{font-size:11px;color:#7a8fa3;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.feed-range{font-size:10px;color:#5a7088}
+.feed-trend{font-size:11px;margin-top:6px}
+
+/* Deep dive cards */
+.dive-card{background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:24px;margin-bottom:20px;border-left:4px solid #4E9E8E}
+.dive-card.f1{border-left-color:#f39c12}
+.dive-card.f2{border-left-color:#8DC63F}
+.dive-card.mom{border-left-color:#e74c3c}
+.dive-card.facility{border-left-color:#4A90B5}
+.dive-card h3{font-size:16px;font-weight:600;color:white;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.dive-card p{font-size:12px;line-height:1.7;margin-bottom:12px;color:#d0d8e0}
+.dive-section{margin-bottom:16px}
+.dive-section-title{font-size:12px;font-weight:600;color:#4E9E8E;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid #1a305044}
+.dive-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:12px 0}
+.dive-metric{background:#07131866;border-radius:8px;padding:12px;text-align:center}
+.dive-metric-val{font-size:18px;font-weight:700;margin-bottom:2px}
+.dive-metric-label{font-size:9px;color:#7a8fa3;text-transform:uppercase;letter-spacing:.5px}
+.dive-checklist{margin:8px 0 8px 16px;font-size:12px;color:#d0d8e0;line-height:1.8}
+.dive-checklist li{margin-bottom:4px;padding-left:4px}
+
+/* Details/summary */
+details{cursor:pointer}
+summary{padding:12px 0;color:#4E9E8E;font-weight:600;font-size:13px;user-select:none;cursor:pointer}
+summary:hover{color:#8DC63F}
+details[open] summary{margin-bottom:12px}
+
+/* Footer */
+.report-footer{margin-top:64px;padding:32px;border-top:1px solid #1a3050;text-align:center;color:#7a8fa3}
+.footer-brand{font-size:13px;font-weight:700;color:#4E9E8E;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.footer-tagline{font-size:12px;color:#d0d8e0;margin-bottom:12px;font-style:italic}
+.footer-meta{font-size:11px;color:#5a7088}
+
+/* Responsive */
+@media(max-width:768px){
+.sidebar{display:none}
+.main-content{margin-left:0;padding:16px}
+.card-grid,.dn-grid,.feed-grid,.sys-grid,.exec-grid{grid-template-columns:1fr}
+.report-header{flex-direction:column}
+.header-health{margin-top:16px}
+}
+@media print{
+.sidebar{display:none}
+.main-content{margin-left:0;background:white;color:black}
+body{background:white;color:black}
+}
+</style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <img class="brand-logo" src="{{LOGO_DATA_URI}}" alt="CCGL">
+            <img class="brand-wordmark" src="{{WORDMARK_DATA_URI}}" alt="Cape Cod Grow Lab">
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#alerts" class="nav-link active">Alerts & Warnings</a>
+            <a href="#rooms" class="nav-link">Room Status</a>
+            <a href="#feed" class="nav-link">Feed & Fertigation</a>
+            <div class="nav-divider"></div>
+            <a href="#daynight" class="nav-link">Day vs Night</a>
+            <a href="#deepdive" class="nav-link">Deep Dive & Intel</a>
+            <a href="#priorities" class="nav-link">Priority Actions</a>
+            <div class="nav-divider"></div>
+            <a href="#health" class="nav-link">System Health</a>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <header class="report-header">
+            <div>
+                <h1>CCGL GrowLink Report</h1>
+                <div class="header-meta">{{HEADER_GROWTH_STAGES}}</div>
+                <div class="header-time">{{HEADER_TIMESTAMPS}}</div>
+            </div>
+            <div class="header-health">
+                <div class="health-number" style="color:#2ecc71">{{FACILITY_HEALTH_SCORE}}</div>
+                <div class="health-label">Facility Health</div>
+            </div>
+        </header>
+
+        <section id="alerts">
+            <h2>Critical Alerts & AI Analysis</h2>
+            
+            {{ALERTS_SECTION}}
+        </section>
+
+        <section id="rooms">
+            <h2>Room-by-Room Status</h2>
+            
+            {{ROOMS_SECTION}}
+        </section>
+
+        <section id="feed">
+            <h2>Central Feed & Fertigation Intelligence</h2>
+            
+            {{FEED_SECTION}}
+        </section>
+
+        <section id="daynight">
+            <h2>Day vs Night Analysis</h2>
+            
+            {{DAYNIGHT_SECTION}}
+        </section>
+
+        <section id="deepdive">
+            <h2>Cultivation Deep Dive & Intelligence</h2>
+            
+            {{DEEPDIVE_SECTION}}
+        </section>
+
+        <section id="priorities">
+            <h2>Priority Action List</h2>
+            
+            {{PRIORITIES_SECTION}}
+        </section>
+
+        <section id="health">
+            <h2>System Health & Infrastructure</h2>
+            
+            {{HEALTH_SECTION}}
+        </section>
+
+        <footer class="report-footer">
+            <div class="footer-brand">Cape Cod Grow Lab</div>
+            <div class="footer-tagline">Mindfully Cultivated Cannabis · Brewster, MA</div>
+            <div class="footer-meta">{{FOOTER_META}}</div>
+        </footer>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                navLinks.forEach(link => link.classList.remove('active'));
+                const activeLink = document.querySelector('.nav-link[href="#' + entry.target.id + '"]');
+                if (activeLink) activeLink.classList.add('active');
+            }
+        });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    sections.forEach(section => observer.observe(section));
+});
+</script>
+</body>
+</html>

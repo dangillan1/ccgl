@@ -1,0 +1,14 @@
+# Archive reports (generated hourly, don't need in repo)
+reports/*.html
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# Editor
+*.swp
+*.swo
+*~
