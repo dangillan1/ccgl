@@ -11,6 +11,8 @@ import shutil
 from datetime import datetime
 from pathlib import Path
 
+from event_tracker import process_readings, format_duration, format_value
+
 
 # --- Paths ---
 BASE_DIR = Path(__file__).parent
@@ -171,6 +173,128 @@ def build_alerts(state):
 </div>\n'''
 
     html += '</div>'
+    return html
+
+
+def build_events_section(state):
+    """Build the Event Timeline section from event tracker data."""
+    events = process_readings(state)
+    active = events.get("active", [])
+    resolved = events.get("resolved", [])
+    cycle_log = events.get("cycle_log", {})
+
+    if not active and not resolved and not cycle_log:
+        return '<div class="evt-empty">No significant events tracked yet. Events will accumulate as the system monitors conditions over time.</div>'
+
+    html = ''
+
+    # --- Active Events ---
+    if active:
+        html += '<h3 style="font-size:14px;color:#f39c12;margin-bottom:12px;">Active Events</h3>\n'
+        html += '<div class="evt-grid">\n'
+        for evt in sorted(active, key=lambda e: (0 if e.get("escalated") else 1, 0 if e["severity"] == "critical" else 1)):
+            sev = evt["severity"]
+            escalated = evt.get("escalated", False)
+            badge_cls = "escalated" if escalated else sev
+            badge_text = "ESCALATED" if escalated else sev.upper()
+            hours = evt.get("hours_active", 0)
+            consec = evt.get("consecutive_hours", 1)
+            reopen = evt.get("reopened_count", 0)
+            cur_val = format_value(evt["sensor"], evt["current_value"])
+            peak_val = format_value(evt["sensor"], evt.get("peak_value", evt["current_value"]))
+            stage = evt.get("growth_stage", "")
+
+            html += f'<div class="evt-card severity-{sev}">\n'
+            html += f'  <span class="evt-badge {badge_cls}">{badge_text}</span>'
+            if reopen > 0:
+                html += f' <span class="evt-badge warning">Reopened ×{reopen}</span>'
+            html += f'\n  <div class="evt-title">{evt["label"]}</div>\n'
+            html += f'  <div class="evt-room">{evt["room"]}'
+            if stage:
+                html += f' · {stage}'
+            html += '</div>\n'
+            html += f'  <div class="evt-desc">{evt["description"]}</div>\n'
+
+            # Metrics grid
+            html += '  <div class="evt-meta">\n'
+            html += f'    <div class="evt-meta-item"><div class="evt-meta-val" style="color:{"#e74c3c" if sev == "critical" else "#f39c12"}">{cur_val}</div><div class="evt-meta-label">Current</div></div>\n'
+            html += f'    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#e74c3c">{peak_val}</div><div class="evt-meta-label">Peak</div></div>\n'
+            html += f'    <div class="evt-meta-item"><div class="evt-meta-val">{format_duration(hours)}</div><div class="evt-meta-label">Duration</div></div>\n'
+            html += f'    <div class="evt-meta-item"><div class="evt-meta-val">{consec}h</div><div class="evt-meta-label">Consecutive</div></div>\n'
+            html += '  </div>\n'
+
+            # Sparkline from hourly values
+            hourly = evt.get("hourly_values", [])
+            if len(hourly) > 1:
+                threshold = evt.get("threshold", 0)
+                condition = evt.get("condition", "above")
+                vals = [h["value"] for h in hourly[-24:]]  # last 24 readings
+                vmin = min(vals)
+                vmax = max(vals)
+                vrange = vmax - vmin if vmax != vmin else 1
+                html += '  <div class="evt-sparkline">\n'
+                for v in vals:
+                    pct = max(10, min(100, int((v - vmin) / vrange * 100)))
+                    bar_cls = ""
+                    if condition == "above" and v > threshold:
+                        bar_cls = " over" if sev == "warning" else " critical"
+                    elif condition == "below" and v < threshold:
+                        bar_cls = " over" if sev == "warning" else " critical"
+                    html += f'    <div class="evt-spark-bar{bar_cls}" style="height:{pct}%"></div>\n'
+                html += '  </div>\n'
+
+            html += '</div>\n'
+        html += '</div>\n'
+
+    # --- Recently Resolved Events ---
+    if resolved:
+        html += '<h3 style="font-size:14px;color:#2ecc71;margin:20px 0 12px;">Recently Resolved</h3>\n'
+        html += '<div class="evt-grid">\n'
+        for evt in resolved[:6]:  # Show max 6 resolved
+            dur = evt.get("duration_hours", 0)
+            peak_val = format_value(evt["sensor"], evt.get("peak_value", 0))
+            resolved_at = evt.get("resolved_at", "")[:16].replace("T", " ")
+
+            html += f'<div class="evt-card evt-resolved severity-{evt["severity"]}">\n'
+            html += f'  <span class="evt-badge resolved">RESOLVED</span>\n'
+            html += f'  <div class="evt-title">{evt["label"]}</div>\n'
+            html += f'  <div class="evt-room">{evt["room"]}</div>\n'
+            html += '  <div class="evt-meta">\n'
+            html += f'    <div class="evt-meta-item"><div class="evt-meta-val">{format_duration(dur)}</div><div class="evt-meta-label">Duration</div></div>\n'
+            html += f'    <div class="evt-meta-item"><div class="evt-meta-val">{peak_val}</div><div class="evt-meta-label">Peak</div></div>\n'
+            html += '  </div>\n'
+            if resolved_at:
+                html += f'  <div style="font-size:10px;color:#5a7088;margin-top:8px;">Resolved {resolved_at}</div>\n'
+            html += '</div>\n'
+        html += '</div>\n'
+
+    # --- Cycle Log (harvest-cycle history) ---
+    if cycle_log:
+        html += '<h3 style="font-size:14px;color:#4A90B5;margin:20px 0 12px;">Cycle Event History</h3>\n'
+        html += '<div style="background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:20px;">\n'
+        for log_key, entries in sorted(cycle_log.items()):
+            room, stage = log_key.split("::", 1) if "::" in log_key else (log_key, "")
+            html += f'<div class="evt-cycle-header">{room}'
+            if stage:
+                html += f' <span class="room-tag">{stage}</span>'
+            html += '</div>\n'
+            for entry in entries[-10:]:  # Last 10 entries per room/stage
+                sev = entry.get("severity", "warning")
+                dur = entry.get("duration_hours", 0)
+                reopen = entry.get("reopened_count", 0)
+                started = entry.get("started", "")[:10]
+                label = entry.get("label", "")
+                dur_str = format_duration(dur)
+                reopen_str = f' (reopened ×{reopen})' if reopen else ''
+
+                html += f'<div class="evt-log-row">'
+                html += f'<div class="evt-log-dot {sev}"></div>'
+                html += f'<div class="evt-log-label">{label}{reopen_str}</div>'
+                html += f'<div class="evt-log-duration">{dur_str}</div>'
+                html += f'<div class="evt-log-date">{started}</div>'
+                html += '</div>\n'
+        html += '</div>\n'
+
     return html
 
 
@@ -681,6 +805,7 @@ def main():
         "{{HEADER_TIMESTAMPS}}": f"Data as of {data_time} · Report generated {gen_time}",
         "{{FACILITY_HEALTH_SCORE}}": f'<span style="color:{h_color}">{overall}%</span>',
         "{{ALERTS_SECTION}}": build_alerts(state),
+        "{{EVENTS_SECTION}}": build_events_section(state),
         "{{ROOMS_SECTION}}": build_room_cards(state),
         "{{FEED_SECTION}}": build_feed_section(state),
         "{{DAYNIGHT_SECTION}}": build_day_night(state),

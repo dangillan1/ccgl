@@ -127,6 +127,44 @@ section h2{font-size:20px;color:#4E9E8E;font-weight:600;letter-spacing:.5px;text
 .priority-medium .priority-tag{background:#4A90B522;color:#4A90B5}
 .priority-low .priority-tag{background:#4E9E8E22;color:#4E9E8E}
 
+/* Event timeline */
+.evt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;margin-bottom:20px}
+.evt-card{background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:20px;position:relative;transition:all .3s}
+.evt-card:hover{border-color:#4E9E8E44;transform:translateY(-2px)}
+.evt-card.severity-critical{border-left:4px solid #e74c3c}
+.evt-card.severity-warning{border-left:4px solid #f39c12}
+.evt-card.severity-info{border-left:4px solid #4A90B5}
+.evt-card.evt-resolved{opacity:0.7;border-style:dashed}
+.evt-badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.evt-badge.critical{background:#e74c3c22;color:#e74c3c}
+.evt-badge.warning{background:#f39c1222;color:#f39c12}
+.evt-badge.resolved{background:#2ecc7122;color:#2ecc71}
+.evt-badge.escalated{background:#e74c3c33;color:#ff6b6b;animation:pulse-glow 2s infinite}
+@keyframes pulse-glow{0%,100%{opacity:1}50%{opacity:0.6}}
+.evt-title{font-size:14px;font-weight:600;color:white;margin-bottom:4px}
+.evt-room{font-size:11px;color:#4E9E8E;margin-bottom:10px}
+.evt-desc{font-size:12px;color:#7a8fa3;line-height:1.5;margin-bottom:12px}
+.evt-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.evt-meta-item{background:#07131866;border-radius:6px;padding:8px 10px;text-align:center}
+.evt-meta-val{font-size:16px;font-weight:700;margin-bottom:2px}
+.evt-meta-label{font-size:9px;color:#7a8fa3;text-transform:uppercase;letter-spacing:.5px}
+.evt-sparkline{display:flex;align-items:flex-end;gap:2px;height:24px;margin-top:10px;padding-top:4px;border-top:1px solid #1a305044}
+.evt-spark-bar{flex:1;min-width:3px;max-width:8px;background:#4E9E8E;border-radius:1px 1px 0 0;transition:height .3s}
+.evt-spark-bar.over{background:#f39c12}
+.evt-spark-bar.critical{background:#e74c3c}
+.evt-cycle-log{margin-top:20px}
+.evt-cycle-header{font-size:13px;font-weight:600;color:white;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.evt-cycle-header .room-tag{font-size:10px;padding:2px 8px;border-radius:3px;background:#4E9E8E22;color:#4E9E8E}
+.evt-log-row{display:flex;align-items:center;gap:12px;padding:8px 12px;border-bottom:1px solid #1a305033;font-size:12px}
+.evt-log-row:last-child{border-bottom:none}
+.evt-log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.evt-log-dot.critical{background:#e74c3c}
+.evt-log-dot.warning{background:#f39c12}
+.evt-log-label{flex:1;color:#d0d8e0}
+.evt-log-duration{color:#7a8fa3;font-size:11px}
+.evt-log-date{color:#5a7088;font-size:10px}
+.evt-empty{text-align:center;padding:40px 20px;color:#5a7088;font-size:13px}
+
 /* Day/Night analysis cards */
 .dn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
 .dn-card{background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:20px;border-top:3px solid #4E9E8E}
@@ -349,6 +387,7 @@ body{background:white;color:black}
         </div>
         <nav class="sidebar-nav">
             <a href="#alerts" class="nav-link active">Alerts & Warnings</a>
+            <a href="#events" class="nav-link">Event Timeline</a>
             <a href="#rooms" class="nav-link">Room Status</a>
             <a href="#feed" class="nav-link">Feed & Fertigation</a>
             <div class="nav-divider"></div>
@@ -365,7 +404,7 @@ body{background:white;color:black}
             <div>
                 <h1>CCGL GrowLink Report</h1>
                 <div class="header-meta">F1: Week 4 Flower (Day 26) · F2: Late Flower (7 days to harvest) · Mom: Vegetative Mother Plants</div>
-                <div class="header-time">Data as of April 05, 2026 · 05:02 PM · Report generated April 05, 2026 · 05:06 PM</div>
+                <div class="header-time">Data as of April 05, 2026 · 05:02 PM · Report generated April 05, 2026 · 05:22 PM</div>
             </div>
             <div class="header-health">
                 <div class="health-number" style="color:#2ecc71"><span style="color:#2ecc71">82%</span></div>
@@ -431,6 +470,51 @@ body{background:white;color:black}
     <div class="alert-action">🎯 <strong>Action:</strong> Verify F2 PIC is non-essential for harvest. Power-cycle accessible modules.</div>
 </div>
 </div>
+        </section>
+
+        <section id="events">
+            <h2>Event Timeline</h2>
+
+            <h3 style="font-size:14px;color:#f39c12;margin-bottom:12px;">Active Events</h3>
+<div class="evt-grid">
+<div class="evt-card severity-critical">
+  <span class="evt-badge critical">CRITICAL</span>
+  <div class="evt-title">Substrate Critically Dry</div>
+  <div class="evt-room">Mom · Vegetative Mother Plants</div>
+  <div class="evt-desc">VWC approaching permanent wilt point</div>
+  <div class="evt-meta">
+    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#e74c3c">6.6%</div><div class="evt-meta-label">Current</div></div>
+    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#e74c3c">6.6%</div><div class="evt-meta-label">Peak</div></div>
+    <div class="evt-meta-item"><div class="evt-meta-val">0m</div><div class="evt-meta-label">Duration</div></div>
+    <div class="evt-meta-item"><div class="evt-meta-val">1h</div><div class="evt-meta-label">Consecutive</div></div>
+  </div>
+</div>
+<div class="evt-card severity-warning">
+  <span class="evt-badge warning">WARNING</span>
+  <div class="evt-title">High Humidity</div>
+  <div class="evt-room">Flower 1 · Week 4 Flower (Day 26)</div>
+  <div class="evt-desc">Elevated humidity increases botrytis risk in flower</div>
+  <div class="evt-meta">
+    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#f39c12">71.0%</div><div class="evt-meta-label">Current</div></div>
+    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#e74c3c">71.0%</div><div class="evt-meta-label">Peak</div></div>
+    <div class="evt-meta-item"><div class="evt-meta-val">0m</div><div class="evt-meta-label">Duration</div></div>
+    <div class="evt-meta-item"><div class="evt-meta-val">1h</div><div class="evt-meta-label">Consecutive</div></div>
+  </div>
+</div>
+<div class="evt-card severity-warning">
+  <span class="evt-badge warning">WARNING</span>
+  <div class="evt-title">Substrate Dry</div>
+  <div class="evt-room">Mom · Vegetative Mother Plants</div>
+  <div class="evt-desc">VWC below 15% — irrigation may be insufficient</div>
+  <div class="evt-meta">
+    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#f39c12">6.6%</div><div class="evt-meta-label">Current</div></div>
+    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#e74c3c">6.6%</div><div class="evt-meta-label">Peak</div></div>
+    <div class="evt-meta-item"><div class="evt-meta-val">0m</div><div class="evt-meta-label">Duration</div></div>
+    <div class="evt-meta-item"><div class="evt-meta-val">1h</div><div class="evt-meta-label">Consecutive</div></div>
+  </div>
+</div>
+</div>
+
         </section>
 
         <section id="rooms">
@@ -985,7 +1069,7 @@ body{background:white;color:black}
         <footer class="report-footer">
             <div class="footer-brand">Cape Cod Grow Lab</div>
             <div class="footer-tagline">Mindfully Cultivated Cannabis · Brewster, MA</div>
-            <div class="footer-meta">Generated by CCGL GrowLink Analyst · April 05, 2026 · 05:06 PM</div>
+            <div class="footer-meta">Generated by CCGL GrowLink Analyst · April 05, 2026 · 05:22 PM</div>
         </footer>
     </div>
 
