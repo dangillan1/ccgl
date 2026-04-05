@@ -706,6 +706,11 @@ def main():
     with open(OUTPUT_PATH, 'w') as f:
         f.write(html)
 
+    # Copy to index.html for GitHub Pages
+    index_path = BASE_DIR / "index.html"
+    shutil.copy2(OUTPUT_PATH, index_path)
+    print(f"  GitHub Pages: {index_path}")
+
     # Archive copy
     ARCHIVE_DIR.mkdir(exist_ok=True)
     archive_name = f"CCGL-Report-{now.strftime('%Y-%m-%d-%H%M')}.html"
@@ -716,6 +721,7 @@ def main():
     print(f"\n✓ Report generated!")
     print(f"  Size: {size/1024:.1f} KB ({size:,} bytes)")
     print(f"  Output: {OUTPUT_PATH}")
+    print(f"  GitHub Pages: {index_path}")
     print(f"  Archive: {archive_path}")
 
 
