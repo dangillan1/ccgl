@@ -443,7 +443,7 @@ body{background:white;color:black}
             <div>
                 <h1>CCGL GrowLink Report</h1>
                 <div class="header-meta">F1: Week 4 Flower (Day 23) · F2: Late Flower (8 days to harvest) · Mom: Vegetative Mother Plants</div>
-                <div class="header-time">Data as of April 06, 2026 · 12:02 AM · Report generated April 06, 2026 · 08:10 AM</div>
+                <div class="header-time">Data as of April 06, 2026 · 09:30 AM · Report generated April 06, 2026 · 08:14 AM</div>
             </div>
         </header>
 
@@ -455,7 +455,7 @@ body{background:white;color:black}
 <div class="perf24-card f1">
     <div class="perf24-header">
         <div class="perf24-room">Flower 1 <span class="perf24-stage">Week 4 Flower (Day 23)</span></div>
-        <span class="badge badge-good">ON TRACK</span>
+        <span class="badge badge-warning">ATTENTION</span>
     </div>
     <table class="perf24-table">
     <thead><tr><th>Sensor</th><th>24h Range</th><th>Avg</th><th>Range</th></tr></thead>
@@ -488,6 +488,8 @@ body{background:white;color:black}
     </table>
     <div class="perf24-vpd" style="background:#e74c3c11;border-color:#e74c3c;color:#e74c3c">VPD swung 0.10–1.87 kPa (1.8 kPa spread) — day avg 0.78, night avg 0.15</div>
     <div class="perf24-events">
+    <div class="evt-line"><span style="color:#f39c12;font-weight:600">High VPD</span> <span style="color:#5a7088">0m active · peaked 1.87 kPa</span></div>
+    <div class="evt-line"><span style="color:#f39c12;font-weight:600">High Temperature</span> <span style="color:#5a7088">0m active · peaked 86.7°F</span></div>
     <div class="evt-line"><span style="color:#2ecc71;font-weight:600">High Humidity ✓</span> <span style="color:#5a7088">resolved · peaked 79.9%</span></div>
     <div class="evt-line"><span style="color:#2ecc71;font-weight:600">Low VPD ✓</span> <span style="color:#5a7088">resolved · peaked 0.50 kPa</span></div>
     <div class="evt-line"><span style="color:#2ecc71;font-weight:600">High VPD ✓</span> <span style="color:#5a7088">resolved · peaked 1.87 kPa</span></div>
@@ -525,10 +527,10 @@ body{background:white;color:black}
     </table>
     <div class="perf24-vpd" style="background:#f39c1211;border-color:#f39c12;color:#f39c12">VPD swung 0.63–1.43 kPa (0.8 kPa spread) — day avg 1.19, night avg 0.73</div>
     <div class="perf24-events">
-    <div class="evt-line"><span style="color:#f39c12;font-weight:600">Low Temperature</span> <span style="color:#5a7088">5h 23m active · peaked 59.6°F</span></div>
-    <div class="evt-line"><span style="color:#f39c12;font-weight:600">Low VPD</span> <span style="color:#5a7088">0m active · peaked 0.77 kPa</span></div>
+    <div class="evt-line"><span style="color:#f39c12;font-weight:600">Low Temperature</span> <span style="color:#5a7088">12h 30m active · peaked 59.6°F</span></div>
+    <div class="evt-line"><span style="color:#2ecc71;font-weight:600">Low VPD ✓</span> <span style="color:#5a7088">resolved · peaked 0.77 kPa</span></div>
     </div>
-    <div class="perf24-assessment"><span style="color:#2ecc71">Stable conditions over the last 24 hours</span></div>
+    <div class="perf24-assessment"><span style="color:#f39c12">Low VPD resolved</span></div>
 </div>
 <div class="perf24-card mom">
     <div class="perf24-header">
@@ -566,8 +568,8 @@ body{background:white;color:black}
     </table>
     <div class="perf24-vpd" style="background:#f39c1211;border-color:#f39c12;color:#f39c12">VPD swung 0.90–1.60 kPa (0.7 kPa spread) — day avg 1.25, night avg 0.94</div>
     <div class="perf24-events">
-    <div class="evt-line"><span style="color:#f39c12;font-weight:600">Substrate Dry</span> <span style="color:#5a7088">7h 41m active · peaked 4.1%</span></div>
-    <div class="evt-line"><span style="color:#e74c3c;font-weight:600">Substrate Critically Dry</span> <span style="color:#5a7088">7h 41m active · peaked 4.1%</span></div>
+    <div class="evt-line"><span style="color:#f39c12;font-weight:600">Substrate Dry</span> <span style="color:#5a7088">14h 48m active · peaked 4.1%</span></div>
+    <div class="evt-line"><span style="color:#e74c3c;font-weight:600">Substrate Critically Dry</span> <span style="color:#5a7088">14h 48m active · peaked 4.1%</span></div>
     </div>
     <div class="perf24-assessment"><span style="color:#e74c3c">Needs immediate attention — Substrate Critically Dry active</span></div>
 </div>
@@ -579,22 +581,6 @@ body{background:white;color:black}
             <h2>Critical Alerts & AI Analysis</h2>
             
             <div class="card-grid">
-<div class="card alert-card">
-    <div class="alert-header">
-        <span class="alert-icon">🚨</span>
-        <span class="alert-title">Mother Room: Substrate Critically Dry — Irrigation Emergency</span>
-        <span class="badge badge-critical">CRITICAL</span>
-    </div>
-    <div class="alert-metrics">
-        <div class="alert-metric"><div class="alert-metric-value" style="color:#e74c3c">4.3%</div><div class="alert-metric-label">Current VWC</div></div>
-        <div class="alert-metric"><div class="alert-metric-value" style="color:#2ecc71">30-65%</div><div class="alert-metric-label">Target VWC</div></div>
-        <div class="alert-metric"><div class="alert-metric-value" style="color:#f39c12">0.70</div><div class="alert-metric-label">EC (dS/m)</div></div>
-        <div class="alert-metric"><div class="alert-metric-value" style="color:#2ecc71">1.2-2.0</div><div class="alert-metric-label">Target EC</div></div>
-    </div>
-    <div class="alert-description">Mother room substrate at 4.3% VWC — critically below the 30% minimum and approaching permanent wilt point (5-8%). EC at 0.70 dS/m is severely depleted, indicating nutrient starvation alongside dehydration.</div>
-    <div class="alert-ai"><strong>🧠 AI Analysis:</strong> The 3h trend shows VWC spiked +216% from 3.1% → 9.8%, suggesting a partial watering event occurred but was insufficient. EC crashed 68% in 3h (2.19 → 0.70), consistent with a flush-through with low-EC water. The irrigation system may be delivering water but at inadequate volume.</div>
-    <div class="alert-action">🎯 <strong>Action:</strong> Hand water all mothers to field capacity IMMEDIATELY. Inspect every emitter for clogs. Verify timer soak duration. Follow up with half-strength balanced nutrients once VWC stabilizes above 40%.</div>
-</div>
 <div class="card alert-card info">
     <div class="alert-header">
         <span class="alert-icon">📡</span>
@@ -612,91 +598,14 @@ body{background:white;color:black}
 
             <h3 style="font-size:14px;color:#f39c12;margin-bottom:12px;">Active Events</h3>
 <div class="evt-grid">
-<div class="evt-card severity-critical">
-  <span class="evt-badge escalated">ESCALATED</span>
-  <div class="evt-title">Substrate Critically Dry</div>
-  <div class="evt-room">Mom · Vegetative Mother Plants</div>
-  <div class="evt-desc">VWC approaching permanent wilt point</div>
-  <div class="evt-meta">
-    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#e74c3c">4.3%</div><div class="evt-meta-label">Current</div></div>
-    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#e74c3c">4.1%</div><div class="evt-meta-label">Peak</div></div>
-    <div class="evt-meta-item"><div class="evt-meta-val">14h 48m</div><div class="evt-meta-label">Duration</div></div>
-    <div class="evt-meta-item"><div class="evt-meta-val">8h</div><div class="evt-meta-label">Consecutive</div></div>
-  </div>
-  <div class="evt-sparkline">
-    <div class="evt-spark-bar critical" style="height:100%"></div>
-    <div class="evt-spark-bar critical" style="height:49%"></div>
-    <div class="evt-spark-bar critical" style="height:41%"></div>
-    <div class="evt-spark-bar critical" style="height:40%"></div>
-    <div class="evt-spark-bar critical" style="height:40%"></div>
-    <div class="evt-spark-bar critical" style="height:10%"></div>
-    <div class="evt-spark-bar critical" style="height:10%"></div>
-    <div class="evt-spark-bar critical" style="height:10%"></div>
-  </div>
-</div>
-<div class="evt-card severity-warning">
-  <span class="evt-badge escalated">ESCALATED</span>
-  <div class="evt-title">Substrate Dry</div>
-  <div class="evt-room">Mom · Vegetative Mother Plants</div>
-  <div class="evt-desc">VWC below 15% — irrigation may be insufficient</div>
-  <div class="evt-meta">
-    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#f39c12">4.3%</div><div class="evt-meta-label">Current</div></div>
-    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#e74c3c">4.1%</div><div class="evt-meta-label">Peak</div></div>
-    <div class="evt-meta-item"><div class="evt-meta-val">14h 48m</div><div class="evt-meta-label">Duration</div></div>
-    <div class="evt-meta-item"><div class="evt-meta-val">8h</div><div class="evt-meta-label">Consecutive</div></div>
-  </div>
-  <div class="evt-sparkline">
-    <div class="evt-spark-bar over" style="height:100%"></div>
-    <div class="evt-spark-bar over" style="height:49%"></div>
-    <div class="evt-spark-bar over" style="height:41%"></div>
-    <div class="evt-spark-bar over" style="height:40%"></div>
-    <div class="evt-spark-bar over" style="height:40%"></div>
-    <div class="evt-spark-bar over" style="height:10%"></div>
-    <div class="evt-spark-bar over" style="height:10%"></div>
-    <div class="evt-spark-bar over" style="height:10%"></div>
-  </div>
-</div>
-<div class="evt-card severity-warning">
-  <span class="evt-badge escalated">ESCALATED</span>
-  <div class="evt-title">Low Temperature</div>
-  <div class="evt-room">Flower 2 · Late Flower (9 days to harvest)</div>
-  <div class="evt-desc">Temperature below optimal — slowed metabolism</div>
-  <div class="evt-meta">
-    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#f39c12">60.4°F</div><div class="evt-meta-label">Current</div></div>
-    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#e74c3c">59.6°F</div><div class="evt-meta-label">Peak</div></div>
-    <div class="evt-meta-item"><div class="evt-meta-val">12h 30m</div><div class="evt-meta-label">Duration</div></div>
-    <div class="evt-meta-item"><div class="evt-meta-val">7h</div><div class="evt-meta-label">Consecutive</div></div>
-  </div>
-  <div class="evt-sparkline">
-    <div class="evt-spark-bar over" style="height:100%"></div>
-    <div class="evt-spark-bar over" style="height:85%"></div>
-    <div class="evt-spark-bar over" style="height:73%"></div>
-    <div class="evt-spark-bar over" style="height:61%"></div>
-    <div class="evt-spark-bar over" style="height:19%"></div>
-    <div class="evt-spark-bar over" style="height:10%"></div>
-    <div class="evt-spark-bar over" style="height:19%"></div>
-  </div>
-</div>
 <div class="evt-card severity-warning">
   <span class="evt-badge warning">WARNING</span>
-  <div class="evt-title">High VPD</div>
+  <div class="evt-title">High Humidity</div>
   <div class="evt-room">Flower 1 · Week 4 Flower (Day 23)</div>
-  <div class="evt-desc">VPD elevated — potential plant stress</div>
+  <div class="evt-desc">Elevated humidity increases botrytis risk in flower</div>
   <div class="evt-meta">
-    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#f39c12">1.87 kPa</div><div class="evt-meta-label">Current</div></div>
-    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#e74c3c">1.87 kPa</div><div class="evt-meta-label">Peak</div></div>
-    <div class="evt-meta-item"><div class="evt-meta-val">0m</div><div class="evt-meta-label">Duration</div></div>
-    <div class="evt-meta-item"><div class="evt-meta-val">1h</div><div class="evt-meta-label">Consecutive</div></div>
-  </div>
-</div>
-<div class="evt-card severity-warning">
-  <span class="evt-badge warning">WARNING</span>
-  <div class="evt-title">High Temperature</div>
-  <div class="evt-room">Flower 1 · Week 4 Flower (Day 23)</div>
-  <div class="evt-desc">Temperature elevated — heat stress risk</div>
-  <div class="evt-meta">
-    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#f39c12">86.7°F</div><div class="evt-meta-label">Current</div></div>
-    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#e74c3c">86.7°F</div><div class="evt-meta-label">Peak</div></div>
+    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#f39c12">71.5%</div><div class="evt-meta-label">Current</div></div>
+    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#e74c3c">71.5%</div><div class="evt-meta-label">Peak</div></div>
     <div class="evt-meta-item"><div class="evt-meta-val">0m</div><div class="evt-meta-label">Duration</div></div>
     <div class="evt-meta-item"><div class="evt-meta-val">1h</div><div class="evt-meta-label">Consecutive</div></div>
   </div>
@@ -754,6 +663,16 @@ body{background:white;color:black}
   </div>
   <div style="font-size:10px;color:#5a7088;margin-top:8px;">Resolved 2026-04-06 08:10</div>
 </div>
+<div class="evt-card evt-resolved severity-warning">
+  <span class="evt-badge resolved">RESOLVED</span>
+  <div class="evt-title">Substrate Dry</div>
+  <div class="evt-room">Mom</div>
+  <div class="evt-meta">
+    <div class="evt-meta-item"><div class="evt-meta-val">14h 52m</div><div class="evt-meta-label">Duration</div></div>
+    <div class="evt-meta-item"><div class="evt-meta-val">4.1%</div><div class="evt-meta-label">Peak</div></div>
+  </div>
+  <div style="font-size:10px;color:#5a7088;margin-top:8px;">Resolved 2026-04-06 08:14</div>
+</div>
 </div>
 <h3 style="font-size:14px;color:#4A90B5;margin:20px 0 12px;">Cycle Event History</h3>
 <div style="background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:20px;">
@@ -764,11 +683,18 @@ body{background:white;color:black}
 <div class="evt-cycle-header">Flower 1 <span class="room-tag">Week 4 Flower (Day 23)</span></div>
 <div class="evt-log-row"><div class="evt-log-dot warning"></div><div class="evt-log-label">High VPD</div><div class="evt-log-duration">1h</div><div class="evt-log-date">2026-04-05</div></div>
 <div class="evt-log-row"><div class="evt-log-dot warning"></div><div class="evt-log-label">High VPD (reopened ×1)</div><div class="evt-log-duration">5h</div><div class="evt-log-date">2026-04-05</div></div>
+<div class="evt-log-row"><div class="evt-log-dot warning"></div><div class="evt-log-label">High VPD</div><div class="evt-log-duration">6m</div><div class="evt-log-date">2026-04-06</div></div>
+<div class="evt-log-row"><div class="evt-log-dot warning"></div><div class="evt-log-label">High Temperature</div><div class="evt-log-duration">6m</div><div class="evt-log-date">2026-04-06</div></div>
 <div class="evt-cycle-header">Flower 1 <span class="room-tag">Week 4 Flower (Day 26)</span></div>
 <div class="evt-log-row"><div class="evt-log-dot warning"></div><div class="evt-log-label">High Humidity</div><div class="evt-log-duration">2h 42m</div><div class="evt-log-date">2026-04-05</div></div>
 <div class="evt-log-row"><div class="evt-log-dot warning"></div><div class="evt-log-label">High Humidity (reopened ×1)</div><div class="evt-log-duration">6h 42m</div><div class="evt-log-date">2026-04-05</div></div>
 <div class="evt-cycle-header">Flower 2 <span class="room-tag">Late Flower (8 days to harvest)</span></div>
 <div class="evt-log-row"><div class="evt-log-dot warning"></div><div class="evt-log-label">Low VPD</div><div class="evt-log-duration">7h 5m</div><div class="evt-log-date">2026-04-06</div></div>
+<div class="evt-cycle-header">Flower 2 <span class="room-tag">Late Flower (9 days to harvest)</span></div>
+<div class="evt-log-row"><div class="evt-log-dot warning"></div><div class="evt-log-label">Low Temperature</div><div class="evt-log-duration">12h 35m</div><div class="evt-log-date">2026-04-05</div></div>
+<div class="evt-cycle-header">Mom <span class="room-tag">Vegetative Mother Plants</span></div>
+<div class="evt-log-row"><div class="evt-log-dot warning"></div><div class="evt-log-label">Substrate Dry</div><div class="evt-log-duration">14h 54m</div><div class="evt-log-date">2026-04-05</div></div>
+<div class="evt-log-row"><div class="evt-log-dot critical"></div><div class="evt-log-label">Substrate Critically Dry</div><div class="evt-log-duration">14h 54m</div><div class="evt-log-date">2026-04-05</div></div>
 </div>
 
         </section>
@@ -784,39 +710,39 @@ body{background:white;color:black}
         <span style="font-size:13px;font-weight:600;color:#2ecc71">100%</span>
     </div>
     <div class="metric-grid"><div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">86.7°F</div>
+    <div class="metric-value" style="color:#2ecc71">78.0°F</div>
     <div class="metric-label">Temperature</div>
-    <div class="metric-range">78.1 – 95.2</div>
+    <div class="metric-range">75.8 – 80.2</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">64.2%</div>
+    <div class="metric-value" style="color:#2ecc71">71.5%</div>
     <div class="metric-label">Humidity</div>
-    <div class="metric-range">42.9 – 85.4</div>
+    <div class="metric-range">70.5 – 72.5</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">861 ppm</div>
+    <div class="metric-value" style="color:#2ecc71">1089 ppm</div>
     <div class="metric-label">CO2</div>
-    <div class="metric-range">850.0 – 870.0</div>
+    <div class="metric-range">1076.0 – 1101.0</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">1.87 kPa</div>
+    <div class="metric-value" style="color:#2ecc71">0.90 kPa</div>
     <div class="metric-label">Vapor Pressure Deficit</div>
-    <div class="metric-range">0.5 – 3.2</div>
+    <div class="metric-range">0.8 – 1.0</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">2.47 dS/m</div>
+    <div class="metric-value" style="color:#2ecc71">2.55 dS/m</div>
     <div class="metric-label">Sub EC</div>
-    <div class="metric-range">2.0 – 2.9</div>
+    <div class="metric-range">2.2 – 2.9</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">32.2%</div>
+    <div class="metric-value" style="color:#2ecc71">50.4%</div>
     <div class="metric-label">Sub VWC</div>
-    <div class="metric-range">26.1 – 39.7</div>
+    <div class="metric-range">45.6 – 54.5</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">83.2°F</div>
+    <div class="metric-value" style="color:#2ecc71">77.1°F</div>
     <div class="metric-label">Sub Temperature</div>
-    <div class="metric-range">79.0 – 92.7</div>
+    <div class="metric-range">75.2 – 78.8</div>
 </div>
 </div>
     
@@ -828,24 +754,24 @@ body{background:white;color:black}
         <span style="font-size:13px;font-weight:600;color:#2ecc71">100%</span>
     </div>
     <div class="metric-grid"><div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">60.4°F</div>
+    <div class="metric-value" style="color:#2ecc71">75.6°F</div>
     <div class="metric-label">Temperature</div>
-    <div class="metric-range">60.1 – 60.7</div>
+    <div class="metric-range">74.0 – 77.2</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">53.4%</div>
+    <div class="metric-value" style="color:#2ecc71">55.0%</div>
     <div class="metric-label">Humidity</div>
-    <div class="metric-range">50.5 – 56.0</div>
+    <div class="metric-range">54.6 – 55.5</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">855 ppm</div>
+    <div class="metric-value" style="color:#2ecc71">946 ppm</div>
     <div class="metric-label">CO2</div>
-    <div class="metric-range">835.0 – 887.0</div>
+    <div class="metric-range">924.0 – 988.0</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">0.83 kPa</div>
+    <div class="metric-value" style="color:#2ecc71">1.37 kPa</div>
     <div class="metric-label">Vapor Pressure Deficit</div>
-    <div class="metric-range">0.8 – 0.9</div>
+    <div class="metric-range">1.3 – 1.4</div>
 </div>
 </div>
     <div class="callout callout-warning" style="margin-top:14px"><strong>⚠ Data Gap:</strong> No substrate sensors. Cannot monitor root zone EC, VWC, or temperature for pre-harvest flush.</div>
@@ -857,42 +783,42 @@ body{background:white;color:black}
         <span style="font-size:13px;font-weight:600;color:#2ecc71">100%</span>
     </div>
     <div class="metric-grid"><div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">80.0°F</div>
+    <div class="metric-value" style="color:#2ecc71">78.0°F</div>
     <div class="metric-label">Temperature</div>
-    <div class="metric-range">78.7 – 81.4</div>
+    <div class="metric-range">77.0 – 79.0</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">60.5%</div>
+    <div class="metric-value" style="color:#2ecc71">65.7%</div>
     <div class="metric-label">Humidity</div>
-    <div class="metric-range">60.0 – 60.9</div>
+    <div class="metric-range">65.4 – 66.0</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">363 ppm</div>
+    <div class="metric-value" style="color:#2ecc71">727 ppm</div>
     <div class="metric-label">CO2</div>
-    <div class="metric-range">329.0 – 398.0</div>
+    <div class="metric-range">680.0 – 775.0</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">1.35 kPa</div>
+    <div class="metric-value" style="color:#2ecc71">1.15 kPa</div>
     <div class="metric-label">Vapor Pressure Deficit</div>
-    <div class="metric-range">1.3 – 1.4</div>
+    <div class="metric-range">1.1 – 1.2</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">4.3%</div>
+    <div class="metric-value" style="color:#2ecc71">54.4%</div>
     <div class="metric-label">Sub VWC</div>
-    <div class="metric-range">0.0 – 17.4</div>
+    <div class="metric-range">45.5 – 63.6</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">82.6°F</div>
+    <div class="metric-value" style="color:#2ecc71">71.5°F</div>
     <div class="metric-label">Sub Temperature</div>
-    <div class="metric-range">81.5 – 84.4</div>
+    <div class="metric-range">68.9 – 76.8</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">1.72 dS/m</div>
+    <div class="metric-value" style="color:#2ecc71">3.26 dS/m</div>
     <div class="metric-label">Sub EC</div>
-    <div class="metric-range">0.0 – 6.9</div>
+    <div class="metric-range">2.9 – 3.8</div>
 </div>
 </div>
-    <div class="callout callout-critical" style="margin-top:14px"><strong>🚨 Irrigation Alert:</strong> Substrate VWC at 4.3% — critically dry. Hand water immediately.</div>
+    <div class="callout callout-critical" style="margin-top:14px"><strong>🚨 Irrigation Alert:</strong> Substrate VWC at 54.4% — critically dry. Hand water immediately.</div>
 </div>
 <div class="card">
     <h3><span class="card-status-dot" style="background:#2ecc71"></span> Cure Room <span class="growth-stage">Active</span></h3>
@@ -901,24 +827,24 @@ body{background:white;color:black}
         <span style="font-size:13px;font-weight:600;color:#2ecc71">100%</span>
     </div>
     <div class="metric-grid"><div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">61.6°F</div>
+    <div class="metric-value" style="color:#2ecc71">60.2°F</div>
     <div class="metric-label">Temperature</div>
-    <div class="metric-range">61.6 – 61.6</div>
+    <div class="metric-range">60.2 – 60.2</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">65.1%</div>
+    <div class="metric-value" style="color:#2ecc71">57.3%</div>
     <div class="metric-label">Humidity</div>
-    <div class="metric-range">65.1 – 65.1</div>
+    <div class="metric-range">57.3 – 57.3</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">741 ppm</div>
+    <div class="metric-value" style="color:#2ecc71">718 ppm</div>
     <div class="metric-label">CO2</div>
-    <div class="metric-range">741.0 – 741.0</div>
+    <div class="metric-range">718.0 – 718.0</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">0.60 kPa</div>
+    <div class="metric-value" style="color:#2ecc71">0.80 kPa</div>
     <div class="metric-label">Vapor Pressure Deficit</div>
-    <div class="metric-range">0.6 – 0.6</div>
+    <div class="metric-range">0.8 – 0.8</div>
 </div>
 </div>
     
@@ -930,24 +856,24 @@ body{background:white;color:black}
         <span style="font-size:13px;font-weight:600;color:#2ecc71">100%</span>
     </div>
     <div class="metric-grid"><div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">64.8°F</div>
+    <div class="metric-value" style="color:#2ecc71">65.5°F</div>
     <div class="metric-label">Temperature</div>
-    <div class="metric-range">64.7 – 64.9</div>
+    <div class="metric-range">65.5 – 65.5</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">71.6%</div>
+    <div class="metric-value" style="color:#2ecc71">54.3%</div>
     <div class="metric-label">Humidity</div>
-    <div class="metric-range">71.2 – 72.0</div>
+    <div class="metric-range">54.1 – 54.5</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">630 ppm</div>
+    <div class="metric-value" style="color:#2ecc71">590 ppm</div>
     <div class="metric-label">CO2</div>
-    <div class="metric-range">623.0 – 638.0</div>
+    <div class="metric-range">575.0 – 610.0</div>
 </div>
 <div class="metric-item status-good">
-    <div class="metric-value" style="color:#2ecc71">0.60 kPa</div>
+    <div class="metric-value" style="color:#2ecc71">1.00 kPa</div>
     <div class="metric-label">Vapor Pressure Deficit</div>
-    <div class="metric-range">0.6 – 0.6</div>
+    <div class="metric-range">1.0 – 1.0</div>
 </div>
 </div>
     <div class="callout callout-info" style="margin-top:14px"><strong>📋 Status:</strong> IDLE — Awaiting F2 harvest (~April 13). Currently 65.3°F / 64.5% RH.</div>
@@ -960,25 +886,25 @@ body{background:white;color:black}
             
             <div class="feed-grid">
     <div class="feed-card">
-        <div class="feed-value" style="color:#2ecc71">6.25</div>
+        <div class="feed-value" style="color:#f39c12">6.52</div>
         <div class="feed-label">Solution pH</div>
         <div class="feed-range">Target: 5.5 – 6.5</div>
         <div class="feed-trend">1h: <span style="color:#5a7088">→ Stable</span></div>
     </div>
     <div class="feed-card">
-        <div class="feed-value" style="color:#2ecc71">812.5</div>
+        <div class="feed-value" style="color:#f39c12">699.5</div>
         <div class="feed-label">TDS (ppm)</div>
         <div class="feed-range">Target: 700 – 1100</div>
         <div class="feed-trend">1h: <span style="color:#5a7088">→ Stable</span></div>
     </div>
     <div class="feed-card">
-        <div class="feed-value" style="color:#2ecc71">66.6°F</div>
+        <div class="feed-value" style="color:#2ecc71">71.3°F</div>
         <div class="feed-label">Solution Temp</div>
         <div class="feed-range">Target: 60 – 72°F</div>
         <div class="feed-trend">1h: <span style="color:#5a7088">→ Stable</span></div>
     </div>
     <div class="feed-card alert">
-        <div class="feed-value" style="color:#e74c3c">97%</div>
+        <div class="feed-value" style="color:#e74c3c">32%</div>
         <div class="feed-label">Tank Float</div>
         <div class="feed-range">⚠ Sensors Broken</div>
         <div class="feed-trend">1h: <span style="color:#5a7088">→ Stable</span></div>
@@ -988,13 +914,13 @@ body{background:white;color:black}
 <div class="card-grid">
     <div class="insight-card feed">
         <h4>🧪 Solution Chemistry Analysis</h4>
-        <p><strong>pH Status:</strong> At 6.25, solution pH is within the optimal 5.5-6.5 range. Nutrient lockout risk is minimal.</p>
-        <p><strong>TDS Context:</strong> At 812.5 ppm, feed concentration is ideal. TDS moved 0 ppm in the last hour (0.0%).</p>
-        <p><strong>Temperature:</strong> Solution at 66.6°F is optimal — dissolved oxygen maximized below 68°F.</p>
+        <p><strong>pH Status:</strong> At 6.52, solution pH is outside the optimal 5.5-6.5 range. Watch for nutrient lockout.</p>
+        <p><strong>TDS Context:</strong> At 699.5 ppm, feed concentration is outside target. TDS moved 0 ppm in the last hour (0.0%).</p>
+        <p><strong>Temperature:</strong> Solution at 71.3°F is optimal — dissolved oxygen maximized below 68°F.</p>
     </div>
     <div class="insight-card" style="border-left-color:#f39c12">
         <h4>🔋 Tank & Delivery Status</h4>
-        <p><strong>Sensor Status:</strong> Both level sensors broken. Float at 97% unreliable (±16 spread).</p>
+        <p><strong>Sensor Status:</strong> Both level sensors broken. Float at 32% unreliable (±16 spread).</p>
         <p><strong>Consumption:</strong> Cannot track automatically. Typical daily: 15-25 gallons. Verify manually.</p>
         <div class="callout callout-warning"><strong>Recommendation:</strong> Schedule sensor replacement. Implement twice-daily manual checks.</div>
     </div>
@@ -1006,21 +932,21 @@ body{background:white;color:black}
                 <div class="insight-card" style="border-left-color:#00cec9">
                     <h4>📊 Substrate Cross-Room Comparison</h4>
                     <div class="dive-metrics">
-                        <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">2.47</div><div class="dive-metric-label">F1 EC (dS/m)</div></div>
+                        <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">2.55</div><div class="dive-metric-label">F1 EC (dS/m)</div></div>
                         <div class="dive-metric"><div class="dive-metric-val" style="color:#5a7088">N/A</div><div class="dive-metric-label">F2 EC</div></div>
-                        <div class="dive-metric"><div class="dive-metric-val" style="color:#e74c3c">1.72</div><div class="dive-metric-label">Mom EC (dS/m)</div></div>
+                        <div class="dive-metric"><div class="dive-metric-val" style="color:#e74c3c">3.26</div><div class="dive-metric-label">Mom EC (dS/m)</div></div>
                     </div>
                     <div class="dive-metrics">
-                        <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">32.2%</div><div class="dive-metric-label">F1 VWC</div></div>
+                        <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">50.4%</div><div class="dive-metric-label">F1 VWC</div></div>
                         <div class="dive-metric"><div class="dive-metric-val" style="color:#5a7088">N/A</div><div class="dive-metric-label">F2 VWC</div></div>
-                        <div class="dive-metric"><div class="dive-metric-val" style="color:#e74c3c">4.3%</div><div class="dive-metric-label">Mom VWC</div></div>
+                        <div class="dive-metric"><div class="dive-metric-val" style="color:#e74c3c">54.4%</div><div class="dive-metric-label">Mom VWC</div></div>
                     </div>
                     <p style="font-size:12px;color:#d0d8e0;margin-top:8px">F1 root zone thriving. Mom in crisis — severe dehydration and nutrient depletion. F2 has no substrate monitoring.</p>
                 </div>
                 <div class="insight-card" style="border-left-color:#9b59b6">
                     <h4>🔬 Nutrient Uptake Intelligence</h4>
-                    <p><strong>F1 Feed-to-Runoff:</strong> Feed EC 0.08 vs substrate EC 2.47 — 30x concentration factor indicating active uptake with salt buildup.</p>
-                    <p><strong>Mom Feed-to-Runoff:</strong> Feed EC 0.08 vs substrate EC 1.72 — low ratio consistent with dry-down flushing nutrients.</p>
+                    <p><strong>F1 Feed-to-Runoff:</strong> Feed EC 0.08 vs substrate EC 2.55 — 31x concentration factor indicating active uptake with salt buildup.</p>
+                    <p><strong>Mom Feed-to-Runoff:</strong> Feed EC 0.08 vs substrate EC 3.26 — low ratio consistent with dry-down flushing nutrients.</p>
                     <div class="callout callout-teal"><strong>System Limitation:</strong> Injector dosing rates not available via GrowLink API.</div>
                 </div>
     </div>
@@ -1033,36 +959,36 @@ body{background:white;color:black}
             <div class="dn-grid">
 <div class="dn-card alert-state">
     <h4>🌱 Flower 1 — Day Cycle ☀️ Lights ON</h4>
-    <div class="dn-row"><span class="dn-label">Temperature</span><span class="dn-value" style="color:#2ecc71">86.7°F</span></div>
-    <div class="dn-row"><span class="dn-label">Humidity</span><span class="dn-value" style="color:#f39c12">64.2%</span></div>
-    <div class="dn-row"><span class="dn-label">VPD</span><span class="dn-value" style="color:#f39c12">1.87 kPa</span></div>
-    <div class="dn-row"><span class="dn-label">CO2</span><span class="dn-value" style="color:#2ecc71">862 ppm</span></div>
+    <div class="dn-row"><span class="dn-label">Temperature</span><span class="dn-value" style="color:#2ecc71">78.0°F</span></div>
+    <div class="dn-row"><span class="dn-label">Humidity</span><span class="dn-value" style="color:#f39c12">71.5%</span></div>
+    <div class="dn-row"><span class="dn-label">VPD</span><span class="dn-value" style="color:#f39c12">0.90 kPa</span></div>
+    <div class="dn-row"><span class="dn-label">CO2</span><span class="dn-value" style="color:#2ecc71">1089 ppm</span></div>
     <div class="dn-row"><span class="dn-label">6h Temp Change</span><span class="dn-value"><span style="color:#5a7088">→ Stable</span></span></div>
     <div class="dn-row"><span class="dn-label">6h Humidity Change</span><span class="dn-value"><span style="color:#5a7088">→ Stable</span></span></div>
     <div class="dn-takeaway"><strong>Key Takeaway:</strong> Humidity is the primary concern. Dehumidification cycle working but hasn't reached target. Temperature differential between day/night needs monitoring — target ≤10°F swing for terpene preservation.</div>
 </div>
 <div class="dn-card">
     <h4>🌱 Flower 2 — Day Cycle ☀️ Lights ON</h4>
-    <div class="dn-row"><span class="dn-label">Temperature</span><span class="dn-value" style="color:#2ecc71">60.4°F</span></div>
-    <div class="dn-row"><span class="dn-label">Humidity</span><span class="dn-value" style="color:#2ecc71">53.4%</span></div>
-    <div class="dn-row"><span class="dn-label">VPD</span><span class="dn-value" style="color:#2ecc71">0.83 kPa</span></div>
-    <div class="dn-row"><span class="dn-label">CO2</span><span class="dn-value" style="color:#2ecc71">856 ppm</span></div>
+    <div class="dn-row"><span class="dn-label">Temperature</span><span class="dn-value" style="color:#2ecc71">75.6°F</span></div>
+    <div class="dn-row"><span class="dn-label">Humidity</span><span class="dn-value" style="color:#2ecc71">55.0%</span></div>
+    <div class="dn-row"><span class="dn-label">VPD</span><span class="dn-value" style="color:#2ecc71">1.37 kPa</span></div>
+    <div class="dn-row"><span class="dn-label">CO2</span><span class="dn-value" style="color:#2ecc71">947 ppm</span></div>
     <div class="dn-row"><span class="dn-label">6h Temp Change</span><span class="dn-value"><span style="color:#5a7088">→ Stable</span></span></div>
     <div class="dn-row"><span class="dn-label">6h CO2 Change</span><span class="dn-value"><span style="color:#5a7088">→ Stable</span></span></div>
     <div class="dn-takeaway"><strong>Key Takeaway:</strong> Excellent condition for final week. VPD ideal for resin production. Maintain these conditions through harvest.</div>
 </div>
 <div class="dn-card alert-state">
     <h4>🌿 Mom Room — Day Cycle ☀️ Lights ON</h4>
-    <div class="dn-row"><span class="dn-label">Temperature</span><span class="dn-value" style="color:#2ecc71">80.0°F</span></div>
-    <div class="dn-row"><span class="dn-label">Humidity</span><span class="dn-value" style="color:#2ecc71">60.5%</span></div>
-    <div class="dn-row"><span class="dn-label">VPD</span><span class="dn-value" style="color:#2ecc71">1.35 kPa</span></div>
+    <div class="dn-row"><span class="dn-label">Temperature</span><span class="dn-value" style="color:#2ecc71">78.0°F</span></div>
+    <div class="dn-row"><span class="dn-label">Humidity</span><span class="dn-value" style="color:#2ecc71">65.7%</span></div>
+    <div class="dn-row"><span class="dn-label">VPD</span><span class="dn-value" style="color:#2ecc71">1.15 kPa</span></div>
     <div class="dn-row"><span class="dn-label">6h Humidity Change</span><span class="dn-value"><span style="color:#5a7088">→ Stable</span></span></div>
     <div class="dn-takeaway"><strong>Key Takeaway:</strong> Environmental conditions are solid — the crisis is underground. Focus all attention on the irrigation emergency. Once VWC recovers above 40%, environmental numbers will maintain themselves.</div>
 </div>
 <div class="dn-card">
     <h4>🏺 Cure Room — Passive Monitoring</h4>
-    <div class="dn-row"><span class="dn-label">Temperature</span><span class="dn-value" style="color:#2ecc71">61.6°F</span></div>
-    <div class="dn-row"><span class="dn-label">Humidity</span><span class="dn-value" style="color:#2ecc71">65.1%</span></div>
+    <div class="dn-row"><span class="dn-label">Temperature</span><span class="dn-value" style="color:#2ecc71">60.2°F</span></div>
+    <div class="dn-row"><span class="dn-label">Humidity</span><span class="dn-value" style="color:#2ecc71">57.3%</span></div>
     <div class="dn-row"><span class="dn-label">Target Temp</span><span class="dn-value" style="color:#5a7088">58-68°F</span></div>
     <div class="dn-row"><span class="dn-label">Target RH</span><span class="dn-value" style="color:#5a7088">55-65%</span></div>
     <div class="dn-takeaway"><strong>Key Takeaway:</strong> Cure conditions excellent. Both temp and humidity within ideal range. No action needed.</div>
@@ -1082,20 +1008,20 @@ body{background:white;color:black}
     <div class="dive-section">
         <div class="dive-section-title">Environmental Snapshot</div>
         <div class="dive-metrics">
-            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">86.7°F</div><div class="dive-metric-label">Temperature</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:#f39c12">64.2%</div><div class="dive-metric-label">Humidity</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:#f39c12">1.87</div><div class="dive-metric-label">VPD (kPa)</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">862</div><div class="dive-metric-label">CO2 (ppm)</div></div>
+            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">78.0°F</div><div class="dive-metric-label">Temperature</div></div>
+            <div class="dive-metric"><div class="dive-metric-val" style="color:#f39c12">71.5%</div><div class="dive-metric-label">Humidity</div></div>
+            <div class="dive-metric"><div class="dive-metric-val" style="color:#f39c12">0.90</div><div class="dive-metric-label">VPD (kPa)</div></div>
+            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">1089</div><div class="dive-metric-label">CO2 (ppm)</div></div>
         </div>
     </div>
     <div class="dive-section">
         <div class="dive-section-title">Root Zone Health</div>
         <div class="dive-metrics">
-            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">2.47</div><div class="dive-metric-label">EC (dS/m)</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">32.2%</div><div class="dive-metric-label">VWC</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">83.2°F</div><div class="dive-metric-label">Root Temp</div></div>
+            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">2.55</div><div class="dive-metric-label">EC (dS/m)</div></div>
+            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">50.4%</div><div class="dive-metric-label">VWC</div></div>
+            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">77.1°F</div><div class="dive-metric-label">Root Temp</div></div>
         </div>
-        <p style="margin-top:12px">Root zone thriving — EC at 2.47 dS/m within ideal range, VWC at 32.2% optimal. Issue is purely environmental air management.</p>
+        <p style="margin-top:12px">Root zone thriving — EC at 2.55 dS/m within ideal range, VWC at 50.4% optimal. Issue is purely environmental air management.</p>
     </div>
     <div class="dive-section">
         <div class="dive-section-title">Recommended Actions</div>
@@ -1104,7 +1030,7 @@ body{background:white;color:black}
             <li>🔴 <strong>URGENT:</strong> Add oscillating fans at canopy level to break boundary layer moisture</li>
             <li>🟡 Consider potassium silicate foliar (0.5-1g/L) for cuticle strength</li>
             <li>🟡 Begin PK boost at 20% over baseline for stretch finish and resin</li>
-            <li>🟢 CO2 at 862 ppm good — maintain current levels</li>
+            <li>🟢 CO2 at 1089 ppm good — maintain current levels</li>
         </ul>
     </div>
 </div>
@@ -1113,12 +1039,12 @@ body{background:white;color:black}
     <div class="dive-section">
         <div class="dive-section-title">Environmental Snapshot</div>
         <div class="dive-metrics">
-            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">60.4°F</div><div class="dive-metric-label">Temperature</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">53.4%</div><div class="dive-metric-label">Humidity</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">0.83</div><div class="dive-metric-label">VPD (kPa)</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">856</div><div class="dive-metric-label">CO2 (ppm)</div></div>
+            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">75.6°F</div><div class="dive-metric-label">Temperature</div></div>
+            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">55.0%</div><div class="dive-metric-label">Humidity</div></div>
+            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">1.37</div><div class="dive-metric-label">VPD (kPa)</div></div>
+            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">947</div><div class="dive-metric-label">CO2 (ppm)</div></div>
         </div>
-        <div class="callout callout-good" style="margin-top:12px"><strong>✅ All Clear:</strong> Every environmental parameter within optimal range. VPD at 0.83 kPa ideal for resin production.</div>
+        <div class="callout callout-good" style="margin-top:12px"><strong>✅ All Clear:</strong> Every environmental parameter within optimal range. VPD at 1.37 kPa ideal for resin production.</div>
     </div>
     <div class="dive-section">
         <div class="dive-section-title">⚠ Critical Blind Spot: No Substrate Sensors</div>
@@ -1141,9 +1067,9 @@ body{background:white;color:black}
     <div class="dive-section">
         <div class="dive-section-title">Substrate Crisis</div>
         <div class="dive-metrics">
-            <div class="dive-metric"><div class="dive-metric-val" style="color:#e74c3c">4.3%</div><div class="dive-metric-label">VWC (Critical)</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:#e74c3c">1.72</div><div class="dive-metric-label">EC (dS/m)</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">82.6°F</div><div class="dive-metric-label">Root Temp</div></div>
+            <div class="dive-metric"><div class="dive-metric-val" style="color:#e74c3c">54.4%</div><div class="dive-metric-label">VWC (Critical)</div></div>
+            <div class="dive-metric"><div class="dive-metric-val" style="color:#e74c3c">3.26</div><div class="dive-metric-label">EC (dS/m)</div></div>
+            <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">71.5°F</div><div class="dive-metric-label">Root Temp</div></div>
         </div>
         <div class="callout callout-critical"><strong>Permanent Wilt Risk:</strong> If VWC drops below 5-8%, root damage becomes irreversible. Drought-stressed mothers produce weak clones, impacting next production cycle.</div>
     </div>
@@ -1175,8 +1101,8 @@ body{background:white;color:black}
         <div class="insight-card cure">
             <h4>🏺 Cure Room Status</h4>
             <div class="dive-metrics">
-                <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">61.6°F</div><div class="dive-metric-label">Temperature</div></div>
-                <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">65.1%</div><div class="dive-metric-label">Humidity</div></div>
+                <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">60.2°F</div><div class="dive-metric-label">Temperature</div></div>
+                <div class="dive-metric"><div class="dive-metric-val" style="color:#2ecc71">57.3%</div><div class="dive-metric-label">Humidity</div></div>
             </div>
             <p>Within ideal cure range (58-68°F, 55-65% RH). Ready for F1 cure ~mid-May.</p>
         </div>
@@ -1187,11 +1113,11 @@ body{background:white;color:black}
     <p style="font-size:12px;color:#7a8fa3;margin-bottom:16px">Automated detection of readings deviating significantly from 24h average.</p>
     <div class="card-grid">
 <div class="insight-card" style="border-left-color:#8DC63F">
-    <h4 style="font-size:13px">Flower 1 — Ambient Temperature</h4>
+    <h4 style="font-size:13px">Flower 1 — Ambient Humidity</h4>
     <div class="dive-metrics">
-        <div class="dive-metric"><div class="dive-metric-val" style="color:#8DC63F">86.67</div><div class="dive-metric-label">Current</div></div>
-        <div class="dive-metric"><div class="dive-metric-val" style="color:#5a7088">82.00</div><div class="dive-metric-label">24h Avg</div></div>
-        <div class="dive-metric"><div class="dive-metric-val" style="color:#8DC63F">5.7%</div><div class="dive-metric-label">Deviation</div></div>
+        <div class="dive-metric"><div class="dive-metric-val" style="color:#8DC63F">71.47</div><div class="dive-metric-label">Current</div></div>
+        <div class="dive-metric"><div class="dive-metric-val" style="color:#5a7088">0.00</div><div class="dive-metric-label">24h Avg</div></div>
+        <div class="dive-metric"><div class="dive-metric-val" style="color:#8DC63F">0.0%</div><div class="dive-metric-label">Deviation</div></div>
     </div>
 </div>
 </div></div>
@@ -1309,7 +1235,7 @@ body{background:white;color:black}
         <footer class="report-footer">
             <div class="footer-brand">Cape Cod Grow Lab</div>
             <div class="footer-tagline">Mindfully Cultivated Cannabis · Brewster, MA</div>
-            <div class="footer-meta">Generated by CCGL GrowLink Analyst · April 06, 2026 · 08:10 AM</div>
+            <div class="footer-meta">Generated by CCGL GrowLink Analyst · April 06, 2026 · 08:14 AM</div>
         </footer>
     </div>
 
