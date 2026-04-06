@@ -178,40 +178,25 @@ def generate_email_html():
 
 <!-- Outer wrapper -->
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#050d18;">
-<tr><td align="center" style="padding:24px 16px;">
+<tr><td align="center" style="padding:12px 8px;">
 
 <!-- Main container (600px max) -->
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:{BG_CARD};border-radius:16px;overflow:hidden;border:1px solid {BORDER};">
 
-<!-- Brand Header with Logo -->
-<tr><td style="background:{BG_CARD_INNER};padding:28px 32px 20px;border-bottom:1px solid {BORDER};">
+<!-- Brand Header -->
+<tr><td style="background:{BG_CARD_INNER};padding:18px 20px;border-bottom:1px solid {BORDER};">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
     <tr>
-        <td width="56" style="vertical-align:middle;padding-right:14px;">
-            <img src="{logo_uri}" alt="CCGL" width="52" height="52" style="display:block;border-radius:12px;border:1px solid {BORDER};" />
+        <td width="48" style="vertical-align:middle;">
+            <img src="{logo_uri}" alt="CCGL" width="48" height="48" style="display:block;border-radius:12px;border:1px solid {BORDER};" />
         </td>
-        <td style="vertical-align:middle;">
-            <img src="{wordmark_uri}" alt="Cape Cod Grow Lab" width="140" height="auto" style="display:block;opacity:0.9;" />
+        <td style="vertical-align:middle;padding-left:14px;">
+            <div style="font-size:10px;font-weight:700;color:{TEAL};text-transform:uppercase;letter-spacing:2px;line-height:1;">Cape Cod Grow Lab</div>
+            <div style="font-size:18px;font-weight:700;color:{WHITE};letter-spacing:-0.3px;margin-top:3px;line-height:1.1;">Daily Grow Summary</div>
         </td>
-        <td width="80" style="vertical-align:middle;text-align:right;">
-            <div style="width:60px;height:60px;border-radius:50%;background:{BG_DARK};border:3px solid {h_color};display:inline-block;text-align:center;line-height:60px;">
-                <span style="font-size:18px;font-weight:800;color:{h_color};">{health_score}%</span>
-            </div>
-        </td>
-    </tr>
-    </table>
-</td></tr>
-
-<!-- Title bar -->
-<tr><td style="background:{BG_DARK};padding:18px 32px;border-bottom:1px solid {BORDER};">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-    <tr>
-        <td>
-            <div style="font-size:18px;font-weight:700;color:{WHITE};letter-spacing:-0.3px;">Daily Grow Summary</div>
-            <div style="font-size:11px;color:{TEXT2};margin-top:4px;">{date_str} · {time_str}</div>
-        </td>
-        <td style="text-align:right;vertical-align:middle;">
-            <div style="font-size:10px;color:{MUTED};">{len(active_events)} active events · {len(resolved_events)} resolved</div>
+        <td width="140" style="vertical-align:middle;text-align:right;">
+            <div style="font-size:11px;color:{TEXT2};line-height:1.2;">{date_str}</div>
+            <div style="font-size:10px;color:{MUTED};margin-top:3px;line-height:1;">{len(active_events)} active · {len(resolved_events)} resolved</div>
         </td>
     </tr>
     </table>
@@ -241,7 +226,7 @@ def generate_email_html():
     if active_events:
         html += f"""
 <!-- Active Events -->
-<tr><td style="padding:24px 32px 8px;">
+<tr><td style="padding:24px 20px 8px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
     <tr>
         <td><div style="font-size:11px;font-weight:700;color:{ORANGE};text-transform:uppercase;letter-spacing:1.5px;">Active Events ({len(active_events)})</div></td>
@@ -262,7 +247,7 @@ def generate_email_html():
             badge_bg = f"{RED}33" if escalated else f"{s_color}22"
 
             html += f"""
-<tr><td style="padding:6px 32px;">
+<tr><td style="padding:6px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{BG_DARK};border-radius:10px;border-left:4px solid {s_color};overflow:hidden;">
     <tr><td style="padding:16px 20px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
@@ -304,13 +289,13 @@ def generate_email_html():
     # ---- RESOLVED EVENTS ----
     if resolved_events:
         html += f"""
-<tr><td style="padding:20px 32px 8px;">
+<tr><td style="padding:20px 20px 8px;">
     <div style="font-size:11px;font-weight:700;color:{GREEN};text-transform:uppercase;letter-spacing:1.5px;">Recently Resolved ({len(resolved_events)})</div>
 </td></tr>"""
 
         for evt in resolved_events[:3]:
             html += f"""
-<tr><td style="padding:4px 32px;">
+<tr><td style="padding:4px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{BG_DARK};border-radius:8px;border-left:3px solid {GREEN};opacity:0.8;">
     <tr><td style="padding:12px 16px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
@@ -340,7 +325,7 @@ def generate_email_html():
 
     html += f"""
 <!-- Room Snapshot -->
-<tr><td style="padding:24px 32px 8px;">
+<tr><td style="padding:24px 20px 8px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
     <tr>
         <td><div style="font-size:11px;font-weight:700;color:{TEAL};text-transform:uppercase;letter-spacing:1.5px;">Room Snapshot</div></td>
@@ -355,7 +340,7 @@ def generate_email_html():
         sensors = key_sensors.get(room, [])
 
         html += f"""
-<tr><td style="padding:6px 32px;">
+<tr><td style="padding:6px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{BG_DARK};border-radius:10px;border-top:3px solid {color};overflow:hidden;">
     <tr><td style="padding:16px 20px;">
         <div style="font-size:13px;font-weight:700;color:{WHITE};margin-bottom:10px;">{room}
@@ -406,14 +391,14 @@ def generate_email_html():
     if priorities:
         html += f"""
 <!-- Priority Actions -->
-<tr><td style="padding:24px 32px 8px;">
+<tr><td style="padding:24px 20px 8px;">
     <div style="font-size:11px;font-weight:700;color:{RED};text-transform:uppercase;letter-spacing:1.5px;">Priority Actions</div>
 </td></tr>"""
 
         for i, p in enumerate(priorities[:4], 1):
             p_color = RED if p["level"] == "critical" else ORANGE
             html += f"""
-<tr><td style="padding:4px 32px;">
+<tr><td style="padding:4px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{BG_DARK};border-radius:8px;">
     <tr>
         <td width="36" style="padding:12px 0 12px 14px;vertical-align:top;">
@@ -428,10 +413,10 @@ def generate_email_html():
     offline_modules = state.get("offline_modules", [])
     html += f"""
 <!-- System Health -->
-<tr><td style="padding:24px 32px 8px;">
+<tr><td style="padding:24px 20px 8px;">
     <div style="font-size:11px;font-weight:700;color:{BLUE};text-transform:uppercase;letter-spacing:1.5px;">System Health</div>
 </td></tr>
-<tr><td style="padding:6px 32px;">
+<tr><td style="padding:6px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{BG_DARK};border-radius:10px;">
     <tr>
         <td width="33%" style="text-align:center;padding:16px 8px;">
@@ -453,14 +438,14 @@ def generate_email_html():
     if offline_modules:
         modules_str = " · ".join(offline_modules[:5])
         html += f"""
-<tr><td style="padding:4px 32px 0;">
+<tr><td style="padding:4px 20px 0;">
     <div style="font-size:10px;color:{MUTED};padding:4px 0;">Offline: {modules_str}</div>
 </td></tr>"""
 
     # ---- CTA BUTTON ----
     html += f"""
 <!-- CTA Button -->
-<tr><td style="padding:28px 32px 8px;">
+<tr><td style="padding:28px 20px 8px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
     <tr><td align="center">
         <a href="{REPORT_URL}" target="_blank" style="display:inline-block;padding:14px 40px;background:linear-gradient(135deg,{TEAL},{LIME});color:{BG_DARK};font-size:13px;font-weight:700;text-decoration:none;border-radius:8px;text-transform:uppercase;letter-spacing:1px;">View Full Report →</a>
@@ -469,7 +454,7 @@ def generate_email_html():
 </td></tr>
 
 <!-- Footer with logo -->
-<tr><td style="padding:24px 32px 32px;border-top:1px solid {BORDER};background:{BG_CARD_INNER};">
+<tr><td style="padding:24px 20px 28px;border-top:1px solid {BORDER};background:{BG_CARD_INNER};">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
     <tr>
         <td style="text-align:center;">
