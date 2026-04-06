@@ -6,15 +6,18 @@ Designed for Gmail rendering with inline styles and table-based layout.
 """
 
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
 STATE_PATH = BASE_DIR / "data" / "state.json"
 EVENTS_PATH = BASE_DIR / "data" / "events.json"
+DAILY_SUMMARY_PATH = BASE_DIR / "data" / "daily-summaries.json"
 LOGO_PATH = BASE_DIR / "data" / "logo_base64.txt"
 WORDMARK_PATH = BASE_DIR / "data" / "wordmark_base64.txt"
 REPORT_URL = "https://dangillan1.github.io/ccgl/"
+LOGO_URL = "https://dangillan1.github.io/ccgl/logo.png"
+WORDMARK_URL = "https://dangillan1.github.io/ccgl/wordmark.png"
 
 # Brand colors
 BG_DARK = "#0a1628"
@@ -99,9 +102,32 @@ def format_duration(hours):
         return f"{d}d {h}h" if h else f"{d}d"
 
 
+def fmt_timestamp(iso_str, fmt="%I:%M %p"):
+    """Format an ISO timestamp string to a readable time."""
+    if not iso_str:
+        return ""
+    try:
+        dt = datetime.fromisoformat(str(iso_str).replace("Z", "+00:00"))
+        return dt.strftime(fmt)
+    except:
+        return ""
+
+
+def fmt_date_range(iso_str):
+    """Format an ISO timestamp to 'Apr 5, 9:22 PM' style."""
+    if not iso_str:
+        return ""
+    try:
+        dt = datetime.fromisoformat(str(iso_str).replace("Z", "+00:00"))
+        return dt.strftime("%b %d, %I:%M %p").replace(" 0", " ")
+    except:
+        return ""
+
+
 def generate_email_html():
     state = load_json(STATE_PATH)
     events = load_json(EVENTS_PATH)
+    daily_summaries = load_json(DAILY_SUMMARY_PATH)
 
     now = datetime.now()
     updated = state.get("last_updated", now.isoformat())
@@ -157,9 +183,9 @@ def generate_email_html():
     except:
         data_range_str = f"As of {time_str}"
 
-    # Load logos
-    logo_uri = load_logo(LOGO_PATH)
-    wordmark_uri = load_logo(WORDMARK_PATH)
+    # Use hosted logo URLs (avoids base64 bloat in email)
+    logo_uri = LOGO_URL
+    wordmark_uri = WORDMARK_URL
 
     # ---- BUILD HTML ----
     html = f"""<!DOCTYPE html>
@@ -194,9 +220,8 @@ def generate_email_html():
             <div style="font-size:10px;font-weight:700;color:{TEAL};text-transform:uppercase;letter-spacing:2px;line-height:1;">Cape Cod Grow Lab</div>
             <div style="font-size:18px;font-weight:700;color:{WHITE};letter-spacing:-0.3px;margin-top:3px;line-height:1.1;">Daily Grow Summary</div>
         </td>
-        <td width="140" style="vertical-align:middle;text-align:right;">
-            <div style="font-size:11px;color:{TEXT2};line-height:1.2;">{date_str}</div>
-            <div style="font-size:10px;color:{MUTED};margin-top:3px;line-height:1;">{len(active_events)} active · {len(resolved_events)} resolved</div>
+        <td width="160" style="vertical-align:middle;text-align:right;">
+            <div style="font-size:13px;font-weight:600;color:{TEXT};line-height:1.2;">{date_str}</div>
         </td>
     </tr>
     </table>
@@ -222,99 +247,8 @@ def generate_email_html():
     </table>
 </td></tr>"""
 
-    # ---- ACTIVE EVENTS SECTION ----
-    if active_events:
-        html += f"""
-<!-- Active Events -->
-<tr><td style="padding:24px 20px 8px;">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-    <tr>
-        <td><div style="font-size:11px;font-weight:700;color:{ORANGE};text-transform:uppercase;letter-spacing:1.5px;">Active Events ({len(active_events)})</div></td>
-    </tr>
-    </table>
-</td></tr>"""
-
-        for evt in active_events:
-            sev = evt.get("severity", "warning")
-            s_color = severity_color(sev)
-            escalated = evt.get("escalated", False)
-            hours = evt.get("hours_active", 0)
-            consec = evt.get("consecutive_hours", 1)
-            cur = evt.get("current_value", 0)
-            peak = evt.get("peak_value", cur)
-            sensor = evt.get("sensor", "")
-            badge = "ESCALATED" if escalated else sev.upper()
-            badge_bg = f"{RED}33" if escalated else f"{s_color}22"
-
-            html += f"""
-<tr><td style="padding:6px 20px;">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{BG_DARK};border-radius:10px;border-left:4px solid {s_color};overflow:hidden;">
-    <tr><td style="padding:16px 20px;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-            <td>
-                <span style="display:inline-block;padding:2px 8px;border-radius:3px;font-size:9px;font-weight:700;background:{badge_bg};color:{s_color};text-transform:uppercase;letter-spacing:0.5px;">{badge}</span>
-                <div style="font-size:14px;font-weight:600;color:{WHITE};margin-top:6px;">{evt.get('label', '')}</div>
-                <div style="font-size:11px;color:{TEAL};margin-top:2px;">{evt.get('room', '')} · {evt.get('growth_stage', '')}</div>
-            </td>
-            <td width="100" style="text-align:right;vertical-align:top;">
-                <div style="font-size:22px;font-weight:800;color:{s_color};">{fmt_sensor(sensor, cur)}</div>
-                <div style="font-size:9px;color:{TEXT2};text-transform:uppercase;margin-top:2px;">Current</div>
-            </td>
-        </tr>
-        </table>
-        <!-- Event metrics row -->
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:12px;">
-        <tr>
-            <td width="33%" style="text-align:center;padding:8px 4px;background:{BG_CARD};border-radius:6px;">
-                <div style="font-size:13px;font-weight:700;color:{WHITE};">{fmt_sensor(sensor, peak)}</div>
-                <div style="font-size:9px;color:{TEXT2};text-transform:uppercase;">Peak</div>
-            </td>
-            <td width="4"></td>
-            <td width="33%" style="text-align:center;padding:8px 4px;background:{BG_CARD};border-radius:6px;">
-                <div style="font-size:13px;font-weight:700;color:{WHITE};">{format_duration(hours)}</div>
-                <div style="font-size:9px;color:{TEXT2};text-transform:uppercase;">Duration</div>
-            </td>
-            <td width="4"></td>
-            <td width="33%" style="text-align:center;padding:8px 4px;background:{BG_CARD};border-radius:6px;">
-                <div style="font-size:13px;font-weight:700;color:{WHITE};">{consec}h</div>
-                <div style="font-size:9px;color:{TEXT2};text-transform:uppercase;">Consecutive</div>
-            </td>
-        </tr>
-        </table>
-    </td></tr>
-    </table>
-</td></tr>"""
-
-    # ---- RESOLVED EVENTS ----
-    if resolved_events:
-        html += f"""
-<tr><td style="padding:20px 20px 8px;">
-    <div style="font-size:11px;font-weight:700;color:{GREEN};text-transform:uppercase;letter-spacing:1.5px;">Recently Resolved ({len(resolved_events)})</div>
-</td></tr>"""
-
-        for evt in resolved_events[:3]:
-            html += f"""
-<tr><td style="padding:4px 20px;">
-    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{BG_DARK};border-radius:8px;border-left:3px solid {GREEN};opacity:0.8;">
-    <tr><td style="padding:12px 16px;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-            <td>
-                <span style="display:inline-block;padding:2px 6px;border-radius:3px;font-size:8px;font-weight:700;background:{GREEN}22;color:{GREEN};text-transform:uppercase;">Resolved</span>
-                <span style="font-size:12px;color:{WHITE};margin-left:8px;font-weight:600;">{evt.get('label', '')}</span>
-                <span style="font-size:11px;color:{TEXT2};margin-left:4px;">· {evt.get('room', '')}</span>
-            </td>
-            <td width="80" style="text-align:right;">
-                <div style="font-size:11px;color:{TEXT2};">{format_duration(evt.get('duration_hours', 0))}</div>
-            </td>
-        </tr>
-        </table>
-    </td></tr>
-    </table>
-</td></tr>"""
-
-    # ---- ROOM SNAPSHOT ----
+    # ---- 24-HOUR ROOM PERFORMANCE LOOKBACK ----
+    # Pull from daily-summaries.json for real 24h data (not hourly state.json snapshot)
     room_order = ["Flower 1", "Flower 2", "Mom"]
     room_colors = {"Flower 1": ORANGE, "Flower 2": LIME, "Mom": BLUE}
     key_sensors = {
@@ -323,88 +257,490 @@ def generate_email_html():
         "Mom": ["Ambient Temperature", "Ambient Humidity", "Substrate VWC", "Vapor Pressure Deficit"],
     }
 
+    # Build a merged 24h view: combine today + yesterday summaries, and fold in event peaks
+    today_str = now.strftime("%Y-%m-%d")
+    yesterday_str = (now - timedelta(days=1)).strftime("%Y-%m-%d")
+    today_daily = daily_summaries.get(today_str, {})
+    yesterday_daily = daily_summaries.get(yesterday_str, {})
+
+    def merge_sensor(s1, s2):
+        """Merge two sensor summary dicts (avg/min/max/count) into a combined view."""
+        if not s1: return dict(s2) if s2 else {}
+        if not s2: return dict(s1)
+        c1, c2 = s1.get("count", 0), s2.get("count", 0)
+        total = c1 + c2
+        merged = {
+            "min": min(s1.get("min", 999), s2.get("min", 999)),
+            "max": max(s1.get("max", -999), s2.get("max", -999)),
+            "count": total,
+        }
+        # Weighted average
+        if total > 0 and s1.get("avg") is not None and s2.get("avg") is not None:
+            merged["avg"] = (s1["avg"] * c1 + s2["avg"] * c2) / total
+        elif s1.get("avg") is not None:
+            merged["avg"] = s1["avg"]
+        elif s2.get("avg") is not None:
+            merged["avg"] = s2["avg"]
+        return merged
+
+    def merge_room_data(today_room, yesterday_room):
+        """Merge today + yesterday 'all' data for a rolling 24h+ view."""
+        t_all = today_room.get("all", {})
+        y_all = yesterday_room.get("all", {})
+        merged = {}
+        all_sensors = set(list(t_all.keys()) + list(y_all.keys()))
+        for sensor in all_sensors:
+            merged[sensor] = merge_sensor(t_all.get(sensor, {}), y_all.get(sensor, {}))
+        return merged
+
+    def fold_in_event_peaks(merged_all, room_events, room_resolved):
+        """Ensure event peak values are reflected in the merged data."""
+        for evt in list(room_events) + list(room_resolved):
+            sensor = evt.get("sensor", "")
+            peak = evt.get("peak_value")
+            if sensor and peak is not None and sensor in merged_all:
+                s = merged_all[sensor]
+                if "above" in evt.get("condition", ""):
+                    if peak > s.get("max", -999):
+                        s["max"] = peak
+                elif "below" in evt.get("condition", ""):
+                    if peak < s.get("min", 999):
+                        s["min"] = peak
+            # Also fold in hourly_values from events
+            for hv in evt.get("hourly_values", []):
+                val = hv.get("value")
+                if sensor and val is not None and sensor in merged_all:
+                    s = merged_all[sensor]
+                    if val > s.get("max", -999):
+                        s["max"] = val
+                    if val < s.get("min", 999):
+                        s["min"] = val
+
+    # Determine date label (clean, human-readable)
+    has_today = bool(today_daily)
+    has_yesterday = bool(yesterday_daily)
+    def fmt_short_date(d_str):
+        try:
+            return datetime.strptime(d_str, "%Y-%m-%d").strftime("%b %d").replace(" 0", " ")
+        except:
+            return d_str
+    if has_today:
+        summary_label = f"Last 24h · {fmt_short_date(today_str)}"
+    else:
+        summary_label = f"Last 24h · {fmt_short_date(yesterday_str)}"
+
+    def range_quality(s_min, s_max, sensor_name):
+        """Rate how tight the 24h range was."""
+        if s_min is None or s_max is None:
+            return "N/A", MUTED
+        spread = abs(s_max - s_min)
+        if "Temperature" in sensor_name:
+            if spread <= 5: return "tight", GREEN
+            elif spread <= 10: return "moderate", ORANGE
+            return "wide swing", RED
+        elif "Humidity" in sensor_name:
+            if spread <= 8: return "tight", GREEN
+            elif spread <= 15: return "moderate", ORANGE
+            return "wide swing", RED
+        elif "VPD" in sensor_name or "Deficit" in sensor_name:
+            if spread <= 0.3: return "tight", GREEN
+            elif spread <= 0.6: return "moderate", ORANGE
+            return "wide swing", RED
+        elif "VWC" in sensor_name:
+            if spread <= 10: return "tight", GREEN
+            elif spread <= 20: return "moderate", ORANGE
+            return "wide swing", RED
+        return "ok", TEXT2
+
+    def build_room_assessment(room, day_data, night_data, all_data, r_events, r_resolved):
+        """Build narrative assessment from actual daily summary + events."""
+        issues = []
+        wins = []
+
+        # Count events
+        active_critical = sum(1 for e in r_events if e.get("severity") == "critical")
+        active_warning = sum(1 for e in r_events if e.get("severity") == "warning")
+        resolved_count = len(r_resolved)
+
+        # Analyze temperature
+        temp_all = all_data.get("Ambient Temperature", {})
+        if temp_all:
+            t_min, t_max = temp_all.get("min"), temp_all.get("max")
+            if t_min is not None and t_max is not None:
+                spread = t_max - t_min
+                if t_max > 85:
+                    issues.append(f"temp peaked {t_max:.0f}°F")
+                elif spread > 10:
+                    issues.append(f"temp swung {spread:.0f}°F")
+                elif spread <= 5:
+                    wins.append("temp well-controlled")
+
+        # Analyze humidity
+        hum_all = all_data.get("Ambient Humidity", {})
+        if hum_all:
+            h_avg = hum_all.get("avg")
+            h_max = hum_all.get("max")
+            if h_avg and h_avg > 75:
+                issues.append(f"humidity averaged {h_avg:.0f}%")
+            elif h_max and h_max > 85:
+                issues.append(f"humidity peaked {h_max:.0f}%")
+            elif h_avg and h_max:
+                spread = h_max - hum_all.get("min", h_avg)
+                if spread <= 8:
+                    wins.append("humidity held tight")
+
+        # Analyze VPD
+        vpd_all = all_data.get("Vapor Pressure Deficit", {})
+        if vpd_all:
+            v_avg, v_min, v_max = vpd_all.get("avg"), vpd_all.get("min"), vpd_all.get("max")
+            if v_avg is not None:
+                if v_avg < 0.5:
+                    issues.append(f"VPD averaged just {v_avg:.2f} kPa")
+                elif v_min is not None and v_max is not None:
+                    spread = v_max - v_min
+                    if spread > 0.8:
+                        issues.append(f"VPD swung {spread:.1f} kPa")
+                    elif spread <= 0.3:
+                        wins.append("VPD consistent")
+
+        # Factor in events
+        if active_critical > 0:
+            evt_labels = [e.get("label", "") for e in r_events if e.get("severity") == "critical"]
+            issues.insert(0, f"{', '.join(evt_labels[:2])} active")
+        if resolved_count > 0:
+            evt_labels = [e.get("label", "") for e in r_resolved]
+            issues.append(f"{', '.join(evt_labels[:2])} resolved")
+
+        # Build summary
+        if active_critical > 0:
+            return f"Needs immediate attention — {', '.join(issues[:2])}", RED
+        elif len(issues) >= 2:
+            return f"Challenging 24h — {', '.join(issues[:2])}", ORANGE
+        elif issues:
+            return f"{', '.join(wins[:1]) + ' but ' if wins else ''}{issues[0]}", ORANGE
+        elif wins:
+            return f"Strong 24h — {', '.join(wins[:2])}", GREEN
+        return "Stable conditions over the last 24 hours", GREEN
+
+    # Collect events per room (active + resolved)
+    room_active_events = {}
+    room_resolved_events = {}
+    for evt in active_events:
+        room_active_events.setdefault(evt.get("room", ""), []).append(evt)
+    for evt in resolved_events:
+        room_resolved_events.setdefault(evt.get("room", ""), []).append(evt)
+
     html += f"""
-<!-- Room Snapshot -->
+<!-- 24-Hour Room Performance -->
 <tr><td style="padding:24px 20px 8px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
     <tr>
-        <td><div style="font-size:11px;font-weight:700;color:{TEAL};text-transform:uppercase;letter-spacing:1.5px;">Room Snapshot</div></td>
-        <td style="text-align:right;"><div style="font-size:10px;color:{MUTED};">{data_range_str}</div></td>
+        <td><div style="font-size:11px;font-weight:700;color:{TEAL};text-transform:uppercase;letter-spacing:1.5px;">24-Hour Room Performance</div></td>
+        <td style="text-align:right;"><div style="font-size:10px;color:{MUTED};">{summary_label}</div></td>
     </tr>
     </table>
 </td></tr>"""
 
     for room in room_order:
-        r_data = rooms.get(room, {})
         color = room_colors.get(room, TEAL)
         sensors = key_sensors.get(room, [])
+        r_events = room_active_events.get(room, [])
+        r_resolved = room_resolved_events.get(room, [])
+
+        # Merge today + yesterday for rolling 24h+ view
+        today_room = today_daily.get(room, {})
+        yesterday_room = yesterday_daily.get(room, {})
+        all_data = merge_room_data(today_room, yesterday_room)
+        # Fold in event peak values (catches spikes between summary calculations)
+        fold_in_event_peaks(all_data, r_events, r_resolved)
+        # Day/night from today's summary (most recent cycle data)
+        day_data = today_room.get("day", yesterday_room.get("day", {}))
+        night_data = today_room.get("night", yesterday_room.get("night", {}))
+        reading_count = all_data.get("Ambient Temperature", {}).get("count", 0)
+
+        assessment_text, assessment_color = build_room_assessment(
+            room, day_data, night_data, all_data, r_events, r_resolved
+        )
+        has_critical = any(e.get("severity") == "critical" for e in r_events)
+        has_warning = any(e.get("severity") == "warning" for e in r_events)
+        if has_critical:
+            status_badge = ("⚠ CRITICAL", f"{RED}22", RED)
+        elif has_warning:
+            status_badge = ("⚠ ATTENTION", f"{ORANGE}22", ORANGE)
+        else:
+            status_badge = ("✓ ON TRACK", f"{GREEN}22", GREEN)
 
         html += f"""
 <tr><td style="padding:6px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{BG_DARK};border-radius:10px;border-top:3px solid {color};overflow:hidden;">
-    <tr><td style="padding:16px 20px;">
-        <div style="font-size:13px;font-weight:700;color:{WHITE};margin-bottom:10px;">{room}
-            <span style="font-size:10px;font-weight:400;color:{TEXT2};margin-left:8px;">{stages.get(room, '')}</span>
-        </div>
+    <tr><td style="padding:16px 20px 12px;">
+        <!-- Room header -->
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-        <tr>"""
+        <tr>
+            <td>
+                <div style="font-size:13px;font-weight:700;color:{WHITE};">{room}
+                    <span style="font-size:10px;font-weight:400;color:{TEXT2};margin-left:8px;">{stages.get(room, '')}</span>
+                </div>
+            </td>
+            <td style="text-align:right;">
+                <span style="display:inline-block;padding:2px 8px;border-radius:3px;font-size:9px;font-weight:700;background:{status_badge[1]};color:{status_badge[2]};text-transform:uppercase;letter-spacing:0.5px;">{status_badge[0]}</span>
+            </td>
+        </tr>
+        </table>
 
-        for i, sensor in enumerate(sensors):
-            s_data = r_data.get(sensor, {})
-            val = s_data.get("value") if isinstance(s_data, dict) else s_data
+        <!-- Day / Night comparison header -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:12px;">
+        <tr>
+            <td width="28%" style="padding:4px 0;font-size:9px;font-weight:700;color:{MUTED};text-transform:uppercase;letter-spacing:0.5px;"></td>
+            <td width="24%" style="padding:4px 0;font-size:9px;font-weight:700;color:{MUTED};text-transform:uppercase;letter-spacing:0.5px;text-align:center;">24h Range</td>
+            <td width="24%" style="padding:4px 0;font-size:9px;font-weight:700;color:{MUTED};text-transform:uppercase;letter-spacing:0.5px;text-align:center;">Avg</td>
+            <td width="24%" style="padding:4px 0;font-size:9px;font-weight:700;color:{MUTED};text-transform:uppercase;letter-spacing:0.5px;text-align:right;">Range</td>
+        </tr>"""
+
+        for sensor in sensors:
+            s_all = all_data.get(sensor, {})
+            s_min = s_all.get("min")
+            s_max = s_all.get("max")
+            s_avg = s_all.get("avg")
             short_name = sensor.replace("Ambient ", "").replace("Vapor Pressure Deficit", "VPD").replace("Substrate ", "")
 
-            # Flag if this sensor has an alert
-            val_color = WHITE
-            if room == "Flower 1" and "Temperature" in sensor and val and val > 85:
-                val_color = RED
-            elif room == "Flower 1" and "Humidity" in sensor and val and val > 70:
-                val_color = ORANGE
-            elif "VWC" in sensor and val and val < 10:
-                val_color = RED
-            elif "VWC" in sensor and val and val < 15:
-                val_color = ORANGE
+            # Build range string from real 24h data
+            if s_min is not None and s_max is not None and s_min != s_max:
+                range_str = f"{fmt_sensor(sensor, s_min)} – {fmt_sensor(sensor, s_max)}"
+            elif s_min is not None:
+                range_str = f"Held {fmt_sensor(sensor, s_min)}"
+            else:
+                range_str = "N/A"
+
+            # Average
+            avg_str = fmt_sensor(sensor, s_avg) if s_avg is not None else "—"
+
+            # Quality
+            quality, q_color = range_quality(s_min, s_max, sensor)
 
             html += f"""
-            <td width="{100 // len(sensors)}%" style="text-align:center;padding:6px 4px;">
-                <div style="font-size:16px;font-weight:700;color:{val_color};">{fmt_sensor(sensor, val)}</div>
-                <div style="font-size:9px;color:{TEXT2};text-transform:uppercase;margin-top:2px;">{short_name}</div>
-            </td>"""
+        <tr>
+            <td style="padding:5px 0;font-size:11px;font-weight:600;color:{TEXT2};">{short_name}</td>
+            <td style="padding:5px 0;font-size:11px;font-weight:700;color:{WHITE};text-align:center;">{range_str}</td>
+            <td style="padding:5px 0;font-size:11px;color:{TEXT2};text-align:center;">{avg_str}</td>
+            <td style="padding:5px 0;text-align:right;">
+                <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:{q_color};"></span>
+                <span style="font-size:9px;color:{q_color};margin-left:3px;">{quality}</span>
+            </td>
+        </tr>"""
 
         html += """
+        </table>"""
+
+        # Day vs Night VPD comparison (the key consistency metric)
+        vpd_day = day_data.get("Vapor Pressure Deficit", {})
+        vpd_night = night_data.get("Vapor Pressure Deficit", {})
+        vpd_all = all_data.get("Vapor Pressure Deficit", {})
+        if vpd_all:
+            v_min = vpd_all.get("min")
+            v_max = vpd_all.get("max")
+            v_avg = vpd_all.get("avg")
+            day_avg = vpd_day.get("avg")
+            night_avg = vpd_night.get("avg")
+
+            # Build VPD narrative
+            vpd_parts = []
+            if v_min is not None and v_max is not None:
+                spread = abs(v_max - v_min)
+                if spread <= 0.3:
+                    vpd_note = f"VPD held {v_min:.2f}–{v_max:.2f} kPa — excellent consistency"
+                    vpd_c = GREEN
+                elif spread <= 0.6:
+                    vpd_note = f"VPD ranged {v_min:.2f}–{v_max:.2f} kPa"
+                    if day_avg and night_avg:
+                        vpd_note += f" (day avg {day_avg:.2f}, night avg {night_avg:.2f})"
+                    vpd_c = TEAL
+                else:
+                    vpd_note = f"VPD swung {v_min:.2f}–{v_max:.2f} kPa ({spread:.1f} kPa spread)"
+                    if day_avg and night_avg:
+                        vpd_note += f" — day avg {day_avg:.2f}, night avg {night_avg:.2f}"
+                    vpd_c = ORANGE if spread <= 1.0 else RED
+
+                html += f"""
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:8px;">
+        <tr><td>
+            <div style="font-size:10px;color:{vpd_c};padding:6px 10px;background:{vpd_c}11;border-radius:5px;border-left:3px solid {vpd_c};">
+                {vpd_note}
+            </div>
+        </td></tr>
+        </table>"""
+
+        # Event summary for this room (active + recently resolved)
+        total_events = len(r_events) + len(r_resolved)
+        if total_events > 0:
+            evt_items = []
+            for evt in r_events:
+                sev = evt.get("severity", "warning")
+                s_c = severity_color(sev)
+                dur = evt.get("hours_active", 0)
+                peak = evt.get("peak_value")
+                sensor = evt.get("sensor", "")
+                peak_str = f" · peaked {fmt_sensor(sensor, peak)}" if peak else ""
+                evt_items.append(
+                    f'<span style="color:{s_c};font-weight:600;">{evt.get("label","")}</span>'
+                    f' <span style="color:{MUTED};">{format_duration(dur)} active{peak_str}</span>'
+                )
+            for evt in r_resolved:
+                peak = evt.get("peak_value")
+                sensor = evt.get("sensor", "")
+                peak_str = f" · peaked {fmt_sensor(sensor, peak)}" if peak else ""
+                evt_items.append(
+                    f'<span style="color:{GREEN};font-weight:600;">{evt.get("label","")} ✓</span>'
+                    f' <span style="color:{MUTED};">resolved{peak_str}</span>'
+                )
+
+            html += f"""
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:6px;">"""
+            for item in evt_items[:4]:
+                html += f"""
+        <tr><td style="padding:2px 0;font-size:10px;line-height:1.4;">
+            {item}
+        </td></tr>"""
+            html += """
+        </table>"""
+
+        # Room assessment narrative
+        html += f"""
+        <div style="font-size:10px;color:{assessment_color};margin-top:8px;padding-top:8px;border-top:1px solid {BORDER};">
+            {assessment_text}
+        </div>
+    </td></tr>
+    </table>
+</td></tr>"""
+
+    # ---- EVENTS & ACTIONS (combined panel: active events + 24h data-driven actions) ----
+    # Build unified action items: event cards first, then 24h-derived flags
+    action_items = []
+
+    # 1. Active events as action cards (sorted: critical first, then by duration)
+    for evt in sorted(active_events, key=lambda e: (0 if e.get("severity") == "critical" else 1, -e.get("hours_active", 0))):
+        sev = evt.get("severity", "warning")
+        s_color = severity_color(sev)
+        room = evt.get("room", "")
+        label = evt.get("label", "")
+        sensor = evt.get("sensor", "")
+        hours = evt.get("hours_active", 0)
+        peak = evt.get("peak_value")
+        cur = evt.get("current_value")
+        escalated = evt.get("escalated", False)
+        evt_started = fmt_date_range(evt.get("started", ""))
+        badge = "ESCALATED" if escalated else sev.upper()
+        badge_bg = f"{RED}33" if escalated else f"{s_color}22"
+        peak_str = f" · peaked {fmt_sensor(sensor, peak)}" if peak and peak != cur else ""
+
+        action_items.append({
+            "type": "event",
+            "level": sev,
+            "color": s_color,
+            "badge": badge,
+            "badge_bg": badge_bg,
+            "title": f"{room} — {label}",
+            "detail": f"Active {format_duration(hours)}, currently {fmt_sensor(sensor, cur)}{peak_str}",
+            "since": f"Since {evt_started}" if evt_started else "",
+        })
+
+    # 2. 24h data-driven flags (only add if not already covered by an active event)
+    data_flags = []
+    for room in room_order:
+        t_room = today_daily.get(room, {})
+        y_room = yesterday_daily.get(room, {})
+        r_all = merge_room_data(t_room, y_room)
+        fold_in_event_peaks(r_all, room_active_events.get(room, []), room_resolved_events.get(room, []))
+
+        # VPD inconsistency
+        vpd = r_all.get("Vapor Pressure Deficit", {})
+        if vpd.get("min") is not None and vpd.get("max") is not None:
+            vpd_spread = vpd["max"] - vpd["min"]
+            if vpd_spread > 1.0:
+                data_flags.append({
+                    "type": "flag",
+                    "level": "warning",
+                    "color": ORANGE,
+                    "text": f"{room} VPD swung {vpd['min']:.2f}–{vpd['max']:.2f} kPa over 24h ({vpd_spread:.1f} kPa spread). Review dehumidifier and HVAC cycling.",
+                })
+
+        # Extreme humidity
+        hum = r_all.get("Ambient Humidity", {})
+        if hum.get("avg") and hum["avg"] > 80:
+            data_flags.append({
+                "type": "flag",
+                "level": "warning",
+                "color": ORANGE,
+                "text": f"{room} humidity averaged {hum['avg']:.0f}% over 24h (peaked {hum.get('max', 0):.0f}%). Botrytis risk in flower.",
+            })
+
+        # Extreme temp swings
+        temp = r_all.get("Ambient Temperature", {})
+        if temp.get("min") is not None and temp.get("max") is not None:
+            t_spread = temp["max"] - temp["min"]
+            if t_spread > 15:
+                data_flags.append({
+                    "type": "flag",
+                    "level": "warning",
+                    "color": ORANGE,
+                    "text": f"{room} temp ranged {temp['min']:.0f}–{temp['max']:.0f}°F ({t_spread:.0f}° swing). Check HVAC and ventilation.",
+                })
+
+    total_items = len(action_items) + len(data_flags)
+    if total_items > 0:
+        # Section header
+        critical_count = sum(1 for a in action_items if a["level"] == "critical")
+        header_color = RED if critical_count > 0 else ORANGE
+        html += f"""
+<!-- Events & Actions -->
+<tr><td style="padding:24px 20px 8px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <td><div style="font-size:11px;font-weight:700;color:{header_color};text-transform:uppercase;letter-spacing:1.5px;">Events & Actions ({total_items})</div></td>
+        <td style="text-align:right;"><div style="font-size:10px;color:{MUTED};">Based on 24h performance</div></td>
+    </tr>
+    </table>
+</td></tr>"""
+
+        # Render active event cards
+        for item in action_items:
+            html += f"""
+<tr><td style="padding:4px 20px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{BG_DARK};border-radius:8px;border-left:4px solid {item['color']};">
+    <tr><td style="padding:12px 16px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td>
+                <span style="display:inline-block;padding:2px 8px;border-radius:3px;font-size:9px;font-weight:700;background:{item['badge_bg']};color:{item['color']};text-transform:uppercase;letter-spacing:0.5px;">{item['badge']}</span>
+                <span style="font-size:12px;font-weight:600;color:{WHITE};margin-left:8px;">{item['title']}</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-top:4px;">
+                <div style="font-size:11px;color:{TEXT};line-height:1.4;">{item['detail']}</div>
+                <div style="font-size:9px;color:{MUTED};margin-top:2px;">{item['since']}</div>
+            </td>
         </tr>
         </table>
     </td></tr>
     </table>
 </td></tr>"""
 
-    # ---- PRIORITY ACTIONS ----
-    # Build priorities from alerts
-    priorities = []
-    for key, alert in alerts.items():
-        status = alert.get("status", "")
-        if status == "CRITICAL":
-            priorities.insert(0, {"text": alert.get("note", key), "level": "critical"})
-        elif status == "WARNING":
-            priorities.append({"text": alert.get("note", key), "level": "warning"})
-
-    if priorities:
-        html += f"""
-<!-- Priority Actions -->
-<tr><td style="padding:24px 20px 8px;">
-    <div style="font-size:11px;font-weight:700;color:{RED};text-transform:uppercase;letter-spacing:1.5px;">Priority Actions</div>
-</td></tr>"""
-
-        for i, p in enumerate(priorities[:4], 1):
-            p_color = RED if p["level"] == "critical" else ORANGE
+        # Render 24h data-driven flags
+        if data_flags:
             html += f"""
-<tr><td style="padding:4px 20px;">
+<tr><td style="padding:12px 20px 4px;">
+    <div style="font-size:9px;font-weight:700;color:{MUTED};text-transform:uppercase;letter-spacing:1px;">24h Performance Flags</div>
+</td></tr>"""
+            for i, flag in enumerate(data_flags[:4], 1):
+                html += f"""
+<tr><td style="padding:3px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{BG_DARK};border-radius:8px;">
     <tr>
-        <td width="36" style="padding:12px 0 12px 14px;vertical-align:top;">
-            <div style="width:28px;height:28px;border-radius:50%;background:{p_color}22;text-align:center;line-height:28px;font-size:13px;font-weight:800;color:{p_color};">{i}</div>
+        <td width="36" style="padding:10px 0 10px 14px;vertical-align:top;">
+            <div style="width:24px;height:24px;border-radius:50%;background:{flag['color']}22;text-align:center;line-height:24px;font-size:11px;font-weight:800;color:{flag['color']};">{i}</div>
         </td>
-        <td style="padding:12px 16px;font-size:12px;color:{TEXT};line-height:1.5;">{p['text']}</td>
+        <td style="padding:10px 14px;font-size:11px;color:{TEXT};line-height:1.5;">{flag['text']}</td>
     </tr>
     </table>
 </td></tr>"""
@@ -414,7 +750,12 @@ def generate_email_html():
     html += f"""
 <!-- System Health -->
 <tr><td style="padding:24px 20px 8px;">
-    <div style="font-size:11px;font-weight:700;color:{BLUE};text-transform:uppercase;letter-spacing:1.5px;">System Health</div>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+        <td><div style="font-size:11px;font-weight:700;color:{BLUE};text-transform:uppercase;letter-spacing:1.5px;">System Health</div></td>
+        <td style="text-align:right;"><div style="font-size:10px;color:{MUTED};">{data_range_str}</div></td>
+    </tr>
+    </table>
 </td></tr>
 <tr><td style="padding:6px 20px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{BG_DARK};border-radius:10px;">
@@ -445,7 +786,7 @@ def generate_email_html():
     # ---- CTA BUTTON ----
     html += f"""
 <!-- CTA Button -->
-<tr><td style="padding:28px 20px 8px;">
+<tr><td style="padding:28px 20px 36px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
     <tr><td align="center">
         <a href="{REPORT_URL}" target="_blank" style="display:inline-block;padding:14px 40px;background:linear-gradient(135deg,{TEAL},{LIME});color:{BG_DARK};font-size:13px;font-weight:700;text-decoration:none;border-radius:8px;text-transform:uppercase;letter-spacing:1px;">View Full Report →</a>

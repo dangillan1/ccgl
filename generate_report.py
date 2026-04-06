@@ -176,6 +176,267 @@ def build_alerts(state):
     return html
 
 
+def build_24h_performance(state):
+    """Build the 24-Hour Room Performance section using daily-summaries.json + events."""
+    from datetime import timedelta
+    daily_path = BASE_DIR / "data" / "daily-summaries.json"
+    events_path = BASE_DIR / "data" / "events.json"
+
+    try:
+        daily_summaries = load_json(daily_path)
+    except:
+        daily_summaries = {}
+    try:
+        events_data = load_json(events_path)
+    except:
+        events_data = {}
+
+    now = datetime.now()
+    today_str = now.strftime("%Y-%m-%d")
+    yesterday_str = (now - timedelta(days=1)).strftime("%Y-%m-%d")
+    today_daily = daily_summaries.get(today_str, {})
+    yesterday_daily = daily_summaries.get(yesterday_str, {})
+
+    active_events = events_data.get("active", [])
+    resolved_events = events_data.get("resolved", [])
+
+    def merge_sensor(s1, s2):
+        if not s1: return dict(s2) if s2 else {}
+        if not s2: return dict(s1)
+        c1, c2 = s1.get("count", 0), s2.get("count", 0)
+        total = c1 + c2
+        merged = {
+            "min": min(s1.get("min", 999), s2.get("min", 999)),
+            "max": max(s1.get("max", -999), s2.get("max", -999)),
+            "count": total,
+        }
+        if total > 0 and s1.get("avg") is not None and s2.get("avg") is not None:
+            merged["avg"] = (s1["avg"] * c1 + s2["avg"] * c2) / total
+        elif s1.get("avg") is not None:
+            merged["avg"] = s1["avg"]
+        elif s2.get("avg") is not None:
+            merged["avg"] = s2["avg"]
+        return merged
+
+    def merge_room_data(today_room, yesterday_room):
+        t_all = today_room.get("all", {})
+        y_all = yesterday_room.get("all", {})
+        merged = {}
+        for sensor in set(list(t_all.keys()) + list(y_all.keys())):
+            merged[sensor] = merge_sensor(t_all.get(sensor, {}), y_all.get(sensor, {}))
+        return merged
+
+    def fold_in_event_peaks(merged_all, room_events, room_resolved):
+        for evt in list(room_events) + list(room_resolved):
+            sensor = evt.get("sensor", "")
+            if sensor not in merged_all:
+                continue
+            for hv in evt.get("hourly_values", []):
+                val = hv.get("value")
+                if val is not None:
+                    if val > merged_all[sensor].get("max", -999):
+                        merged_all[sensor]["max"] = val
+                    if val < merged_all[sensor].get("min", 999):
+                        merged_all[sensor]["min"] = val
+            peak = evt.get("peak_value")
+            if peak is not None:
+                if "above" in evt.get("condition", "") and peak > merged_all[sensor].get("max", -999):
+                    merged_all[sensor]["max"] = peak
+                elif "below" in evt.get("condition", "") and peak < merged_all[sensor].get("min", 999):
+                    merged_all[sensor]["min"] = peak
+
+    def range_quality(s_min, s_max, sensor_name):
+        if s_min is None or s_max is None:
+            return "N/A", C["muted"]
+        spread = abs(s_max - s_min)
+        if "Temperature" in sensor_name:
+            if spread <= 5: return "tight", C["good"]
+            elif spread <= 10: return "moderate", C["warning"]
+            return "wide swing", C["critical"]
+        elif "Humidity" in sensor_name:
+            if spread <= 8: return "tight", C["good"]
+            elif spread <= 15: return "moderate", C["warning"]
+            return "wide swing", C["critical"]
+        elif "VPD" in sensor_name or "Deficit" in sensor_name:
+            if spread <= 0.3: return "tight", C["good"]
+            elif spread <= 0.6: return "moderate", C["warning"]
+            return "wide swing", C["critical"]
+        elif "VWC" in sensor_name:
+            if spread <= 10: return "tight", C["good"]
+            elif spread <= 20: return "moderate", C["warning"]
+            return "wide swing", C["critical"]
+        return "ok", C["text2"]
+
+    room_order = ["Flower 1", "Flower 2", "Mom"]
+    room_css = {"Flower 1": "f1", "Flower 2": "f2", "Mom": "mom"}
+    room_colors = {"Flower 1": C["warning"], "Flower 2": C["lime"], "Mom": C["blue"]}
+    key_sensors = {
+        "Flower 1": ["Ambient Temperature", "Ambient Humidity", "Vapor Pressure Deficit", "Substrate VWC"],
+        "Flower 2": ["Ambient Temperature", "Ambient Humidity", "Vapor Pressure Deficit"],
+        "Mom": ["Ambient Temperature", "Ambient Humidity", "Substrate VWC", "Vapor Pressure Deficit"],
+    }
+    stages = state.get("growth_stages", {})
+
+    # Collect events per room
+    room_active = {}
+    room_resolved = {}
+    for evt in active_events:
+        room_active.setdefault(evt.get("room", ""), []).append(evt)
+    for evt in resolved_events:
+        room_resolved.setdefault(evt.get("room", ""), []).append(evt)
+
+    # Date label
+    def fmt_short_date(d_str):
+        try:
+            return datetime.strptime(d_str, "%Y-%m-%d").strftime("%b %d").replace(" 0", " ")
+        except:
+            return d_str
+
+    date_label = f"Last 24h · {fmt_short_date(today_str)}" if today_daily else f"Last 24h · {fmt_short_date(yesterday_str)}"
+
+    html = f'<div style="font-size:11px;color:{C["muted"]};margin-bottom:16px;text-align:right">{date_label}</div>\n'
+    html += '<div class="perf24-grid">\n'
+
+    for room in room_order:
+        css_class = room_css.get(room, "")
+        color = room_colors.get(room, C["teal"])
+        sensors = key_sensors.get(room, [])
+        r_active = room_active.get(room, [])
+        r_resolved = room_resolved.get(room, [])
+
+        # Merge data
+        t_room = today_daily.get(room, {})
+        y_room = yesterday_daily.get(room, {})
+        all_data = merge_room_data(t_room, y_room)
+        fold_in_event_peaks(all_data, r_active, r_resolved)
+        day_data = t_room.get("day", y_room.get("day", {}))
+        night_data = t_room.get("night", y_room.get("night", {}))
+
+        # Status badge
+        has_critical = any(e.get("severity") == "critical" for e in r_active)
+        has_warning = any(e.get("severity") == "warning" for e in r_active)
+        if has_critical:
+            badge_html = f'<span class="badge badge-critical">CRITICAL</span>'
+        elif has_warning:
+            badge_html = f'<span class="badge badge-warning">ATTENTION</span>'
+        else:
+            badge_html = f'<span class="badge badge-good">ON TRACK</span>'
+
+        # Assessment
+        issues, wins = [], []
+        temp_all = all_data.get("Ambient Temperature", {})
+        if temp_all.get("max") and temp_all["max"] > 85:
+            issues.append(f"temp peaked {temp_all['max']:.0f}°F")
+        elif temp_all.get("min") and temp_all.get("max") and (temp_all["max"] - temp_all["min"]) <= 5:
+            wins.append("temp well-controlled")
+        hum_all = all_data.get("Ambient Humidity", {})
+        if hum_all.get("avg") and hum_all["avg"] > 75:
+            issues.append(f"humidity averaged {hum_all['avg']:.0f}%")
+        vpd_all = all_data.get("Vapor Pressure Deficit", {})
+        if vpd_all.get("avg") and vpd_all["avg"] < 0.5:
+            issues.append(f"VPD averaged {vpd_all['avg']:.2f} kPa")
+        elif vpd_all.get("min") and vpd_all.get("max") and (vpd_all["max"] - vpd_all["min"]) <= 0.3:
+            wins.append("VPD consistent")
+
+        for evt in r_active:
+            if evt.get("severity") == "critical":
+                issues.insert(0, f"{evt.get('label','')} active")
+        for evt in r_resolved:
+            issues.append(f"{evt.get('label','')} resolved")
+
+        if has_critical:
+            assessment = f'<span style="color:{C["critical"]}">Needs immediate attention — {", ".join(issues[:2])}</span>'
+        elif len(issues) >= 2:
+            assessment = f'<span style="color:{C["warning"]}">Challenging 24h — {", ".join(issues[:2])}</span>'
+        elif issues:
+            prefix = f'{", ".join(wins[:1])} but ' if wins else ''
+            assessment = f'<span style="color:{C["warning"]}">{prefix}{issues[0]}</span>'
+        elif wins:
+            assessment = f'<span style="color:{C["good"]}">Strong 24h — {", ".join(wins[:2])}</span>'
+        else:
+            assessment = f'<span style="color:{C["good"]}">Stable conditions over the last 24 hours</span>'
+
+        html += f'''<div class="perf24-card {css_class}">
+    <div class="perf24-header">
+        <div class="perf24-room">{room} <span class="perf24-stage">{stages.get(room, "")}</span></div>
+        {badge_html}
+    </div>
+    <table class="perf24-table">
+    <thead><tr><th>Sensor</th><th>24h Range</th><th>Avg</th><th>Range</th></tr></thead>
+    <tbody>
+'''
+
+        for sensor in sensors:
+            s_all = all_data.get(sensor, {})
+            s_min, s_max, s_avg = s_all.get("min"), s_all.get("max"), s_all.get("avg")
+            short = sensor.replace("Ambient ", "").replace("Vapor Pressure Deficit", "VPD").replace("Substrate ", "")
+
+            if s_min is not None and s_max is not None and s_min != s_max:
+                range_str = f"{fmt(sensor, s_min)} – {fmt(sensor, s_max)}"
+            elif s_min is not None:
+                range_str = f"Held {fmt(sensor, s_min)}"
+            else:
+                range_str = "N/A"
+            avg_str = fmt(sensor, s_avg) if s_avg is not None else "—"
+            quality, q_color = range_quality(s_min, s_max, sensor)
+
+            html += f'''    <tr>
+        <td>{short}</td>
+        <td>{range_str}</td>
+        <td>{avg_str}</td>
+        <td><span class="perf24-quality"><span class="perf24-dot" style="background:{q_color}"></span> {quality}</span></td>
+    </tr>
+'''
+
+        html += '    </tbody>\n    </table>\n'
+
+        # VPD callout
+        if vpd_all.get("min") is not None and vpd_all.get("max") is not None:
+            spread = abs(vpd_all["max"] - vpd_all["min"])
+            day_avg = day_data.get("Vapor Pressure Deficit", {}).get("avg")
+            night_avg = night_data.get("Vapor Pressure Deficit", {}).get("avg")
+            if spread <= 0.3:
+                vpd_note = f"VPD held {vpd_all['min']:.2f}–{vpd_all['max']:.2f} kPa — excellent consistency"
+                vpd_c = C["good"]
+            elif spread <= 0.6:
+                vpd_note = f"VPD ranged {vpd_all['min']:.2f}–{vpd_all['max']:.2f} kPa"
+                if day_avg and night_avg:
+                    vpd_note += f" (day avg {day_avg:.2f}, night avg {night_avg:.2f})"
+                vpd_c = C["teal"]
+            else:
+                vpd_note = f"VPD swung {vpd_all['min']:.2f}–{vpd_all['max']:.2f} kPa ({spread:.1f} kPa spread)"
+                if day_avg and night_avg:
+                    vpd_note += f" — day avg {day_avg:.2f}, night avg {night_avg:.2f}"
+                vpd_c = C["warning"] if spread <= 1.0 else C["critical"]
+
+            html += f'    <div class="perf24-vpd" style="background:{vpd_c}11;border-color:{vpd_c};color:{vpd_c}">{vpd_note}</div>\n'
+
+        # Event summary
+        total_evts = len(r_active) + len(r_resolved)
+        if total_evts > 0:
+            html += '    <div class="perf24-events">\n'
+            for evt in r_active:
+                sev = evt.get("severity", "warning")
+                s_c = C["critical"] if sev == "critical" else C["warning"]
+                dur = format_duration(evt.get("hours_active", 0))
+                peak = evt.get("peak_value")
+                sensor = evt.get("sensor", "")
+                peak_str = f" · peaked {format_value(sensor, peak)}" if peak else ""
+                html += f'    <div class="evt-line"><span style="color:{s_c};font-weight:600">{evt.get("label","")}</span> <span style="color:{C["muted"]}">{dur} active{peak_str}</span></div>\n'
+            for evt in r_resolved:
+                peak = evt.get("peak_value")
+                sensor = evt.get("sensor", "")
+                peak_str = f" · peaked {format_value(sensor, peak)}" if peak else ""
+                html += f'    <div class="evt-line"><span style="color:{C["good"]};font-weight:600">{evt.get("label","")} ✓</span> <span style="color:{C["muted"]}">resolved{peak_str}</span></div>\n'
+            html += '    </div>\n'
+
+        html += f'    <div class="perf24-assessment">{assessment}</div>\n'
+        html += '</div>\n'
+
+    html += '</div>\n'
+    return html
+
+
 def build_events_section(state):
     """Build the Event Timeline section from event tracker data."""
     events = process_readings(state)
@@ -803,7 +1064,7 @@ def main():
         "{{WORDMARK_SVG_URI}}": wordmark_svg,
         "{{HEADER_GROWTH_STAGES}}": header_stages,
         "{{HEADER_TIMESTAMPS}}": f"Data as of {data_time} · Report generated {gen_time}",
-        "{{FACILITY_HEALTH_SCORE}}": f'<span style="color:{h_color}">{overall}%</span>',
+        "{{PERFORMANCE_24H_SECTION}}": build_24h_performance(state),
         "{{ALERTS_SECTION}}": build_alerts(state),
         "{{EVENTS_SECTION}}": build_events_section(state),
         "{{ROOMS_SECTION}}": build_room_cards(state),

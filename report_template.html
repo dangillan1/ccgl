@@ -98,6 +98,32 @@ section h2{font-size:20px;color:#4E9E8E;font-weight:600;letter-spacing:.5px;text
 .insight-card h4{font-size:14px;font-weight:600;color:white;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .insight-card p{font-size:12px;color:#d0d8e0;line-height:1.7;margin-bottom:10px}
 
+/* 24h Performance Module */
+.perf24-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;margin-bottom:20px}
+.perf24-card{background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:24px;border-top:3px solid #4E9E8E;transition:all .3s}
+.perf24-card:hover{border-color:#4E9E8E44;box-shadow:0 4px 12px rgba(78,158,142,.1)}
+.perf24-card.f1{border-top-color:#f39c12}
+.perf24-card.f2{border-top-color:#8DC63F}
+.perf24-card.mom{border-top-color:#4A90B5}
+.perf24-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.perf24-room{font-size:15px;font-weight:700;color:white;display:flex;align-items:center;gap:10px}
+.perf24-stage{font-size:10px;padding:3px 8px;background:#4E9E8E22;border-radius:4px;color:#4E9E8E;text-transform:uppercase;letter-spacing:.5px;font-weight:400}
+.perf24-table{width:100%;border-collapse:collapse}
+.perf24-table thead th{font-size:9px;color:#5a7088;text-transform:uppercase;letter-spacing:.5px;padding:4px 0 8px;text-align:left;border-bottom:1px solid #1a305044;font-weight:600}
+.perf24-table thead th:nth-child(2),.perf24-table thead th:nth-child(3){text-align:center}
+.perf24-table thead th:last-child{text-align:right}
+.perf24-table tbody td{padding:8px 0;font-size:12px;border-bottom:1px solid #1a305022}
+.perf24-table tbody td:first-child{color:#7a8fa3;font-weight:600}
+.perf24-table tbody td:nth-child(2){text-align:center;font-weight:700;color:white}
+.perf24-table tbody td:nth-child(3){text-align:center;color:#7a8fa3}
+.perf24-table tbody td:last-child{text-align:right}
+.perf24-quality{display:inline-flex;align-items:center;gap:4px;font-size:10px}
+.perf24-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.perf24-vpd{padding:8px 12px;border-radius:6px;font-size:11px;margin-top:12px;line-height:1.5;border-left:3px solid}
+.perf24-events{margin-top:10px;font-size:11px;line-height:1.6}
+.perf24-events .evt-line{padding:2px 0}
+.perf24-assessment{font-size:11px;margin-top:12px;padding-top:10px;border-top:1px solid #1a305044}
+
 /* Callout box */
 .callout{padding:14px 16px;border-radius:8px;font-size:12px;line-height:1.6;margin:12px 0}
 .callout-warning{background:#f39c1211;border-left:3px solid #f39c12;color:#d0d8e0}
@@ -298,6 +324,18 @@ section h2{font-size:15px;margin-bottom:12px;padding-bottom:8px}
 .exec-number{font-size:22px}
 .exec-label{font-size:9px}
 
+/* 24h Performance mobile */
+.perf24-grid{grid-template-columns:1fr;gap:10px}
+.perf24-card{padding:14px;border-radius:8px}
+.perf24-header{margin-bottom:10px}
+.perf24-room{font-size:13px}
+.perf24-stage{font-size:9px;padding:2px 6px}
+.perf24-table thead th{font-size:8px;padding:3px 0 6px}
+.perf24-table tbody td{padding:6px 0;font-size:11px}
+.perf24-vpd{font-size:10px;padding:6px 10px;margin-top:8px}
+.perf24-events{font-size:10px;margin-top:8px}
+.perf24-assessment{font-size:10px;margin-top:8px;padding-top:8px}
+
 /* Feed cards compact */
 .feed-card{padding:12px;border-radius:8px}
 .feed-value{font-size:22px}
@@ -386,7 +424,8 @@ body{background:white;color:black}
             <img class="brand-wordmark" src="{{WORDMARK_DATA_URI}}" alt="Cape Cod Grow Lab">
         </div>
         <nav class="sidebar-nav">
-            <a href="#alerts" class="nav-link active">Alerts & Warnings</a>
+            <a href="#perf24" class="nav-link active">24h Performance</a>
+            <a href="#alerts" class="nav-link">Alerts & Warnings</a>
             <a href="#events" class="nav-link">Event Timeline</a>
             <a href="#rooms" class="nav-link">Room Status</a>
             <a href="#feed" class="nav-link">Feed & Fertigation</a>
@@ -406,11 +445,13 @@ body{background:white;color:black}
                 <div class="header-meta">{{HEADER_GROWTH_STAGES}}</div>
                 <div class="header-time">{{HEADER_TIMESTAMPS}}</div>
             </div>
-            <div class="header-health">
-                <div class="health-number" style="color:#2ecc71">{{FACILITY_HEALTH_SCORE}}</div>
-                <div class="health-label">Facility Health</div>
-            </div>
         </header>
+
+        <section id="perf24">
+            <h2>24-Hour Room Performance</h2>
+
+            {{PERFORMANCE_24H_SECTION}}
+        </section>
 
         <section id="alerts">
             <h2>Critical Alerts & AI Analysis</h2>
