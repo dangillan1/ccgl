@@ -220,8 +220,8 @@ def generate_email_html():
             <div style="font-size:10px;font-weight:700;color:{TEAL};text-transform:uppercase;letter-spacing:2px;line-height:1;">Cape Cod Grow Lab</div>
             <div style="font-size:18px;font-weight:700;color:{WHITE};letter-spacing:-0.3px;margin-top:3px;line-height:1.1;">Daily Grow Summary</div>
         </td>
-        <td width="160" style="vertical-align:middle;text-align:right;">
-            <div style="font-size:13px;font-weight:600;color:{TEXT};line-height:1.2;">{date_str}</div>
+        <td style="vertical-align:middle;text-align:right;white-space:nowrap;">
+            <div style="font-size:11px;font-weight:600;color:{TEXT};line-height:1.2;">{date_str}</div>
         </td>
     </tr>
     </table>
@@ -482,8 +482,8 @@ def generate_email_html():
                     <span style="font-size:10px;font-weight:400;color:{TEXT2};margin-left:8px;">{stages.get(room, '')}</span>
                 </div>
             </td>
-            <td style="text-align:right;">
-                <span style="display:inline-block;padding:2px 8px;border-radius:3px;font-size:9px;font-weight:700;background:{status_badge[1]};color:{status_badge[2]};text-transform:uppercase;letter-spacing:0.5px;">{status_badge[0]}</span>
+            <td style="text-align:right;white-space:nowrap;width:1%;">
+                <span style="display:inline-block;padding:2px 8px;border-radius:3px;font-size:9px;font-weight:700;background:{status_badge[1]};color:{status_badge[2]};text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap;">{status_badge[0]}</span>
             </td>
         </tr>
         </table>
