@@ -10821,5 +10821,139 @@
         }
       }
     }
+  },
+  {
+    "timestamp": "2026-04-07T02:06:32.000Z",
+    "facility": {
+      "modulesOnline": 23,
+      "modulesOffline": 5,
+      "activeAlerts": 1,
+      "offlineModules": [
+        "Clone Nutrient Module",
+        "Clone Room Environment Module",
+        "Environment Module 2",
+        "Flower 2 PIC",
+        "Veg Room PIC"
+      ]
+    },
+    "rooms": {
+      "Central Feed System": {
+        "sensors": {
+          "Solution Temperature": {
+            "value": 65.15
+          },
+          "Substrate EC": {
+            "value": 0.21
+          },
+          "Solution TDS": {
+            "value": 857
+          },
+          "Solution pH": {
+            "value": 6.02
+          },
+          "Solution Float": {
+            "value": 87.5
+          }
+        }
+      },
+      "Cure Room": {
+        "sensors": {
+          "Vapor Pressure Deficit": {
+            "value": 0.7
+          },
+          "Ambient CO2": {
+            "value": 1094
+          },
+          "Ambient Temperature": {
+            "value": 61
+          },
+          "Ambient Humidity": {
+            "value": 59.5
+          }
+        }
+      },
+      "Dry Room": {
+        "sensors": {
+          "Vapor Pressure Deficit": {
+            "value": 0.97
+          },
+          "Ambient Temperature": {
+            "value": 64.6
+          },
+          "Ambient Humidity": {
+            "value": 53.97
+          },
+          "Ambient CO2": {
+            "value": 691.33
+          }
+        }
+      },
+      "Flower 1": {
+        "sensors": {
+          "Vapor Pressure Deficit": {
+            "value": 1.47
+          },
+          "Ambient CO2": {
+            "value": 986.67
+          },
+          "Substrate VWC": {
+            "value": 35.86
+          },
+          "Ambient Temperature": {
+            "value": 80.57
+          },
+          "Ambient Humidity": {
+            "value": 62
+          },
+          "Substrate EC": {
+            "value": 2.44
+          },
+          "Substrate Temperature": {
+            "value": 79.79
+          }
+        }
+      },
+      "Flower 2": {
+        "sensors": {
+          "Ambient Humidity": {
+            "value": 50.67
+          },
+          "Vapor Pressure Deficit": {
+            "value": 0.93
+          },
+          "Ambient CO2": {
+            "value": 910.33
+          },
+          "Ambient Temperature": {
+            "value": 62.33
+          }
+        }
+      },
+      "Mom": {
+        "sensors": {
+          "Ambient Temperature": {
+            "value": 78.65
+          },
+          "Substrate VWC": {
+            "value": 36
+          },
+          "Ambient CO2": {
+            "value": 470.5
+          },
+          "Vapor Pressure Deficit": {
+            "value": 1.25
+          },
+          "Ambient Humidity": {
+            "value": 62.9
+          },
+          "Substrate Temperature": {
+            "value": 78.75
+          },
+          "Substrate EC": {
+            "value": 3.82
+          }
+        }
+      }
+    }
   }
 ]
