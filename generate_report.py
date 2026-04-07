@@ -197,6 +197,14 @@ def build_24h_performance(state):
     today_daily = daily_summaries.get(today_str, {})
     yesterday_daily = daily_summaries.get(yesterday_str, {})
 
+    # Fallback: if no data for today/yesterday, use the two most recent available dates
+    if not today_daily and not yesterday_daily and daily_summaries:
+        sorted_dates = sorted(daily_summaries.keys(), reverse=True)
+        today_str = sorted_dates[0]
+        yesterday_str = sorted_dates[1] if len(sorted_dates) > 1 else sorted_dates[0]
+        today_daily = daily_summaries.get(today_str, {})
+        yesterday_daily = daily_summaries.get(yesterday_str, {})
+
     active_events = events_data.get("active", [])
     resolved_events = events_data.get("resolved", [])
 
