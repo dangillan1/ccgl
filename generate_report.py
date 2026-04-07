@@ -1041,11 +1041,15 @@ def main():
     with open(TEMPLATE_PATH, 'r') as f:
         template = f.read()
 
-    # Parse timestamps
+    # Parse timestamps — convert UTC to Eastern time for display
     last_updated = state.get("last_updated", "")
     try:
+        from datetime import timezone, timedelta
         dt = datetime.fromisoformat(last_updated.replace("Z", "+00:00"))
-        data_time = dt.strftime("%B %d, %Y · %I:%M %p")
+        # Convert to Eastern time (EDT = UTC-4, EST = UTC-5; use -4 for Apr–Oct)
+        eastern = timezone(timedelta(hours=-4))
+        dt_et = dt.astimezone(eastern)
+        data_time = dt_et.strftime("%B %d, %Y · %I:%M %p") + " ET"
     except:
         data_time = "Unknown"
 
