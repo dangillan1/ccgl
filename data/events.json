@@ -1,56 +1,61 @@
 {
   "active": [
     {
-      "key": "Flower 2::low_temp",
-      "room": "Flower 2",
-      "rule_id": "low_temp",
-      "sensor": "Ambient Temperature",
-      "label": "Low Temperature",
-      "description": "Temperature below optimal \u2014 slowed metabolism",
+      "key": "Flower 1::high_humidity",
+      "room": "Flower 1",
+      "rule_id": "high_humidity",
+      "sensor": "Ambient Humidity",
+      "label": "High Humidity",
+      "description": "Elevated humidity increases botrytis risk in flower",
       "severity": "warning",
-      "condition": "below",
-      "threshold": 65,
+      "condition": "above",
+      "threshold": 70,
       "status": "active",
-      "started": "2026-04-06T19:04:44.007531-04:00",
-      "last_seen": "2026-04-07T06:44:10.015574-04:00",
-      "current_value": 62.47,
-      "peak_value": 60.9,
-      "peak_time": "2026-04-06T22:09:11.288094-04:00",
-      "hours_active": 11.657224461666667,
-      "consecutive_hours": 7,
+      "started": "2026-04-06T08:14:36.054387-04:00",
+      "last_seen": "2026-04-07T07:03:10.134891-04:00",
+      "current_value": 72.83,
+      "peak_value": 73.5,
+      "peak_time": "2026-04-06T16:18:37.503847-04:00",
+      "hours_active": 22.809466814444445,
+      "consecutive_hours": 1,
       "escalated": true,
-      "reopened_count": 0,
-      "growth_stage": "Late Flower (7 days to harvest)",
+      "reopened_count": 3,
+      "growth_stage": "Week 4 Flower (Day 23)",
       "hourly_values": [
         {
-          "time": "2026-04-06T19:04:44.007531-04:00",
-          "value": 63.53
+          "time": "2026-04-06T08:14:36.054387-04:00",
+          "value": 71.47
         },
         {
-          "time": "2026-04-06T20:03:38.635018-04:00",
-          "value": 63.7
+          "time": "2026-04-06T11:05:42.313736-04:00",
+          "value": 71.37
         },
         {
-          "time": "2026-04-06T22:06:32.519250-04:00",
-          "value": 62.33
+          "time": "2026-04-06T12:37:27.540047-04:00",
+          "value": 72.7
+        },
+        {
+          "time": "2026-04-06T14:03:32.930087-04:00",
+          "value": 72.97
+        },
+        {
+          "time": "2026-04-06T15:03:15.992046-04:00",
+          "value": 73.43
+        },
+        {
+          "time": "2026-04-06T16:18:37.503847-04:00",
+          "value": 73.5
         },
         {
           "time": "2026-04-06T23:03:24.236819-04:00",
-          "value": 64.93
+          "value": 72.53
         },
         {
-          "time": "2026-04-07T05:14:02.023097-04:00",
-          "value": 62.77
-        },
-        {
-          "time": "2026-04-07T06:04:25.573820-04:00",
-          "value": 62.47
-        },
-        {
-          "time": "2026-04-07T06:37:22.770684-04:00",
-          "value": 62.47
+          "time": "2026-04-07T07:02:56.289223-04:00",
+          "value": 72.83
         }
-      ]
+      ],
+      "duration_hours": 20.990546877222222
     }
   ],
   "resolved": [
@@ -463,58 +468,58 @@
       "duration_hours": 0.07105896805555556
     },
     {
-      "key": "Flower 1::high_humidity",
-      "room": "Flower 1",
-      "rule_id": "high_humidity",
-      "sensor": "Ambient Humidity",
-      "label": "High Humidity",
-      "description": "Elevated humidity increases botrytis risk in flower",
+      "key": "Flower 2::low_temp",
+      "room": "Flower 2",
+      "rule_id": "low_temp",
+      "sensor": "Ambient Temperature",
+      "label": "Low Temperature",
+      "description": "Temperature below optimal \u2014 slowed metabolism",
       "severity": "warning",
-      "condition": "above",
-      "threshold": 70,
+      "condition": "below",
+      "threshold": 65,
       "status": "resolved",
-      "started": "2026-04-06T08:14:36.054387-04:00",
-      "last_seen": "2026-04-06T23:03:24.236819-04:00",
-      "current_value": 72.53,
-      "peak_value": 73.5,
-      "peak_time": "2026-04-06T16:18:37.503847-04:00",
-      "hours_active": 8.067069304166667,
-      "consecutive_hours": 1,
+      "started": "2026-04-06T19:04:44.007531-04:00",
+      "last_seen": "2026-04-07T06:54:22.408654-04:00",
+      "current_value": 62.47,
+      "peak_value": 60.9,
+      "peak_time": "2026-04-06T22:09:11.288094-04:00",
+      "hours_active": 11.827333655833334,
+      "consecutive_hours": 7,
       "escalated": true,
-      "reopened_count": 2,
-      "growth_stage": "Week 4 Flower (Day 23)",
+      "reopened_count": 0,
+      "growth_stage": "Late Flower (7 days to harvest)",
       "hourly_values": [
         {
-          "time": "2026-04-06T08:14:36.054387-04:00",
-          "value": 71.47
+          "time": "2026-04-06T19:04:44.007531-04:00",
+          "value": 63.53
         },
         {
-          "time": "2026-04-06T11:05:42.313736-04:00",
-          "value": 71.37
+          "time": "2026-04-06T20:03:38.635018-04:00",
+          "value": 63.7
         },
         {
-          "time": "2026-04-06T12:37:27.540047-04:00",
-          "value": 72.7
-        },
-        {
-          "time": "2026-04-06T14:03:32.930087-04:00",
-          "value": 72.97
-        },
-        {
-          "time": "2026-04-06T15:03:15.992046-04:00",
-          "value": 73.43
-        },
-        {
-          "time": "2026-04-06T16:18:37.503847-04:00",
-          "value": 73.5
+          "time": "2026-04-06T22:06:32.519250-04:00",
+          "value": 62.33
         },
         {
           "time": "2026-04-06T23:03:24.236819-04:00",
-          "value": 72.53
+          "value": 64.93
+        },
+        {
+          "time": "2026-04-07T05:14:02.023097-04:00",
+          "value": 62.77
+        },
+        {
+          "time": "2026-04-07T06:04:25.573820-04:00",
+          "value": 62.47
+        },
+        {
+          "time": "2026-04-07T06:37:22.770684-04:00",
+          "value": 62.47
         }
       ],
-      "duration_hours": 20.990546877222222,
-      "resolved_at": "2026-04-07T05:14:02.023097-04:00"
+      "resolved_at": "2026-04-07T07:02:56.289223-04:00",
+      "duration_hours": 11.970078280555555
     }
   ],
   "cycle_log": {
@@ -702,6 +707,19 @@
         "duration_hours": 12.6,
         "peak_value": 59.57,
         "peak_time": "2026-04-06T01:03:01.138495-04:00",
+        "reopened_count": 0,
+        "sensor": "Ambient Temperature"
+      }
+    ],
+    "Flower 2::Late Flower (7 days to harvest)": [
+      {
+        "label": "Low Temperature",
+        "severity": "warning",
+        "started": "2026-04-06T19:04:44.007531-04:00",
+        "resolved": "2026-04-07T07:02:56.289223-04:00",
+        "duration_hours": 12.0,
+        "peak_value": 60.9,
+        "peak_time": "2026-04-06T22:09:11.288094-04:00",
         "reopened_count": 0,
         "sensor": "Ambient Temperature"
       }
