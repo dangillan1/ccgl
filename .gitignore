@@ -15,3 +15,6 @@ __pycache__/
 *.swp
 *.swo
 *~
+
+# Secrets (GrowLink API bearer token, captured from browser localStorage)
+data/config.json

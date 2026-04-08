@@ -14,7 +14,17 @@ echo "Cleaning stale git locks..."
 find .git -name "*.lock" -delete 2>/dev/null
 find .git/objects -name "tmp_obj_*" -delete 2>/dev/null
 
-# 2. Build daily summaries from hourly readings (keeps 24h data current)
+# 2. Fetch live GrowLink data (requires data/config.json with bearer token)
+echo "Fetching live GrowLink data..."
+python3 fetch_growlink.py
+FETCH_RC=$?
+if [ $FETCH_RC -eq 2 ]; then
+    echo "⚠ GrowLink auth failed (token expired) — continuing with existing data"
+elif [ $FETCH_RC -ne 0 ]; then
+    echo "⚠ GrowLink fetch failed (rc=$FETCH_RC) — continuing with existing data"
+fi
+
+# 3. Build daily summaries from hourly readings (keeps 24h data current)
 echo "Building daily summaries..."
 python3 build_daily_summaries.py
 if [ $? -ne 0 ]; then
@@ -36,7 +46,7 @@ find .git -name "*.lock" -delete 2>/dev/null
 
 # 5. Stage and commit
 echo "Staging changes..."
-git add index.html CCGL-Hourly-Report-Latest.html generate_report.py generate_email.py build_daily_summaries.py report_template.html data/events.json data/daily-summaries.json data/state.json data/hourly-readings.json logo.png wordmark.png push_live.sh 2>/dev/null
+git add index.html CCGL-Hourly-Report-Latest.html generate_report.py generate_email.py build_daily_summaries.py fetch_growlink.py report_template.html data/events.json data/daily-summaries.json data/state.json data/hourly-readings.json logo.png wordmark.png push_live.sh .gitignore 2>/dev/null
 
 # Only commit if there are staged changes
 if git diff --cached --quiet; then
