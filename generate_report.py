@@ -1249,10 +1249,12 @@ def main():
     now = datetime.now()
     gen_time = now.strftime("%B %d, %Y · %I:%M %p")
 
-    # Header growth stage summary
-    header_stages = (f"F1: {GROWTH_STAGES['Flower 1']} · "
-                     f"F2: {GROWTH_STAGES['Flower 2']} · "
-                     f"Mom: {GROWTH_STAGES['Mom']}")
+    # Header growth-stage pills
+    header_stages = (
+        f'<div class="hdr-pill f1"><span class="pill-tag">F1</span>{GROWTH_STAGES["Flower 1"]}</div>'
+        f'<div class="hdr-pill f2"><span class="pill-tag">F2</span>{GROWTH_STAGES["Flower 2"]}</div>'
+        f'<div class="hdr-pill mom"><span class="pill-tag">MOM</span>{GROWTH_STAGES["Mom"]}</div>'
+    )
 
     replacements = {
         "{{LOGO_DATA_URI}}": logo,
