@@ -300,6 +300,150 @@ def _last24h_stats_from_hourly(hourly, room, sensor):
     return {"min": min(vals), "max": max(vals), "avg": sum(vals) / len(vals), "count": len(vals)}
 
 
+def _hourly_series(hourly, room, sensor, n=24):
+    """Return list of (timestamp, value) tuples for the last n snapshots."""
+    if not hourly:
+        return []
+    out = []
+    for entry in hourly[-n:]:
+        r = entry.get("rooms", {}).get(room, {})
+        v = _hourly_val(r, sensor)
+        if v is not None:
+            out.append((entry.get("timestamp", ""), v))
+    return out
+
+
+def _hours_outside_band(values, lo, hi):
+    """Count how many values are outside [lo, hi]."""
+    if not values:
+        return 0, 0
+    over = sum(1 for v in values if v > hi)
+    under = sum(1 for v in values if v < lo)
+    return over, under
+
+
+def _24h_trend_notes(hourly, room):
+    """Generate natural-language trend callouts for the last 24h in this room.
+    Returns a list of dicts: {severity: 'warn'|'info'|'good', icon, text}."""
+    notes = []
+    targets = TARGETS.get(room, {})
+
+    # --- Temperature ---
+    temp_stats = _last24h_stats_from_hourly(hourly, room, "Ambient Temperature")
+    temp_vals = [v for _, v in _hourly_series(hourly, room, "Ambient Temperature")]
+    if temp_stats and temp_stats.get("min") is not None:
+        swing = temp_stats["max"] - temp_stats["min"]
+        if swing >= 8:
+            notes.append({"severity": "warn", "icon": "🌡",
+                "text": f"Wide temperature swing — {swing:.1f}°F range ({temp_stats['min']:.0f}→{temp_stats['max']:.0f}°F)"})
+        elif swing >= 5:
+            notes.append({"severity": "info", "icon": "🌡",
+                "text": f"Moderate temp swing — {swing:.1f}°F range ({temp_stats['min']:.0f}→{temp_stats['max']:.0f}°F)"})
+        # Band check
+        t_band = targets.get("Ambient Temperature")
+        if t_band and temp_vals:
+            over, under = _hours_outside_band(temp_vals, t_band[0], t_band[1])
+            if over >= 3:
+                notes.append({"severity": "warn", "icon": "🔥",
+                    "text": f"Ran hot — {over}/24h above target ({t_band[1]:.0f}°F); peak {temp_stats['max']:.1f}°F"})
+            if under >= 3:
+                notes.append({"severity": "warn", "icon": "❄",
+                    "text": f"Ran cool — {under}/24h below target ({t_band[0]:.0f}°F); low {temp_stats['min']:.1f}°F"})
+
+    # --- Humidity ---
+    rh_stats = _last24h_stats_from_hourly(hourly, room, "Ambient Humidity")
+    rh_vals = [v for _, v in _hourly_series(hourly, room, "Ambient Humidity")]
+    if rh_stats and rh_stats.get("min") is not None:
+        swing = rh_stats["max"] - rh_stats["min"]
+        if swing >= 20:
+            notes.append({"severity": "warn", "icon": "💧",
+                "text": f"Wide RH swing — {swing:.0f}% range ({rh_stats['min']:.0f}→{rh_stats['max']:.0f}%)"})
+        rh_band = targets.get("Ambient Humidity")
+        if rh_band and rh_vals:
+            over, under = _hours_outside_band(rh_vals, rh_band[0], rh_band[1])
+            if over >= 3:
+                notes.append({"severity": "warn", "icon": "💦",
+                    "text": f"RH ran high — {over}/24h above {rh_band[1]:.0f}% (mold/mildew risk); peak {rh_stats['max']:.0f}%"})
+            if under >= 3:
+                notes.append({"severity": "info", "icon": "🏜",
+                    "text": f"RH ran dry — {under}/24h below {rh_band[0]:.0f}%; low {rh_stats['min']:.0f}%"})
+
+    # --- VPD ---
+    vpd_stats = _last24h_stats_from_hourly(hourly, room, "Vapor Pressure Deficit")
+    vpd_vals = [v for _, v in _hourly_series(hourly, room, "Vapor Pressure Deficit")]
+    if vpd_stats and vpd_stats.get("min") is not None:
+        swing = vpd_stats["max"] - vpd_stats["min"]
+        if swing >= 0.7:
+            notes.append({"severity": "warn", "icon": "🌬",
+                "text": f"VPD swing {swing:.2f} kPa ({vpd_stats['min']:.2f}→{vpd_stats['max']:.2f})"})
+        vpd_band = targets.get("Vapor Pressure Deficit")
+        if vpd_band and vpd_vals:
+            over, under = _hours_outside_band(vpd_vals, vpd_band[0], vpd_band[1])
+            if over >= 4:
+                notes.append({"severity": "warn", "icon": "📈",
+                    "text": f"VPD trending high — {over}/24h above {vpd_band[1]:.2f}; stomata may close"})
+            if under >= 4:
+                notes.append({"severity": "info", "icon": "📉",
+                    "text": f"VPD trending low — {under}/24h below {vpd_band[0]:.2f}; slow transpiration"})
+
+    # --- CO2 (flower only, during lights-on) ---
+    if room in ("Flower 1", "Flower 2"):
+        co2_series = _hourly_series(hourly, room, "Ambient CO2")
+        sched = LIGHT_SCHEDULES.get(room)
+        if co2_series and sched:
+            on_start, on_end = sched
+            day_vals = []
+            for ts, v in co2_series:
+                try:
+                    h = datetime.fromisoformat(ts.replace("Z", "+00:00")).astimezone(timezone(timedelta(hours=-4))).hour + \
+                        datetime.fromisoformat(ts.replace("Z", "+00:00")).astimezone(timezone(timedelta(hours=-4))).minute / 60
+                except Exception:
+                    continue
+                if on_start <= h < on_end:
+                    day_vals.append(v)
+            if day_vals:
+                co2_avg = sum(day_vals) / len(day_vals)
+                co2_target = targets.get("Ambient CO2", (800, 1400))
+                if co2_avg < co2_target[0] - 50:
+                    notes.append({"severity": "warn", "icon": "🫁",
+                        "text": f"CO2 low during lights-on — avg {co2_avg:.0f} ppm (target ≥{co2_target[0]}); check tank/regulator"})
+
+    # --- Substrate VWC dry-back (flower/mom with substrate) ---
+    vwc_stats = _last24h_stats_from_hourly(hourly, room, "Substrate VWC")
+    if vwc_stats and vwc_stats.get("min") is not None:
+        drange = vwc_stats["max"] - vwc_stats["min"]
+        if room in ("Flower 1", "Flower 2"):
+            if drange < 6:
+                notes.append({"severity": "warn", "icon": "🌱",
+                    "text": f"Shallow dry-backs — only {drange:.1f}% VWC swing; may be over-irrigating"})
+            elif drange > 40:
+                notes.append({"severity": "warn", "icon": "🏜",
+                    "text": f"Aggressive dry-backs — {drange:.1f}% VWC swing; plants stressing"})
+
+    # --- Substrate EC drift ---
+    ec_series = _hourly_series(hourly, room, "Substrate EC")
+    if len(ec_series) >= 12:
+        half = len(ec_series) // 2
+        first_avg = sum(v for _, v in ec_series[:half]) / half
+        second_avg = sum(v for _, v in ec_series[half:]) / (len(ec_series) - half)
+        delta = second_avg - first_avg
+        if abs(delta) >= 0.4:
+            direction = "climbing" if delta > 0 else "dropping"
+            icon = "📈" if delta > 0 else "📉"
+            sev = "warn" if abs(delta) >= 0.6 else "info"
+            notes.append({"severity": sev, "icon": icon,
+                "text": f"Substrate EC {direction} — {first_avg:.1f}→{second_avg:.1f} mS/cm over 24h"})
+
+    # If nothing to report, emit a positive "stable" note
+    if not notes:
+        # Only emit if we had any data to evaluate
+        if temp_stats or rh_stats or vpd_stats:
+            notes.append({"severity": "good", "icon": "✓",
+                "text": "Environment held steady across the last 24 hours — no significant swings or drift"})
+
+    return notes
+
+
 def build_24h_performance(state, hourly, daily_summaries, events):
     """Live 24-hour performance: per-room, derived from hourly-readings.json."""
     now = datetime.now()
@@ -364,6 +508,16 @@ def build_24h_performance(state, hourly, daily_summaries, events):
             now_str = f'<span style="color:{col};font-weight:700">{fmt(sensor, cur)}</span>'
             html += f'''    <tr><td>{short}</td><td>{range_str}</td><td>{avg_str}</td><td style="text-align:right">{now_str}</td></tr>\n'''
         html += '    </tbody>\n    </table>\n'
+
+        # 24h environmental trend notes (wide swings, drift, band excursions)
+        trend_notes = _24h_trend_notes(hourly, room)
+        if trend_notes:
+            html += '    <div class="perf24-trends">\n'
+            html += '        <div class="perf24-trends-label">24h Trends</div>\n'
+            for n in trend_notes:
+                sev_c = {"warn": C["warning"], "info": C["blue"], "good": C["good"]}.get(n["severity"], C["muted"])
+                html += f'        <div class="perf24-trend-row trend-{n["severity"]}"><span class="trend-icon">{n["icon"]}</span><span class="trend-text" style="border-left-color:{sev_c}">{n["text"]}</span></div>\n'
+            html += '    </div>\n'
 
         # 24h event summary
         if r_active or r_resolved:
@@ -1216,6 +1370,97 @@ def build_system_health(state):
     return html
 
 
+# --- Sidebar-embedded compact versions ---
+
+def build_sidebar_priorities(state, events):
+    """Compact priority list for sidebar — top 4 items, tight layout."""
+    active = events.get("active", [])
+    fac = facility_of(state)
+    items = []
+
+    for e in sorted(active, key=lambda x: (0 if x.get("severity") == "critical" else 1,
+                                           -x.get("consecutive_hours", 0))):
+        if e.get("severity") == "critical":
+            lvl, tag = "urgent", "URGENT"
+        elif e.get("escalated"):
+            lvl, tag = "urgent", "ESC"
+        else:
+            lvl, tag = "high", "HIGH"
+        sensor = e.get("sensor", "")
+        room = e.get("room", "")
+        cur = e.get("current_value")
+        items.append({
+            "lvl": lvl, "tag": tag,
+            "title": f"{room}: {e.get('label','')}",
+            "desc": f"{format_value(sensor, cur)} · {format_duration(e.get('hours_active', 0))}",
+        })
+
+    days_to = (F2_HARVEST_DATE - datetime.now()).days
+    if 0 <= days_to <= 10:
+        items.append({"lvl": "high", "tag": "HIGH",
+                      "title": f"F2 Harvest Prep",
+                      "desc": f"{days_to}d to ~{F2_HARVEST_DATE.strftime('%b %d')} · pre-cond dry room"})
+
+    mod_off = int(fac.get("modulesOffline", 0))
+    if mod_off > 0:
+        items.append({"lvl": "medium", "tag": "MED",
+                      "title": f"{mod_off} Offline Module(s)",
+                      "desc": "Verify expected vs unexpected"})
+
+    if not items:
+        items.append({"lvl": "low", "tag": "OK",
+                      "title": "No priorities",
+                      "desc": "All thresholds stable"})
+
+    html = ""
+    for it in items[:5]:
+        html += f'''<div class="sb-priority lvl-{it["lvl"]}">
+    <div class="sb-priority-tag">{it["tag"]}</div>
+    <div class="sb-priority-title">{it["title"]}</div>
+    <div class="sb-priority-desc">{it["desc"]}</div>
+</div>\n'''
+    return html
+
+
+def build_sidebar_health(state):
+    """Compact system health for sidebar."""
+    fac = facility_of(state)
+    rooms = rooms_of(state)
+    online = int(fac.get("modulesOnline", 0))
+    off = int(fac.get("modulesOffline", 0))
+    total = online + off
+    pct = int(online / total * 100) if total > 0 else 0
+    pct_c = C["good"] if pct >= 85 else C["warning"] if pct >= 70 else C["critical"]
+    offline_modules = fac.get("offlineModules") or []
+    active_alerts = int(fac.get("activeAlerts", 0))
+
+    html = f'''<div class="sb-health-row"><span class="sb-health-label">Modules</span><span class="sb-health-value">{online}/{total}</span></div>
+<div class="sb-health-row"><span class="sb-health-label">Uptime</span><span class="sb-health-value" style="color:{pct_c}">{pct}%</span></div>
+<div class="sb-health-row"><span class="sb-health-label">Offline</span><span class="sb-health-value" style="color:{C['warning'] if off else C['muted']}">{off}</span></div>
+<div class="sb-health-row"><span class="sb-health-label">GL Alerts</span><span class="sb-health-value" style="color:{C['blue']}">{active_alerts}</span></div>
+'''
+    if offline_modules:
+        html += '<div class="sb-health-sub">Offline</div><ul class="sb-health-list">\n'
+        for m in offline_modules[:5]:
+            dot_c = C["warning"] if "Flower" in m else C["muted"]
+            html += f'<li><span class="dot" style="background:{dot_c}"></span>{m}</li>\n'
+        if len(offline_modules) > 5:
+            html += f'<li style="padding-left:14px;color:#5a7088">+{len(offline_modules)-5} more</li>\n'
+        html += '</ul>\n'
+
+    # Known issues – dynamic
+    issues = []
+    feed = rooms.get("Central Feed System", {}) or {}
+    if get_val(feed, "Solution Float") is not None:
+        issues.append(("Tank float unreliable", C["warning"]))
+    issues.append(("CO2 not supplemented in Mom/Veg", C["muted"]))
+    html += '<div class="sb-health-sub">Known Issues</div><ul class="sb-health-list">\n'
+    for text, c in issues:
+        html += f'<li><span class="dot" style="background:{c}"></span>{text}</li>\n'
+    html += '</ul>\n'
+    return html
+
+
 # --- Main ---
 
 def main():
@@ -1268,8 +1513,8 @@ def main():
         "{{EVENTS_SECTION}}": build_events_section(state),
         "{{ROOMS_SECTION}}": build_room_cards(state),
         "{{FEED_SECTION}}": build_feed_section(state, hourly, daily_summaries),
-        "{{PRIORITIES_SECTION}}": build_priorities(state, events),
-        "{{HEALTH_SECTION}}": build_system_health(state),
+        "{{SIDEBAR_PRIORITIES}}": build_sidebar_priorities(state, events),
+        "{{SIDEBAR_HEALTH}}": build_sidebar_health(state),
         "{{FOOTER_META}}": f"Generated by CCGL GrowLink Analyst · {gen_time}",
     }
 

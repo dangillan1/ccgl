@@ -12,12 +12,12 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-07T21:04:27.050726-04:00",
-      "last_seen": "2026-04-08T00:57:42.580544-04:00",
-      "current_value": 12.45,
-      "peak_value": 12.45,
-      "peak_time": "2026-04-08T00:50:41.891598-04:00",
-      "hours_active": 3.8876471769444443,
-      "consecutive_hours": 3,
+      "last_seen": "2026-04-08T01:05:14.466507-04:00",
+      "current_value": 12.34,
+      "peak_value": 12.34,
+      "peak_time": "2026-04-08T01:05:14.464866-04:00",
+      "hours_active": 4.013171053333333,
+      "consecutive_hours": 4,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -33,6 +33,10 @@
         {
           "time": "2026-04-08T00:27:44.334811-04:00",
           "value": 12.81
+        },
+        {
+          "time": "2026-04-08T01:03:23.890180-04:00",
+          "value": 12.45
         }
       ]
     },
@@ -48,12 +52,12 @@
       "threshold": 65,
       "status": "active",
       "started": "2026-04-07T21:04:27.050726-04:00",
-      "last_seen": "2026-04-08T00:57:42.580544-04:00",
-      "current_value": 62.3,
+      "last_seen": "2026-04-08T01:05:14.466507-04:00",
+      "current_value": 61.83,
       "peak_value": 60.9,
       "peak_time": "2026-04-07T23:41:38.715939-04:00",
-      "hours_active": 3.88764718,
-      "consecutive_hours": 3,
+      "hours_active": 4.013171056388889,
+      "consecutive_hours": 4,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -69,83 +73,15 @@
         {
           "time": "2026-04-08T00:27:44.334811-04:00",
           "value": 60.9
+        },
+        {
+          "time": "2026-04-08T01:03:23.890180-04:00",
+          "value": 62.3
         }
       ]
     }
   ],
   "resolved": [
-    {
-      "key": "Flower 1::high_vpd",
-      "room": "Flower 1",
-      "rule_id": "high_vpd",
-      "sensor": "Vapor Pressure Deficit",
-      "label": "High VPD",
-      "description": "VPD elevated \u2014 potential plant stress",
-      "severity": "warning",
-      "condition": "above",
-      "threshold": 1.6,
-      "status": "resolved",
-      "started": "2026-04-05T20:03:42.048571-04:00",
-      "last_seen": "2026-04-06T00:05:29.011721-04:00",
-      "current_value": 1.87,
-      "peak_value": 1.87,
-      "peak_time": "2026-04-06T00:05:29.011721-04:00",
-      "hours_active": 4.029711994722222,
-      "consecutive_hours": 1,
-      "escalated": false,
-      "reopened_count": 1,
-      "growth_stage": "Week 4 Flower (Day 23)",
-      "hourly_values": [
-        {
-          "time": "2026-04-05T20:03:42.048571-04:00",
-          "value": 1.67
-        },
-        {
-          "time": "2026-04-06T00:05:08.750647-04:00",
-          "value": 1.87
-        }
-      ],
-      "duration_hours": 4.988636108055555,
-      "resolved_at": "2026-04-06T01:03:01.138495-04:00"
-    },
-    {
-      "key": "Flower 1::high_temp",
-      "room": "Flower 1",
-      "rule_id": "high_temp",
-      "sensor": "Ambient Temperature",
-      "label": "High Temperature",
-      "description": "Temperature elevated \u2014 heat stress risk",
-      "severity": "warning",
-      "condition": "above",
-      "threshold": 85,
-      "status": "resolved",
-      "started": "2026-04-05T19:39:55.478101-04:00",
-      "last_seen": "2026-04-06T00:05:29.011721-04:00",
-      "current_value": 86.67,
-      "peak_value": 88.6,
-      "peak_time": "2026-04-05T20:10:04.068981-04:00",
-      "hours_active": 4.425981577777778,
-      "consecutive_hours": 1,
-      "escalated": false,
-      "reopened_count": 1,
-      "growth_stage": "Week 4 Flower (Day 22)",
-      "hourly_values": [
-        {
-          "time": "2026-04-05T19:39:55.478101-04:00",
-          "value": 88.13
-        },
-        {
-          "time": "2026-04-05T20:10:04.068981-04:00",
-          "value": 88.6
-        },
-        {
-          "time": "2026-04-06T00:05:08.750647-04:00",
-          "value": 86.67
-        }
-      ],
-      "duration_hours": 5.384905684444445,
-      "resolved_at": "2026-04-06T01:03:01.138495-04:00"
-    },
     {
       "key": "Flower 2::low_vpd",
       "room": "Flower 2",
