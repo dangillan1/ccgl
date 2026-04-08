@@ -361,11 +361,19 @@ details[open] summary{margin-bottom:12px}
 section{margin-bottom:28px}
 section h2{font-size:15px;margin-bottom:12px;padding-bottom:8px}
 
-/* Report header compact */
-.report-header{flex-direction:row;padding:20px 16px;margin-bottom:24px;border-radius:8px;align-items:center;gap:12px}
-.report-header h1{font-size:16px;margin-bottom:4px}
-.header-meta{font-size:11px;line-height:1.4}
-.header-time{font-size:9px}
+/* Report header — mobile stack */
+.report-header{flex-direction:column;align-items:flex-start;gap:10px;padding:14px 16px;margin-bottom:20px;border-radius:8px}
+.report-header::before{width:120px}
+.hdr-left{width:100%}
+.hdr-title-row{flex-wrap:wrap;gap:6px 10px;margin-bottom:6px;align-items:baseline}
+.report-header h1{font-size:17px;letter-spacing:-.2px}
+.hdr-sub{font-size:9px;letter-spacing:1.2px}
+.header-time{font-size:9px;letter-spacing:.5px;gap:6px;flex-wrap:wrap}
+.live-dot{font-size:8px;padding:1px 7px 1px 5px;gap:4px}
+.live-dot::before{width:5px;height:5px}
+.hdr-stages{width:100%;gap:5px;justify-content:flex-start}
+.hdr-pill{padding:4px 9px;font-size:10px;gap:5px;flex:1 1 auto;justify-content:center;min-width:0}
+.hdr-pill .pill-tag{font-size:8px;padding:1px 5px}
 .health-number{font-size:24px}
 .health-label{font-size:9px}
 
@@ -516,7 +524,7 @@ body{background:white;color:black}
                     <h1>Growlink Data &amp; Analytics</h1>
                     <span class="hdr-sub">Cape Cod Grow Lab</span>
                 </div>
-                <div class="header-time"><span class="live-dot">Live</span>Data as of April 08, 2026 · 01:11 AM ET · Report generated April 08, 2026 · 01:11 AM</div>
+                <div class="header-time"><span class="live-dot">Live</span>Data as of April 08, 2026 · 01:11 AM ET · Report generated April 08, 2026 · 01:13 AM</div>
             </div>
             <div class="hdr-stages"><div class="hdr-pill f1"><span class="pill-tag">F1</span>Week 4 Flower</div><div class="hdr-pill f2"><span class="pill-tag">F2</span>Late Flower</div><div class="hdr-pill mom"><span class="pill-tag">MOM</span>Vegetative</div></div>
         </header>
@@ -577,8 +585,8 @@ body{background:white;color:black}
         <div class="perf24-trend-row trend-info"><span class="trend-icon">📉</span><span class="trend-text" style="border-left-color:#4A90B5">VPD trending low — 10/24h below 1.20; slow transpiration</span></div>
     </div>
     <div class="perf24-events">
-    <div class="evt-line"><span style="color:#f39c12;font-weight:600">Substrate Dry</span> <span style="color:#5a7088">4h 6m active · peaked 12.3%</span></div>
-    <div class="evt-line"><span style="color:#f39c12;font-weight:600">Low Temperature</span> <span style="color:#5a7088">4h 6m active · peaked 60.9°F</span></div>
+    <div class="evt-line"><span style="color:#f39c12;font-weight:600">Substrate Dry</span> <span style="color:#5a7088">4h 9m active · peaked 12.3%</span></div>
+    <div class="evt-line"><span style="color:#f39c12;font-weight:600">Low Temperature</span> <span style="color:#5a7088">4h 9m active · peaked 60.9°F</span></div>
     <div class="evt-line"><span style="color:#2ecc71;font-weight:600">Low VPD ✓</span> <span style="color:#5a7088">resolved · peaked 0.77 kPa</span></div>
     <div class="evt-line"><span style="color:#2ecc71;font-weight:600">Low Temperature ✓</span> <span style="color:#5a7088">resolved · peaked 59.6°F</span></div>
     <div class="evt-line"><span style="color:#2ecc71;font-weight:600">Low Temperature ✓</span> <span style="color:#5a7088">resolved · peaked 60.9°F</span></div>
@@ -625,7 +633,7 @@ body{background:white;color:black}
     <div class="alert-metrics">
         <div class="alert-metric"><div class="alert-metric-value" style="color:#f39c12">12.3%</div><div class="alert-metric-label">Current</div></div>
         <div class="alert-metric"><div class="alert-metric-value" style="color:#f39c12">12.3%</div><div class="alert-metric-label">Peak</div></div>
-        <div class="alert-metric"><div class="alert-metric-value">4h 6m</div><div class="alert-metric-label">Active</div></div>
+        <div class="alert-metric"><div class="alert-metric-value">4h 9m</div><div class="alert-metric-label">Active</div></div>
         <div class="alert-metric"><div class="alert-metric-value">4h</div><div class="alert-metric-label">Consecutive</div></div>
     </div>
     <div class="alert-description">VWC below 15% — irrigation may be insufficient</div>
@@ -639,7 +647,7 @@ body{background:white;color:black}
     <div class="alert-metrics">
         <div class="alert-metric"><div class="alert-metric-value" style="color:#f39c12">62.2°F</div><div class="alert-metric-label">Current</div></div>
         <div class="alert-metric"><div class="alert-metric-value" style="color:#f39c12">60.9°F</div><div class="alert-metric-label">Peak</div></div>
-        <div class="alert-metric"><div class="alert-metric-value">4h 6m</div><div class="alert-metric-label">Active</div></div>
+        <div class="alert-metric"><div class="alert-metric-value">4h 9m</div><div class="alert-metric-label">Active</div></div>
         <div class="alert-metric"><div class="alert-metric-value">4h</div><div class="alert-metric-label">Consecutive</div></div>
     </div>
     <div class="alert-description">Temperature below optimal — slowed metabolism</div>
@@ -707,13 +715,13 @@ body{background:white;color:black}
         <summary>
             <span class="chip-dot"></span>
             <span class="chip-title">Substrate Dry <span class="chip-esc">⚡ESC</span></span>
-            <span class="chip-meta">12.3% · 4h 6m</span>
+            <span class="chip-meta">12.3% · 4h 9m</span>
         </summary>
         <div class="chip-body">
             <div class="chip-grid">
                 <div><div class="chip-val" style="color:#e74c3c">12.3%</div><div class="chip-lab">Current</div></div>
                 <div><div class="chip-val" style="color:#e74c3c">12.3%</div><div class="chip-lab">Peak</div></div>
-                <div><div class="chip-val">4h 6m</div><div class="chip-lab">Duration</div></div>
+                <div><div class="chip-val">4h 9m</div><div class="chip-lab">Duration</div></div>
                 <div><div class="chip-val">4h</div><div class="chip-lab">Consecutive</div></div>
             </div>
             <div class="chip-desc">VWC below 15% — irrigation may be insufficient</div>
@@ -724,13 +732,13 @@ body{background:white;color:black}
         <summary>
             <span class="chip-dot"></span>
             <span class="chip-title">Low Temperature <span class="chip-esc">⚡ESC</span></span>
-            <span class="chip-meta">62.2°F · 4h 6m</span>
+            <span class="chip-meta">62.2°F · 4h 9m</span>
         </summary>
         <div class="chip-body">
             <div class="chip-grid">
                 <div><div class="chip-val" style="color:#e74c3c">62.2°F</div><div class="chip-lab">Current</div></div>
                 <div><div class="chip-val" style="color:#e74c3c">60.9°F</div><div class="chip-lab">Peak</div></div>
-                <div><div class="chip-val">4h 6m</div><div class="chip-lab">Duration</div></div>
+                <div><div class="chip-val">4h 9m</div><div class="chip-lab">Duration</div></div>
                 <div><div class="chip-val">4h</div><div class="chip-lab">Consecutive</div></div>
             </div>
             <div class="chip-desc">Temperature below optimal — slowed metabolism</div>
@@ -1094,7 +1102,7 @@ body{background:white;color:black}
     <div class="priority-content">
         <div class="priority-tag">ESCALATED</div>
         <div class="priority-title">Flower 2: Substrate Dry</div>
-        <div class="priority-desc">VWC below 15% — irrigation may be insufficient Currently 12.3% · 4h 6m active.</div>
+        <div class="priority-desc">VWC below 15% — irrigation may be insufficient Currently 12.3% · 4h 9m active.</div>
     </div>
 </div>
 <div class="priority-card priority-urgent">
@@ -1102,7 +1110,7 @@ body{background:white;color:black}
     <div class="priority-content">
         <div class="priority-tag">ESCALATED</div>
         <div class="priority-title">Flower 2: Low Temperature</div>
-        <div class="priority-desc">Temperature below optimal — slowed metabolism Currently 62.2°F · 4h 6m active.</div>
+        <div class="priority-desc">Temperature below optimal — slowed metabolism Currently 62.2°F · 4h 9m active.</div>
     </div>
 </div>
 <div class="priority-card priority-high">
@@ -1169,7 +1177,7 @@ body{background:white;color:black}
         <footer class="report-footer">
             <div class="footer-brand">Cape Cod Grow Lab</div>
             <div class="footer-tagline">Mindfully Cultivated Cannabis · Brewster, MA</div>
-            <div class="footer-meta">Generated by CCGL GrowLink Analyst · April 08, 2026 · 01:11 AM</div>
+            <div class="footer-meta">Generated by CCGL GrowLink Analyst · April 08, 2026 · 01:13 AM</div>
         </footer>
     </div>
 
