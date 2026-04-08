@@ -12,13 +12,13 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-07T21:04:27.050726-04:00",
-      "last_seen": "2026-04-07T23:41:38.715939-04:00",
+      "last_seen": "2026-04-08T00:28:40.176126-04:00",
       "current_value": 12.81,
       "peak_value": 12.81,
       "peak_time": "2026-04-07T23:41:38.715939-04:00",
-      "hours_active": 2.6199070077777775,
-      "consecutive_hours": 2,
-      "escalated": false,
+      "hours_active": 3.4036459488888893,
+      "consecutive_hours": 3,
+      "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
@@ -28,6 +28,10 @@
         },
         {
           "time": "2026-04-07T23:41:38.715939-04:00",
+          "value": 12.81
+        },
+        {
+          "time": "2026-04-08T00:27:44.334811-04:00",
           "value": 12.81
         }
       ]
@@ -44,13 +48,13 @@
       "threshold": 65,
       "status": "active",
       "started": "2026-04-07T21:04:27.050726-04:00",
-      "last_seen": "2026-04-07T23:41:38.715939-04:00",
+      "last_seen": "2026-04-08T00:28:40.176126-04:00",
       "current_value": 60.9,
       "peak_value": 60.9,
       "peak_time": "2026-04-07T23:41:38.715939-04:00",
-      "hours_active": 2.619907011111111,
-      "consecutive_hours": 2,
-      "escalated": false,
+      "hours_active": 3.403645951666667,
+      "consecutive_hours": 3,
+      "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
@@ -61,87 +65,15 @@
         {
           "time": "2026-04-07T23:41:38.715939-04:00",
           "value": 60.9
+        },
+        {
+          "time": "2026-04-08T00:27:44.334811-04:00",
+          "value": 60.9
         }
       ]
     }
   ],
   "resolved": [
-    {
-      "key": "Flower 1::high_humidity",
-      "room": "Flower 1",
-      "rule_id": "high_humidity",
-      "sensor": "Ambient Humidity",
-      "label": "High Humidity",
-      "description": "Elevated humidity increases botrytis risk in flower",
-      "severity": "warning",
-      "condition": "above",
-      "threshold": 70,
-      "status": "resolved",
-      "started": "2026-04-05T17:21:58.349017-04:00",
-      "last_seen": "2026-04-05T23:26:36.716228-04:00",
-      "current_value": 79.93,
-      "peak_value": 79.93,
-      "peak_time": "2026-04-05T21:22:59.968201-04:00",
-      "hours_active": 6.077324247777778,
-      "consecutive_hours": 2,
-      "escalated": false,
-      "reopened_count": 1,
-      "growth_stage": "Week 4 Flower (Day 26)",
-      "hourly_values": [
-        {
-          "time": "2026-04-05T17:21:58.349017-04:00",
-          "value": 71.0
-        },
-        {
-          "time": "2026-04-05T19:39:55.478101-04:00",
-          "value": 70.13
-        },
-        {
-          "time": "2026-04-05T21:02:55.797892-04:00",
-          "value": 79.83
-        },
-        {
-          "time": "2026-04-05T23:26:36.716228-04:00",
-          "value": 79.93
-        }
-      ],
-      "duration_hours": 6.719556038055556,
-      "resolved_at": "2026-04-06T00:05:08.750647-04:00"
-    },
-    {
-      "key": "Flower 1::low_vpd",
-      "room": "Flower 1",
-      "rule_id": "low_vpd",
-      "sensor": "Vapor Pressure Deficit",
-      "label": "Low VPD",
-      "description": "VPD below optimal \u2014 reduced transpiration, moisture risk",
-      "severity": "warning",
-      "condition": "below",
-      "threshold": 0.8,
-      "status": "resolved",
-      "started": "2026-04-05T21:02:55.797892-04:00",
-      "last_seen": "2026-04-05T23:26:36.716228-04:00",
-      "current_value": 0.6,
-      "peak_value": 0.5,
-      "peak_time": "2026-04-05T21:02:55.797892-04:00",
-      "hours_active": 2.3946995647222225,
-      "consecutive_hours": 2,
-      "escalated": false,
-      "reopened_count": 0,
-      "growth_stage": "Week 4 Flower (Day 22)",
-      "hourly_values": [
-        {
-          "time": "2026-04-05T21:02:55.797892-04:00",
-          "value": 0.5
-        },
-        {
-          "time": "2026-04-05T23:26:36.716228-04:00",
-          "value": 0.6
-        }
-      ],
-      "resolved_at": "2026-04-06T00:05:08.750647-04:00",
-      "duration_hours": 3.036931352222222
-    },
     {
       "key": "Flower 1::high_vpd",
       "room": "Flower 1",

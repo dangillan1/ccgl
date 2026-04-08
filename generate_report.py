@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
 """
-CCGL GrowLink Report Generator (v3 — Enhanced Template Edition)
-Loads report_template.html, fills placeholders from state.json,
-and generates the visually rich "Amazing" version of the report.
+CCGL GrowLink Report Generator (v4 — Data-Driven Edition)
+
+Every section sources from live data. No hardcoded sensor values, no fabricated
+targets presented as setpoints. Reads:
+  - data/state.json (current_readings.rooms/facility/timestamp)
+  - data/daily-summaries.json (day/night/all aggregates)
+  - data/hourly-readings.json (historical series)
+  - data/events.json via event_tracker.process_readings
+
+Growth stages, light schedules, and stage-appropriate target ranges are
+declared as config at the top of this file — not fetched from state.json.
 """
 
 import json
 import os
 import shutil
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from event_tracker import process_readings, format_duration, format_value
@@ -18,6 +26,9 @@ from event_tracker import process_readings, format_duration, format_value
 BASE_DIR = Path(__file__).parent
 TEMPLATE_PATH = BASE_DIR / "report_template.html"
 STATE_PATH = BASE_DIR / "data" / "state.json"
+HOURLY_PATH = BASE_DIR / "data" / "hourly-readings.json"
+DAILY_PATH = BASE_DIR / "data" / "daily-summaries.json"
+EVENTS_PATH = BASE_DIR / "data" / "events.json"
 LOGO_PATH = BASE_DIR / "data" / "logo_base64.txt"
 WORDMARK_PATH = BASE_DIR / "data" / "wordmark_base64.txt"
 LOGO_SVG_PATH = BASE_DIR / "data" / "logo_svg_b64.txt"
@@ -37,578 +48,643 @@ C = {
 }
 
 
+# --- Static configuration (facts the API doesn't give us) ---
+
+GROWTH_STAGES = {
+    "Flower 1": "Week 4 Flower",
+    "Flower 2": "Late Flower",
+    "Mom":      "Vegetative",
+    "Cure Room": "Cure",
+    "Dry Room": "Idle",
+    "Clone":    "Clone/Veg",
+    "Central Feed System": "Reservoir",
+}
+
+# F2 harvest target — used for dry-room pre-conditioning countdown
+F2_HARVEST_DATE = datetime(2026, 4, 14)
+
+# Light schedules (lights-on hours, 24h clock)
+LIGHT_SCHEDULES = {
+    "Flower 1": (7, 19),            # 7:00 AM – 7:00 PM
+    "Flower 2": (6, 18),            # 6:00 AM – 6:00 PM
+    "Mom":      (8, 25.5),          # 8:00 AM – 1:30 AM (next day)
+    "Cure Room": None,
+    "Dry Room": None,
+}
+
+# Stage-appropriate ranges used only to color-code status (NOT shown as setpoints)
+TARGETS = {
+    "Flower 1": {
+        "Ambient Temperature":      (72, 82),
+        "Ambient Humidity":         (45, 60),
+        "Vapor Pressure Deficit":   (1.0, 1.5),
+        "Ambient CO2":              (800, 1200),
+        "Substrate VWC":            (30, 55),
+        "Substrate EC":             (2.0, 3.5),
+        "Substrate Temperature":    (68, 78),
+    },
+    "Flower 2": {
+        "Ambient Temperature":      (68, 78),
+        "Ambient Humidity":         (40, 55),
+        "Vapor Pressure Deficit":   (1.2, 1.6),
+        "Ambient CO2":              (600, 1000),
+        "Substrate VWC":            (15, 40),
+        "Substrate EC":             (1.5, 3.5),
+        "Substrate Temperature":    (65, 75),
+    },
+    "Mom": {
+        "Ambient Temperature":      (70, 80),
+        "Ambient Humidity":         (55, 70),
+        "Vapor Pressure Deficit":   (0.8, 1.2),
+        "Ambient CO2":              (400, 1200),
+        "Substrate VWC":            (30, 65),
+        "Substrate EC":             (1.2, 2.8),
+        "Substrate Temperature":    (68, 78),
+    },
+    "Cure Room": {
+        "Ambient Temperature":      (58, 68),
+        "Ambient Humidity":         (55, 65),
+        "Vapor Pressure Deficit":   (0.4, 0.8),
+    },
+    "Dry Room": {
+        "Ambient Temperature":      (58, 66),
+        "Ambient Humidity":         (55, 65),
+        "Vapor Pressure Deficit":   (0.6, 1.0),
+    },
+    "Central Feed System": {
+        "Solution pH":              (5.5, 6.5),
+        "Solution TDS":             (700, 1100),
+        "Solution Temperature":     (60, 72),
+    },
+}
+
+# Rooms that get first-class treatment in the main sections
+PRIMARY_ROOMS = ["Flower 1", "Flower 2", "Mom"]
+ALL_ROOMS_ORDER = ["Flower 1", "Flower 2", "Mom", "Cure Room", "Dry Room", "Central Feed System"]
+
+# Key sensors to highlight in 24h performance view (varies per room)
+KEY_SENSORS = {
+    "Flower 1": ["Ambient Temperature", "Ambient Humidity", "Vapor Pressure Deficit", "Ambient CO2", "Substrate VWC", "Substrate EC"],
+    "Flower 2": ["Ambient Temperature", "Ambient Humidity", "Vapor Pressure Deficit", "Ambient CO2", "Substrate VWC", "Substrate EC"],
+    "Mom":      ["Ambient Temperature", "Ambient Humidity", "Vapor Pressure Deficit", "Substrate VWC", "Substrate EC"],
+    "Cure Room": ["Ambient Temperature", "Ambient Humidity", "Vapor Pressure Deficit"],
+    "Dry Room":  ["Ambient Temperature", "Ambient Humidity", "Vapor Pressure Deficit"],
+}
+
+
 # --- Helpers ---
 
-def load_json(path):
-    with open(path, 'r') as f:
-        return json.load(f)
+def load_json(path, default=None):
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except Exception:
+        return default if default is not None else {}
+
 
 def load_text(path):
-    with open(path, 'r') as f:
-        raw = f.read().strip()
-    if not raw.startswith('data:'):
-        raw = f'data:image/png;base64,{raw}'
+    try:
+        with open(path) as f:
+            raw = f.read().strip()
+    except Exception:
+        return ""
+    if not raw.startswith("data:"):
+        raw = f"data:image/png;base64,{raw}"
     return raw
 
+
+def rooms_of(state):
+    return (state.get("current_readings", {}) or {}).get("rooms", {}) or {}
+
+
+def facility_of(state):
+    return (state.get("current_readings", {}) or {}).get("facility", {}) or {}
+
+
+def state_timestamp(state):
+    cr = state.get("current_readings", {}) or {}
+    return cr.get("timestamp") or state.get("last_updated", "")
+
+
+def get_val(room_data, sensor):
+    """Return numeric value or None if sensor missing."""
+    s = (room_data or {}).get(sensor)
+    if not s:
+        return None
+    v = s.get("value")
+    return v if v is not None else None
+
+
+def has_sensor(room_data, sensor):
+    return get_val(room_data, sensor) is not None
+
+
 def fmt(sensor_name, value):
-    if "Temperature" in sensor_name: return f"{value:.1f}°F"
-    elif "Humidity" in sensor_name: return f"{value:.1f}%"
-    elif "CO2" in sensor_name: return f"{int(value)} ppm"
-    elif "VPD" in sensor_name or "Deficit" in sensor_name: return f"{value:.2f} kPa"
-    elif "pH" in sensor_name: return f"{value:.2f}"
-    elif "TDS" in sensor_name: return f"{int(value)} ppm"
-    elif "EC" in sensor_name: return f"{value:.2f} dS/m"
-    elif "VWC" in sensor_name: return f"{value:.1f}%"
-    elif "Float" in sensor_name: return f"{value:.0f}%"
+    if value is None:
+        return "—"
+    if "Temperature" in sensor_name:   return f"{value:.1f}°F"
+    if "Humidity" in sensor_name:      return f"{value:.1f}%"
+    if "CO2" in sensor_name:           return f"{int(value)} ppm"
+    if "VPD" in sensor_name or "Deficit" in sensor_name: return f"{value:.2f} kPa"
+    if "pH" in sensor_name:            return f"{value:.2f}"
+    if "TDS" in sensor_name:           return f"{int(value)} ppm"
+    if "EC" in sensor_name:            return f"{value:.2f} dS/m"
+    if "VWC" in sensor_name:           return f"{value:.1f}%"
+    if "Float" in sensor_name:         return f"{value:.0f}%"
     return f"{value:.2f}"
 
-def status_color(value, lo, hi):
-    if lo <= value <= hi: return C["good"]
-    margin = (hi - lo) * 0.15
-    if (lo - margin) <= value <= (hi + margin): return C["warning"]
-    return C["critical"]
 
-def status_class(value, lo, hi):
-    if lo <= value <= hi: return "good"
+def target_for(room, sensor):
+    return TARGETS.get(room, {}).get(sensor)
+
+
+def classify(room, sensor, value):
+    """Return 'good' | 'warning' | 'critical' | 'unknown'."""
+    if value is None:
+        return "unknown"
+    t = target_for(room, sensor)
+    if not t:
+        return "good"  # no target → assume fine
+    lo, hi = t
+    if lo <= value <= hi:
+        return "good"
     margin = (hi - lo) * 0.15
-    if (lo - margin) <= value <= (hi + margin): return "warning"
+    if (lo - margin) <= value <= (hi + margin):
+        return "warning"
     return "critical"
 
-def health_score(room_data):
-    if not room_data or "sensors" not in room_data: return 100
+
+def status_color(cls):
+    return {"good": C["good"], "warning": C["warning"], "critical": C["critical"],
+            "unknown": C["muted"]}[cls]
+
+
+def health_score(room, room_data):
+    """Score a room 0-100 from its per-sensor classifications."""
+    if not room_data:
+        return 100
     g = w = cr = 0
-    for sn, sd in room_data["sensors"].items():
-        v, lo, hi = sd.get("value", 0), sd.get("min", 0), sd.get("max", 0)
-        s = status_class(v, lo, hi)
-        if s == "good": g += 1
-        elif s == "warning": w += 1
-        else: cr += 1
+    for sn in room_data.keys():
+        v = get_val(room_data, sn)
+        if v is None:
+            continue
+        cls = classify(room, sn, v)
+        if cls == "good": g += 1
+        elif cls == "warning": w += 1
+        elif cls == "critical": cr += 1
     total = g + w + cr
-    if total == 0: return 100
+    if total == 0:
+        return 100
     return max(0, 100 - (w * 15) - (cr * 25))
 
-def trend_arrow(delta, pct):
-    if abs(pct) < 1:
-        return f'<span style="color:{C["muted"]}">→ Stable</span>'
-    elif delta > 0:
-        color = C["critical"] if pct > 10 else C["warning"] if pct > 5 else C["lime"]
-        return f'<span style="color:{color}">↑ +{pct:.1f}%</span>'
+
+def lights_on(room, now=None):
+    """Return True if lights should currently be ON for this room."""
+    sched = LIGHT_SCHEDULES.get(room)
+    if not sched:
+        return None
+    now = now or datetime.now()
+    hour = now.hour + now.minute / 60.0
+    lo, hi = sched
+    # Handle schedules that cross midnight (e.g. Mom 8 → 25.5 means 8:00 → 1:30 next day)
+    if hi > 24:
+        return hour >= lo or hour < (hi - 24)
+    return lo <= hour < hi
+
+
+# --- Section: 24h Performance (top of report) ---
+
+def _merge_sensor_stats(a, b):
+    if not a: return dict(b) if b else {}
+    if not b: return dict(a)
+    ca, cb = a.get("count", 0), b.get("count", 0)
+    total = ca + cb
+    out = {
+        "min": min(a.get("min", 9e9), b.get("min", 9e9)),
+        "max": max(a.get("max", -9e9), b.get("max", -9e9)),
+        "count": total,
+    }
+    if total > 0 and a.get("avg") is not None and b.get("avg") is not None:
+        out["avg"] = (a["avg"] * ca + b["avg"] * cb) / total
     else:
-        color = C["critical"] if abs(pct) > 10 else C["warning"] if abs(pct) > 5 else C["lime"]
-        return f'<span style="color:{color}">↓ {pct:.1f}%</span>'
+        out["avg"] = a.get("avg") or b.get("avg")
+    return out
 
 
-# --- Section Builders ---
+def _hourly_val(room_data, sensor):
+    """Hourly entries may store either {value,...} dicts or raw floats."""
+    s = (room_data or {}).get(sensor)
+    if s is None:
+        return None
+    if isinstance(s, dict):
+        return s.get("value")
+    try:
+        return float(s)
+    except (TypeError, ValueError):
+        return None
 
-def build_alerts(state):
-    ca = state.get("critical_alerts", {})
-    offline = state.get("offline_modules", [])
-    tank = state.get("tank_sensors", {})
+
+def _last24h_stats_from_hourly(hourly, room, sensor):
+    """Compute min/max/avg over the last 24 snapshots."""
+    if not hourly:
+        return {}
+    recent = hourly[-24:]
+    vals = []
+    for entry in recent:
+        r = entry.get("rooms", {}).get(room, {})
+        v = _hourly_val(r, sensor)
+        if v is not None:
+            vals.append(v)
+    if not vals:
+        return {}
+    return {"min": min(vals), "max": max(vals), "avg": sum(vals) / len(vals), "count": len(vals)}
+
+
+def build_24h_performance(state, hourly, daily_summaries, events):
+    """Live 24-hour performance: per-room, derived from hourly-readings.json."""
+    now = datetime.now()
+    active = events.get("active", [])
+    resolved = events.get("resolved", [])
+
+    # Events by room
+    room_active, room_resolved = {}, {}
+    for e in active:
+        room_active.setdefault(e.get("room", ""), []).append(e)
+    for e in resolved:
+        room_resolved.setdefault(e.get("room", ""), []).append(e)
+
+    room_css = {"Flower 1": "f1", "Flower 2": "f2", "Mom": "mom"}
+
+    html = f'<div style="font-size:11px;color:{C["muted"]};margin-bottom:16px;text-align:right">Last 24 snapshots · {now.strftime("%b %-d")}</div>\n'
+    html += '<div class="perf24-grid">\n'
+
+    for room in PRIMARY_ROOMS:
+        rd = rooms_of(state).get(room, {})
+        sensors = [s for s in KEY_SENSORS.get(room, []) if has_sensor(rd, s) or s in ("Substrate VWC", "Substrate EC")]
+        # Only keep sensors that exist live OR had data in the hourly history
+        available_sensors = []
+        for s in sensors:
+            stats = _last24h_stats_from_hourly(hourly, room, s)
+            if stats or has_sensor(rd, s):
+                available_sensors.append(s)
+
+        r_active = room_active.get(room, [])
+        r_resolved = room_resolved.get(room, [])
+
+        if any(e.get("severity") == "critical" for e in r_active):
+            badge = '<span class="badge badge-critical">CRITICAL</span>'
+        elif r_active:
+            badge = '<span class="badge badge-warning">ATTENTION</span>'
+        else:
+            badge = '<span class="badge badge-good">ON TRACK</span>'
+
+        html += f'''<div class="perf24-card {room_css.get(room,"")}">
+    <div class="perf24-header">
+        <div class="perf24-room">{room} <span class="perf24-stage">{GROWTH_STAGES.get(room, "")}</span></div>
+        {badge}
+    </div>
+    <table class="perf24-table">
+    <thead><tr><th>Sensor</th><th>24h Range</th><th>Avg</th><th>Now</th></tr></thead>
+    <tbody>
+'''
+        for sensor in available_sensors:
+            stats = _last24h_stats_from_hourly(hourly, room, sensor)
+            cur = get_val(rd, sensor)
+            short = (sensor.replace("Ambient ", "")
+                           .replace("Vapor Pressure Deficit", "VPD")
+                           .replace("Substrate ", "Sub "))
+            if stats and stats.get("min") is not None:
+                range_str = f"{fmt(sensor, stats['min'])} – {fmt(sensor, stats['max'])}"
+                avg_str = fmt(sensor, stats.get("avg"))
+            else:
+                range_str = "—"
+                avg_str = "—"
+            cls = classify(room, sensor, cur)
+            col = status_color(cls)
+            now_str = f'<span style="color:{col};font-weight:700">{fmt(sensor, cur)}</span>'
+            html += f'''    <tr><td>{short}</td><td>{range_str}</td><td>{avg_str}</td><td style="text-align:right">{now_str}</td></tr>\n'''
+        html += '    </tbody>\n    </table>\n'
+
+        # 24h event summary
+        if r_active or r_resolved:
+            html += '    <div class="perf24-events">\n'
+            for e in r_active:
+                sev_c = C["critical"] if e.get("severity") == "critical" else C["warning"]
+                dur = format_duration(e.get("hours_active", 0))
+                peak = e.get("peak_value")
+                pk = f" · peaked {format_value(e['sensor'], peak)}" if peak is not None else ""
+                html += f'    <div class="evt-line"><span style="color:{sev_c};font-weight:600">{e.get("label","")}</span> <span style="color:{C["muted"]}">{dur} active{pk}</span></div>\n'
+            for e in r_resolved[:3]:
+                peak = e.get("peak_value")
+                pk = f" · peaked {format_value(e['sensor'], peak)}" if peak is not None else ""
+                html += f'    <div class="evt-line"><span style="color:{C["good"]};font-weight:600">{e.get("label","")} ✓</span> <span style="color:{C["muted"]}">resolved{pk}</span></div>\n'
+            html += '    </div>\n'
+        html += '</div>\n'
+    html += '</div>\n'
+    return html
+
+
+# --- Section: Alerts ---
+
+def build_alerts(state, events):
+    """Data-driven alerts derived from active events + facility health."""
+    active = events.get("active", [])
+    fac = facility_of(state)
+    offline_modules = fac.get("offlineModules", []) or []
+    critical_active = [e for e in active if e.get("severity") == "critical"]
+    warning_active = [e for e in active if e.get("severity") == "warning"]
+    escalated = [e for e in active if e.get("escalated")]
+
     html = '<div class="card-grid">\n'
 
-    if "flower1_high_humidity" in ca:
-        a = ca["flower1_high_humidity"]
-        hum = a.get("current_humidity", 71.33)
-        vpd = a.get("vpd", 0.97)
-        html += f'''<div class="card alert-card warning">
-    <div class="alert-header">
-        <span class="alert-icon">⚠️</span>
-        <span class="alert-title">Flower 1: Humidity Crisis — Bud Rot Risk Elevated</span>
-        <span class="badge badge-warning">WARNING</span>
-    </div>
-    <div class="alert-metrics">
-        <div class="alert-metric"><div class="alert-metric-value" style="color:{C['warning']}">{hum:.1f}%</div><div class="alert-metric-label">Current RH</div></div>
-        <div class="alert-metric"><div class="alert-metric-value" style="color:{C['warning']}">{vpd:.2f}</div><div class="alert-metric-label">VPD (kPa)</div></div>
-    </div>
-    <div class="alert-description">Flower 1 humidity elevated at {hum:.1f}% during Week 4 flower with dense bud sites forming. VPD at {vpd:.2f} kPa — low transpiration increases moisture risk in the canopy.</div>
-    <div class="alert-ai"><strong>🧠 AI Analysis:</strong> Humidity trend suggests dehumidification is running but hasn't stabilized. Substrate VWC contributing to room humidity through evapotranspiration.</div>
-    <div class="alert-action">🎯 <strong>Action:</strong> Increase dehumidifier runtime. Add supplemental exhaust during lights-on (7 AM - 7 PM). Position portable dehu at canopy height for maximum moisture capture.</div>
-</div>\n'''
-
-    if "mom_substrate_dry" in ca:
-        a = ca["mom_substrate_dry"]
-        vwc = a.get("current_vwc", 9.8)
+    # 1) Critical events
+    for e in critical_active:
+        cur = e.get("current_value")
+        peak = e.get("peak_value")
+        sensor = e.get("sensor", "")
+        room = e.get("room", "")
         html += f'''<div class="card alert-card">
     <div class="alert-header">
         <span class="alert-icon">🚨</span>
-        <span class="alert-title">Mother Room: Substrate Critically Dry — Irrigation Emergency</span>
+        <span class="alert-title">{room}: {e.get("label","")}</span>
         <span class="badge badge-critical">CRITICAL</span>
     </div>
     <div class="alert-metrics">
-        <div class="alert-metric"><div class="alert-metric-value" style="color:{C['critical']}">{vwc:.1f}%</div><div class="alert-metric-label">Current VWC</div></div>
-        <div class="alert-metric"><div class="alert-metric-value" style="color:{C['good']}">30-65%</div><div class="alert-metric-label">Target VWC</div></div>
-        <div class="alert-metric"><div class="alert-metric-value" style="color:{C['warning']}">0.70</div><div class="alert-metric-label">EC (dS/m)</div></div>
-        <div class="alert-metric"><div class="alert-metric-value" style="color:{C['good']}">1.2-2.0</div><div class="alert-metric-label">Target EC</div></div>
+        <div class="alert-metric"><div class="alert-metric-value" style="color:{C["critical"]}">{format_value(sensor, cur)}</div><div class="alert-metric-label">Current</div></div>
+        <div class="alert-metric"><div class="alert-metric-value" style="color:{C["critical"]}">{format_value(sensor, peak)}</div><div class="alert-metric-label">Peak</div></div>
+        <div class="alert-metric"><div class="alert-metric-value">{format_duration(e.get("hours_active",0))}</div><div class="alert-metric-label">Active</div></div>
+        <div class="alert-metric"><div class="alert-metric-value">{e.get("consecutive_hours",1)}h</div><div class="alert-metric-label">Consecutive</div></div>
     </div>
-    <div class="alert-description">Mother room substrate at {vwc:.1f}% VWC — critically below the 30% minimum and approaching permanent wilt point (5-8%). EC at 0.70 dS/m is severely depleted, indicating nutrient starvation alongside dehydration.</div>
-    <div class="alert-ai"><strong>🧠 AI Analysis:</strong> The 3h trend shows VWC spiked +216% from 3.1% → 9.8%, suggesting a partial watering event occurred but was insufficient. EC crashed 68% in 3h (2.19 → 0.70), consistent with a flush-through with low-EC water. The irrigation system may be delivering water but at inadequate volume.</div>
-    <div class="alert-action">🎯 <strong>Action:</strong> Hand water all mothers to field capacity IMMEDIATELY. Inspect every emitter for clogs. Verify timer soak duration. Follow up with half-strength balanced nutrients once VWC stabilizes above 40%.</div>
+    <div class="alert-description">{e.get("description","")}</div>
 </div>\n'''
 
-    if tank.get("sensor1") == "broken":
+    # 2) Escalated warnings (≥3 consecutive hours)
+    for e in escalated:
+        if e in critical_active:
+            continue
+        cur = e.get("current_value")
+        sensor = e.get("sensor", "")
+        room = e.get("room", "")
         html += f'''<div class="card alert-card warning">
     <div class="alert-header">
-        <span class="alert-icon">🔧</span>
-        <span class="alert-title">Nutrient Tank: Both Level Sensors Non-Functional</span>
-        <span class="badge badge-warning">HARDWARE</span>
+        <span class="alert-icon">⚠️</span>
+        <span class="alert-title">{room}: {e.get("label","")}</span>
+        <span class="badge badge-warning">ESCALATED</span>
     </div>
     <div class="alert-metrics">
-        <div class="alert-metric"><div class="alert-metric-value" style="color:{C['critical']}">2/2</div><div class="alert-metric-label">Sensors Down</div></div>
-        <div class="alert-metric"><div class="alert-metric-value" style="color:{C['warning']}">{tank.get("current_float", 93):.0f}%</div><div class="alert-metric-label">Float Reading</div></div>
-        <div class="alert-metric"><div class="alert-metric-value" style="color:{C['muted']}">±{tank.get("float_spread", 16)}</div><div class="alert-metric-label">Float Spread</div></div>
+        <div class="alert-metric"><div class="alert-metric-value" style="color:{C["warning"]}">{format_value(sensor, cur)}</div><div class="alert-metric-label">Current</div></div>
+        <div class="alert-metric"><div class="alert-metric-value" style="color:{C["warning"]}">{format_value(sensor, e.get("peak_value"))}</div><div class="alert-metric-label">Peak</div></div>
+        <div class="alert-metric"><div class="alert-metric-value">{format_duration(e.get("hours_active",0))}</div><div class="alert-metric-label">Active</div></div>
+        <div class="alert-metric"><div class="alert-metric-value">{e.get("consecutive_hours",1)}h</div><div class="alert-metric-label">Consecutive</div></div>
     </div>
-    <div class="alert-description">Both nutrient tank level sensors broken. Float readings unreliable with ±{tank.get("float_spread", 16)} spread. Manual verification required.</div>
-    <div class="alert-action">🎯 <strong>Action:</strong> Schedule tank sensor replacement. Use manual dip-stick measurements until repair.</div>
+    <div class="alert-description">{e.get("description","")}</div>
 </div>\n'''
 
-    if offline:
+    # 3) Facility health card
+    mod_on = int(fac.get("modulesOnline", 0))
+    mod_off = int(fac.get("modulesOffline", 0))
+    if mod_off > 0:
+        offline_txt = ", ".join(offline_modules) if offline_modules else f"{mod_off} modules"
         html += f'''<div class="card alert-card info">
     <div class="alert-header">
         <span class="alert-icon">📡</span>
-        <span class="alert-title">{len(offline)} Monitoring Modules Offline</span>
+        <span class="alert-title">{mod_off} Monitoring Module(s) Offline</span>
         <span class="badge badge-info">SYSTEM</span>
     </div>
-    <div class="alert-description">Offline: <strong>{", ".join(offline)}</strong>. Most are in non-critical zones. Flower 2 PIC offline is notable with harvest 7 days out.</div>
-    <div class="alert-action">🎯 <strong>Action:</strong> Verify F2 PIC is non-essential for harvest. Power-cycle accessible modules.</div>
+    <div class="alert-description">{mod_on} online · {mod_off} offline. Offline: <strong>{offline_txt}</strong>.</div>
+</div>\n'''
+
+    # Nothing to alert on
+    if not critical_active and not escalated and mod_off == 0:
+        html += f'''<div class="card alert-card good">
+    <div class="alert-header">
+        <span class="alert-icon">✅</span>
+        <span class="alert-title">All Clear — No Critical or Escalated Events</span>
+        <span class="badge badge-good">STABLE</span>
+    </div>
+    <div class="alert-description">{len(warning_active)} active warning event(s) tracked below. All monitoring modules online.</div>
 </div>\n'''
 
     html += '</div>'
     return html
 
 
-def build_24h_performance(state):
-    """Build the 24-Hour Room Performance section using daily-summaries.json + events."""
-    from datetime import timedelta
-    daily_path = BASE_DIR / "data" / "daily-summaries.json"
-    events_path = BASE_DIR / "data" / "events.json"
+# --- Section: Events — redesigned, room-grouped, expandable ---
 
-    try:
-        daily_summaries = load_json(daily_path)
-    except:
-        daily_summaries = {}
-    try:
-        events_data = load_json(events_path)
-    except:
-        events_data = {}
-
-    now = datetime.now()
-    today_str = now.strftime("%Y-%m-%d")
-    yesterday_str = (now - timedelta(days=1)).strftime("%Y-%m-%d")
-    today_daily = daily_summaries.get(today_str, {})
-    yesterday_daily = daily_summaries.get(yesterday_str, {})
-
-    # Fallback: if no data for today/yesterday, use the two most recent available dates
-    if not today_daily and not yesterday_daily and daily_summaries:
-        sorted_dates = sorted(daily_summaries.keys(), reverse=True)
-        today_str = sorted_dates[0]
-        yesterday_str = sorted_dates[1] if len(sorted_dates) > 1 else sorted_dates[0]
-        today_daily = daily_summaries.get(today_str, {})
-        yesterday_daily = daily_summaries.get(yesterday_str, {})
-
-    active_events = events_data.get("active", [])
-    resolved_events = events_data.get("resolved", [])
-
-    def merge_sensor(s1, s2):
-        if not s1: return dict(s2) if s2 else {}
-        if not s2: return dict(s1)
-        c1, c2 = s1.get("count", 0), s2.get("count", 0)
-        total = c1 + c2
-        merged = {
-            "min": min(s1.get("min", 999), s2.get("min", 999)),
-            "max": max(s1.get("max", -999), s2.get("max", -999)),
-            "count": total,
-        }
-        if total > 0 and s1.get("avg") is not None and s2.get("avg") is not None:
-            merged["avg"] = (s1["avg"] * c1 + s2["avg"] * c2) / total
-        elif s1.get("avg") is not None:
-            merged["avg"] = s1["avg"]
-        elif s2.get("avg") is not None:
-            merged["avg"] = s2["avg"]
-        return merged
-
-    def merge_room_data(today_room, yesterday_room):
-        t_all = today_room.get("all", {})
-        y_all = yesterday_room.get("all", {})
-        merged = {}
-        for sensor in set(list(t_all.keys()) + list(y_all.keys())):
-            merged[sensor] = merge_sensor(t_all.get(sensor, {}), y_all.get(sensor, {}))
-        return merged
-
-    def fold_in_event_peaks(merged_all, room_events, room_resolved):
-        for evt in list(room_events) + list(room_resolved):
-            sensor = evt.get("sensor", "")
-            if sensor not in merged_all:
-                continue
-            for hv in evt.get("hourly_values", []):
-                val = hv.get("value")
-                if val is not None:
-                    if val > merged_all[sensor].get("max", -999):
-                        merged_all[sensor]["max"] = val
-                    if val < merged_all[sensor].get("min", 999):
-                        merged_all[sensor]["min"] = val
-            peak = evt.get("peak_value")
-            if peak is not None:
-                if "above" in evt.get("condition", "") and peak > merged_all[sensor].get("max", -999):
-                    merged_all[sensor]["max"] = peak
-                elif "below" in evt.get("condition", "") and peak < merged_all[sensor].get("min", 999):
-                    merged_all[sensor]["min"] = peak
-
-    def range_quality(s_min, s_max, sensor_name):
-        if s_min is None or s_max is None:
-            return "N/A", C["muted"]
-        spread = abs(s_max - s_min)
-        if "Temperature" in sensor_name:
-            if spread <= 5: return "tight", C["good"]
-            elif spread <= 10: return "moderate", C["warning"]
-            return "wide swing", C["critical"]
-        elif "Humidity" in sensor_name:
-            if spread <= 8: return "tight", C["good"]
-            elif spread <= 15: return "moderate", C["warning"]
-            return "wide swing", C["critical"]
-        elif "VPD" in sensor_name or "Deficit" in sensor_name:
-            if spread <= 0.3: return "tight", C["good"]
-            elif spread <= 0.6: return "moderate", C["warning"]
-            return "wide swing", C["critical"]
-        elif "VWC" in sensor_name:
-            if spread <= 10: return "tight", C["good"]
-            elif spread <= 20: return "moderate", C["warning"]
-            return "wide swing", C["critical"]
-        return "ok", C["text2"]
-
-    room_order = ["Flower 1", "Flower 2", "Mom"]
-    room_css = {"Flower 1": "f1", "Flower 2": "f2", "Mom": "mom"}
-    room_colors = {"Flower 1": C["warning"], "Flower 2": C["lime"], "Mom": C["blue"]}
-    key_sensors = {
-        "Flower 1": ["Ambient Temperature", "Ambient Humidity", "Vapor Pressure Deficit", "Substrate VWC"],
-        "Flower 2": ["Ambient Temperature", "Ambient Humidity", "Vapor Pressure Deficit"],
-        "Mom": ["Ambient Temperature", "Ambient Humidity", "Substrate VWC", "Vapor Pressure Deficit"],
-    }
-    stages = state.get("growth_stages", {})
-
-    # Collect events per room
-    room_active = {}
-    room_resolved = {}
-    for evt in active_events:
-        room_active.setdefault(evt.get("room", ""), []).append(evt)
-    for evt in resolved_events:
-        room_resolved.setdefault(evt.get("room", ""), []).append(evt)
-
-    # Date label
-    def fmt_short_date(d_str):
-        try:
-            return datetime.strptime(d_str, "%Y-%m-%d").strftime("%b %d").replace(" 0", " ")
-        except:
-            return d_str
-
-    date_label = f"Last 24h · {fmt_short_date(today_str)}" if today_daily else f"Last 24h · {fmt_short_date(yesterday_str)}"
-
-    html = f'<div style="font-size:11px;color:{C["muted"]};margin-bottom:16px;text-align:right">{date_label}</div>\n'
-    html += '<div class="perf24-grid">\n'
-
-    for room in room_order:
-        css_class = room_css.get(room, "")
-        color = room_colors.get(room, C["teal"])
-        sensors = key_sensors.get(room, [])
-        r_active = room_active.get(room, [])
-        r_resolved = room_resolved.get(room, [])
-
-        # Merge data
-        t_room = today_daily.get(room, {})
-        y_room = yesterday_daily.get(room, {})
-        all_data = merge_room_data(t_room, y_room)
-        fold_in_event_peaks(all_data, r_active, r_resolved)
-        day_data = t_room.get("day", y_room.get("day", {}))
-        night_data = t_room.get("night", y_room.get("night", {}))
-
-        # Status badge
-        has_critical = any(e.get("severity") == "critical" for e in r_active)
-        has_warning = any(e.get("severity") == "warning" for e in r_active)
-        if has_critical:
-            badge_html = f'<span class="badge badge-critical">CRITICAL</span>'
-        elif has_warning:
-            badge_html = f'<span class="badge badge-warning">ATTENTION</span>'
-        else:
-            badge_html = f'<span class="badge badge-good">ON TRACK</span>'
-
-        # Assessment
-        issues, wins = [], []
-        temp_all = all_data.get("Ambient Temperature", {})
-        if temp_all.get("max") and temp_all["max"] > 85:
-            issues.append(f"temp peaked {temp_all['max']:.0f}°F")
-        elif temp_all.get("min") and temp_all.get("max") and (temp_all["max"] - temp_all["min"]) <= 5:
-            wins.append("temp well-controlled")
-        hum_all = all_data.get("Ambient Humidity", {})
-        if hum_all.get("avg") and hum_all["avg"] > 75:
-            issues.append(f"humidity averaged {hum_all['avg']:.0f}%")
-        vpd_all = all_data.get("Vapor Pressure Deficit", {})
-        if vpd_all.get("avg") and vpd_all["avg"] < 0.5:
-            issues.append(f"VPD averaged {vpd_all['avg']:.2f} kPa")
-        elif vpd_all.get("min") and vpd_all.get("max") and (vpd_all["max"] - vpd_all["min"]) <= 0.3:
-            wins.append("VPD consistent")
-
-        for evt in r_active:
-            if evt.get("severity") == "critical":
-                issues.insert(0, f"{evt.get('label','')} active")
-        for evt in r_resolved:
-            issues.append(f"{evt.get('label','')} resolved")
-
-        if has_critical:
-            assessment = f'<span style="color:{C["critical"]}">Needs immediate attention — {", ".join(issues[:2])}</span>'
-        elif len(issues) >= 2:
-            assessment = f'<span style="color:{C["warning"]}">Challenging 24h — {", ".join(issues[:2])}</span>'
-        elif issues:
-            prefix = f'{", ".join(wins[:1])} but ' if wins else ''
-            assessment = f'<span style="color:{C["warning"]}">{prefix}{issues[0]}</span>'
-        elif wins:
-            assessment = f'<span style="color:{C["good"]}">Strong 24h — {", ".join(wins[:2])}</span>'
-        else:
-            assessment = f'<span style="color:{C["good"]}">Stable conditions over the last 24 hours</span>'
-
-        html += f'''<div class="perf24-card {css_class}">
-    <div class="perf24-header">
-        <div class="perf24-room">{room} <span class="perf24-stage">{stages.get(room, "")}</span></div>
-        {badge_html}
-    </div>
-    <table class="perf24-table">
-    <thead><tr><th>Sensor</th><th>24h Range</th><th>Avg</th><th>Range</th></tr></thead>
-    <tbody>
-'''
-
-        for sensor in sensors:
-            s_all = all_data.get(sensor, {})
-            s_min, s_max, s_avg = s_all.get("min"), s_all.get("max"), s_all.get("avg")
-            short = sensor.replace("Ambient ", "").replace("Vapor Pressure Deficit", "VPD").replace("Substrate ", "")
-
-            if s_min is not None and s_max is not None and s_min != s_max:
-                range_str = f"{fmt(sensor, s_min)} – {fmt(sensor, s_max)}"
-            elif s_min is not None:
-                range_str = f"Held {fmt(sensor, s_min)}"
-            else:
-                range_str = "N/A"
-            avg_str = fmt(sensor, s_avg) if s_avg is not None else "—"
-            quality, q_color = range_quality(s_min, s_max, sensor)
-
-            html += f'''    <tr>
-        <td>{short}</td>
-        <td>{range_str}</td>
-        <td>{avg_str}</td>
-        <td><span class="perf24-quality"><span class="perf24-dot" style="background:{q_color}"></span> {quality}</span></td>
-    </tr>
-'''
-
-        html += '    </tbody>\n    </table>\n'
-
-        # VPD callout
-        if vpd_all.get("min") is not None and vpd_all.get("max") is not None:
-            spread = abs(vpd_all["max"] - vpd_all["min"])
-            day_avg = day_data.get("Vapor Pressure Deficit", {}).get("avg")
-            night_avg = night_data.get("Vapor Pressure Deficit", {}).get("avg")
-            if spread <= 0.3:
-                vpd_note = f"VPD held {vpd_all['min']:.2f}–{vpd_all['max']:.2f} kPa — excellent consistency"
-                vpd_c = C["good"]
-            elif spread <= 0.6:
-                vpd_note = f"VPD ranged {vpd_all['min']:.2f}–{vpd_all['max']:.2f} kPa"
-                if day_avg and night_avg:
-                    vpd_note += f" (day avg {day_avg:.2f}, night avg {night_avg:.2f})"
-                vpd_c = C["teal"]
-            else:
-                vpd_note = f"VPD swung {vpd_all['min']:.2f}–{vpd_all['max']:.2f} kPa ({spread:.1f} kPa spread)"
-                if day_avg and night_avg:
-                    vpd_note += f" — day avg {day_avg:.2f}, night avg {night_avg:.2f}"
-                vpd_c = C["warning"] if spread <= 1.0 else C["critical"]
-
-            html += f'    <div class="perf24-vpd" style="background:{vpd_c}11;border-color:{vpd_c};color:{vpd_c}">{vpd_note}</div>\n'
-
-        # Event summary
-        total_evts = len(r_active) + len(r_resolved)
-        if total_evts > 0:
-            html += '    <div class="perf24-events">\n'
-            for evt in r_active:
-                sev = evt.get("severity", "warning")
-                s_c = C["critical"] if sev == "critical" else C["warning"]
-                dur = format_duration(evt.get("hours_active", 0))
-                peak = evt.get("peak_value")
-                sensor = evt.get("sensor", "")
-                peak_str = f" · peaked {format_value(sensor, peak)}" if peak else ""
-                html += f'    <div class="evt-line"><span style="color:{s_c};font-weight:600">{evt.get("label","")}</span> <span style="color:{C["muted"]}">{dur} active{peak_str}</span></div>\n'
-            for evt in r_resolved:
-                peak = evt.get("peak_value")
-                sensor = evt.get("sensor", "")
-                peak_str = f" · peaked {format_value(sensor, peak)}" if peak else ""
-                html += f'    <div class="evt-line"><span style="color:{C["good"]};font-weight:600">{evt.get("label","")} ✓</span> <span style="color:{C["muted"]}">resolved{peak_str}</span></div>\n'
-            html += '    </div>\n'
-
-        html += f'    <div class="perf24-assessment">{assessment}</div>\n'
-        html += '</div>\n'
-
-    html += '</div>\n'
-    return html
+def _escalation_spark(values, threshold, condition):
+    if not values or len(values) < 2:
+        return ""
+    vmin = min(values)
+    vmax = max(values)
+    rng = max(0.01, vmax - vmin)
+    bars = ""
+    for v in values[-24:]:
+        pct = int((v - vmin) / rng * 100)
+        pct = max(10, min(100, pct))
+        cls = ""
+        if condition == "above" and v > threshold:
+            cls = " over"
+        elif condition == "below" and v < threshold:
+            cls = " over"
+        bars += f'<div class="evt-spark-bar{cls}" style="height:{pct}%"></div>'
+    return f'<div class="evt-sparkline">{bars}</div>'
 
 
 def build_events_section(state):
-    """Build the Event Timeline section from event tracker data."""
+    """Room-grouped events view. Blends active, recently resolved, and cycle history
+    into a single streamlined interface with expandable chips."""
     events = process_readings(state)
     active = events.get("active", [])
     resolved = events.get("resolved", [])
     cycle_log = events.get("cycle_log", {})
 
-    if not active and not resolved and not cycle_log:
-        return '<div class="evt-empty">No significant events tracked yet. Events will accumulate as the system monitors conditions over time.</div>'
+    # Group everything by room
+    room_events = {}  # room → {"active": [...], "resolved": [...], "history": [...]}
+    for e in active:
+        room_events.setdefault(e.get("room", "Unknown"), {"active": [], "resolved": [], "history": []})["active"].append(e)
+    for e in resolved:
+        room_events.setdefault(e.get("room", "Unknown"), {"active": [], "resolved": [], "history": []})["resolved"].append(e)
+    for log_key, entries in cycle_log.items():
+        room = log_key.split("::", 1)[0]
+        stage = log_key.split("::", 1)[1] if "::" in log_key else ""
+        bucket = room_events.setdefault(room, {"active": [], "resolved": [], "history": []})
+        for entry in entries:
+            entry = dict(entry)
+            entry["stage"] = stage
+            bucket["history"].append(entry)
 
-    html = ''
+    if not room_events:
+        return '<div class="evt-empty">No events tracked yet. Events accumulate as conditions are monitored.</div>'
 
-    # --- Active Events ---
-    if active:
-        html += '<h3 style="font-size:14px;color:#f39c12;margin-bottom:12px;">Active Events</h3>\n'
-        html += '<div class="evt-grid">\n'
-        for evt in sorted(active, key=lambda e: (0 if e.get("escalated") else 1, 0 if e["severity"] == "critical" else 1)):
-            sev = evt["severity"]
-            escalated = evt.get("escalated", False)
-            badge_cls = "escalated" if escalated else sev
-            badge_text = "ESCALATED" if escalated else sev.upper()
-            hours = evt.get("hours_active", 0)
-            consec = evt.get("consecutive_hours", 1)
-            reopen = evt.get("reopened_count", 0)
-            cur_val = format_value(evt["sensor"], evt["current_value"])
-            peak_val = format_value(evt["sensor"], evt.get("peak_value", evt["current_value"]))
-            stage = evt.get("growth_stage", "")
+    # Order rooms: flower first, then mom, then rest
+    ordered_rooms = [r for r in ALL_ROOMS_ORDER if r in room_events] + \
+                    [r for r in room_events if r not in ALL_ROOMS_ORDER]
 
-            html += f'<div class="evt-card severity-{sev}">\n'
-            html += f'  <span class="evt-badge {badge_cls}">{badge_text}</span>'
-            if reopen > 0:
-                html += f' <span class="evt-badge warning">Reopened ×{reopen}</span>'
-            html += f'\n  <div class="evt-title">{evt["label"]}</div>\n'
-            html += f'  <div class="evt-room">{evt["room"]}'
-            if stage:
-                html += f' · {stage}'
-            html += '</div>\n'
-            html += f'  <div class="evt-desc">{evt["description"]}</div>\n'
+    html = '<div class="roomevt-grid">\n'
 
-            # Metrics grid
-            html += '  <div class="evt-meta">\n'
-            html += f'    <div class="evt-meta-item"><div class="evt-meta-val" style="color:{"#e74c3c" if sev == "critical" else "#f39c12"}">{cur_val}</div><div class="evt-meta-label">Current</div></div>\n'
-            html += f'    <div class="evt-meta-item"><div class="evt-meta-val" style="color:#e74c3c">{peak_val}</div><div class="evt-meta-label">Peak</div></div>\n'
-            html += f'    <div class="evt-meta-item"><div class="evt-meta-val">{format_duration(hours)}</div><div class="evt-meta-label">Duration</div></div>\n'
-            html += f'    <div class="evt-meta-item"><div class="evt-meta-val">{consec}h</div><div class="evt-meta-label">Consecutive</div></div>\n'
-            html += '  </div>\n'
+    for room in ordered_rooms:
+        bucket = room_events[room]
+        r_active = bucket["active"]
+        r_resolved = bucket["resolved"]
+        r_history = sorted(bucket["history"], key=lambda x: x.get("started", ""), reverse=True)[:10]
 
-            # Sparkline from hourly values
-            hourly = evt.get("hourly_values", [])
-            if len(hourly) > 1:
-                threshold = evt.get("threshold", 0)
-                condition = evt.get("condition", "above")
-                vals = [h["value"] for h in hourly[-24:]]  # last 24 readings
-                vmin = min(vals)
-                vmax = max(vals)
-                vrange = vmax - vmin if vmax != vmin else 1
-                html += '  <div class="evt-sparkline">\n'
-                for v in vals:
-                    pct = max(10, min(100, int((v - vmin) / vrange * 100)))
-                    bar_cls = ""
-                    if condition == "above" and v > threshold:
-                        bar_cls = " over" if sev == "warning" else " critical"
-                    elif condition == "below" and v < threshold:
-                        bar_cls = " over" if sev == "warning" else " critical"
-                    html += f'    <div class="evt-spark-bar{bar_cls}" style="height:{pct}%"></div>\n'
-                html += '  </div>\n'
+        # Aggregate counts / severity for the header
+        has_crit = any(e.get("severity") == "critical" for e in r_active)
+        has_esc = any(e.get("escalated") for e in r_active)
+        if has_crit:
+            head_c = C["critical"]; head_label = f"{len(r_active)} ACTIVE"
+        elif has_esc:
+            head_c = C["warning"]; head_label = f"{len(r_active)} ESCALATED"
+        elif r_active:
+            head_c = C["warning"]; head_label = f"{len(r_active)} ACTIVE"
+        elif r_resolved:
+            head_c = C["good"]; head_label = f"{len(r_resolved)} RESOLVED (24h)"
+        else:
+            head_c = C["muted"]; head_label = "HISTORY"
 
-            html += '</div>\n'
-        html += '</div>\n'
+        html += f'''<div class="roomevt-card" style="border-top-color:{head_c}">
+    <div class="roomevt-head">
+        <div class="roomevt-name">{room}<span class="roomevt-stage">{GROWTH_STAGES.get(room, "")}</span></div>
+        <div class="roomevt-status" style="color:{head_c}">{head_label}</div>
+    </div>\n'''
 
-    # --- Recently Resolved Events ---
-    if resolved:
-        html += '<h3 style="font-size:14px;color:#2ecc71;margin:20px 0 12px;">Recently Resolved</h3>\n'
-        html += '<div class="evt-grid">\n'
-        for evt in resolved[:6]:  # Show max 6 resolved
-            dur = evt.get("duration_hours", 0)
-            peak_val = format_value(evt["sensor"], evt.get("peak_value", 0))
-            resolved_at = evt.get("resolved_at", "")[:16].replace("T", " ")
+        # --- Active chips (expandable) ---
+        for i, e in enumerate(r_active):
+            sev = e.get("severity", "warning")
+            chip_c = C["critical"] if sev == "critical" or e.get("escalated") else C["warning"]
+            label = e.get("label", "")
+            sensor = e.get("sensor", "")
+            cur = e.get("current_value")
+            peak = e.get("peak_value")
+            dur = format_duration(e.get("hours_active", 0))
+            consec = e.get("consecutive_hours", 1)
+            reopen = e.get("reopened_count", 0)
+            reopen_badge = f' <span class="chip-reopen">↻×{reopen}</span>' if reopen else ""
+            esc_badge = ' <span class="chip-esc">⚡ESC</span>' if e.get("escalated") else ""
+            hourly_vals = [h["value"] for h in e.get("hourly_values", []) if h.get("value") is not None]
+            spark = _escalation_spark(hourly_vals, e.get("threshold", 0), e.get("condition", "above"))
 
-            html += f'<div class="evt-card evt-resolved severity-{evt["severity"]}">\n'
-            html += f'  <span class="evt-badge resolved">RESOLVED</span>\n'
-            html += f'  <div class="evt-title">{evt["label"]}</div>\n'
-            html += f'  <div class="evt-room">{evt["room"]}</div>\n'
-            html += '  <div class="evt-meta">\n'
-            html += f'    <div class="evt-meta-item"><div class="evt-meta-val">{format_duration(dur)}</div><div class="evt-meta-label">Duration</div></div>\n'
-            html += f'    <div class="evt-meta-item"><div class="evt-meta-val">{peak_val}</div><div class="evt-meta-label">Peak</div></div>\n'
-            html += '  </div>\n'
-            if resolved_at:
-                html += f'  <div style="font-size:10px;color:#5a7088;margin-top:8px;">Resolved {resolved_at}</div>\n'
-            html += '</div>\n'
-        html += '</div>\n'
+            html += f'''    <details class="evt-chip" style="--chip-c:{chip_c}">
+        <summary>
+            <span class="chip-dot"></span>
+            <span class="chip-title">{label}{esc_badge}{reopen_badge}</span>
+            <span class="chip-meta">{format_value(sensor, cur)} · {dur}</span>
+        </summary>
+        <div class="chip-body">
+            <div class="chip-grid">
+                <div><div class="chip-val" style="color:{chip_c}">{format_value(sensor, cur)}</div><div class="chip-lab">Current</div></div>
+                <div><div class="chip-val" style="color:{C["critical"]}">{format_value(sensor, peak)}</div><div class="chip-lab">Peak</div></div>
+                <div><div class="chip-val">{dur}</div><div class="chip-lab">Duration</div></div>
+                <div><div class="chip-val">{consec}h</div><div class="chip-lab">Consecutive</div></div>
+            </div>
+            <div class="chip-desc">{e.get("description","")}</div>
+            {spark}
+        </div>
+    </details>\n'''
 
-    # --- Cycle Log (harvest-cycle history) ---
-    if cycle_log:
-        html += '<h3 style="font-size:14px;color:#4A90B5;margin:20px 0 12px;">Cycle Event History</h3>\n'
-        html += '<div style="background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:20px;">\n'
-        for log_key, entries in sorted(cycle_log.items()):
-            room, stage = log_key.split("::", 1) if "::" in log_key else (log_key, "")
-            html += f'<div class="evt-cycle-header">{room}'
-            if stage:
-                html += f' <span class="room-tag">{stage}</span>'
-            html += '</div>\n'
-            for entry in entries[-10:]:  # Last 10 entries per room/stage
-                sev = entry.get("severity", "warning")
-                dur = entry.get("duration_hours", 0)
-                reopen = entry.get("reopened_count", 0)
-                started = entry.get("started", "")[:10]
-                label = entry.get("label", "")
-                dur_str = format_duration(dur)
-                reopen_str = f' (reopened ×{reopen})' if reopen else ''
+        # --- Recently resolved (compact chips) ---
+        for e in r_resolved[:5]:
+            dur = format_duration(e.get("duration_hours", 0))
+            peak = e.get("peak_value")
+            sensor = e.get("sensor", "")
+            pk_str = f" · peaked {format_value(sensor, peak)}" if peak is not None else ""
+            resolved_at = (e.get("resolved_at") or "")[:16].replace("T", " ")
+            html += f'''    <div class="evt-chip resolved">
+        <span class="chip-dot" style="background:{C["good"]}"></span>
+        <span class="chip-title">{e.get("label","")} ✓</span>
+        <span class="chip-meta">{dur}{pk_str}</span>
+        <span class="chip-when">{resolved_at}</span>
+    </div>\n'''
 
-                html += f'<div class="evt-log-row">'
-                html += f'<div class="evt-log-dot {sev}"></div>'
-                html += f'<div class="evt-log-label">{label}{reopen_str}</div>'
-                html += f'<div class="evt-log-duration">{dur_str}</div>'
-                html += f'<div class="evt-log-date">{started}</div>'
-                html += '</div>\n'
-        html += '</div>\n'
+        # --- Cycle history (collapsed by default) ---
+        if r_history:
+            html += f'''    <details class="evt-history">
+        <summary>Cycle history · {len(r_history)} event(s)</summary>
+        <div class="history-list">\n'''
+            for h in r_history:
+                sev = h.get("severity", "warning")
+                dot_c = C["critical"] if sev == "critical" else C["warning"]
+                started = (h.get("started") or "")[:10]
+                dur = format_duration(h.get("duration_hours", 0))
+                reopen = h.get("reopened_count", 0)
+                reopen_str = f' (↻×{reopen})' if reopen else ""
+                stage = h.get("stage", "")
+                html += f'            <div class="history-row"><span class="history-dot" style="background:{dot_c}"></span><span class="history-label">{h.get("label","")}{reopen_str}</span><span class="history-stage">{stage}</span><span class="history-dur">{dur}</span><span class="history-date">{started}</span></div>\n'
+            html += '        </div>\n    </details>\n'
 
+        if not r_active and not r_resolved and not r_history:
+            html += f'    <div class="evt-quiet">No events recorded.</div>\n'
+
+        html += '</div>\n'  # /roomevt-card
+
+    html += '</div>'
     return html
 
 
+# --- Section: Room cards ---
+
 def build_room_cards(state):
-    rooms = state.get("current_readings", {}).get("rooms", {})
-    stages = state.get("growth_stages", {})
-    room_order = ["Flower 1", "Flower 2", "Mom", "Cure Room", "Dry Room"]
+    rooms = rooms_of(state)
     html = '<div class="card-grid">\n'
 
-    for rn in room_order:
-        if rn not in rooms: continue
-        rd = rooms[rn]
-        sensors = rd
-        hs = health_score(rd)
-        stage = stages.get(rn, "Active" if rn != "Dry Room" else "Idle")
+    for rn in ["Flower 1", "Flower 2", "Mom", "Cure Room", "Dry Room"]:
+        if rn not in rooms:
+            continue
+        rd = rooms[rn] or {}
+        hs = health_score(rn, rd)
+        stage = GROWTH_STAGES.get(rn, "")
 
-        if hs >= 80: dot = f'style="background:{C["good"]}"'; fill_class = "health-fill-good"; h_color = C["good"]
-        elif hs >= 50: dot = f'style="background:{C["warning"]}"'; fill_class = "health-fill-warning"; h_color = C["warning"]
-        else: dot = f'style="background:{C["critical"]}"'; fill_class = "health-fill-critical"; h_color = C["critical"]
+        if hs >= 80: dot = C["good"]; fill_cls = "health-fill-good"; h_color = C["good"]
+        elif hs >= 50: dot = C["warning"]; fill_cls = "health-fill-warning"; h_color = C["warning"]
+        else: dot = C["critical"]; fill_cls = "health-fill-critical"; h_color = C["critical"]
 
+        # Build metrics grid — only for sensors that actually exist
         metrics = ''
-        for sn, sd in sensors.items():
-            v = sd.get("value", 0)
-            lo, hi = sd.get("min", 0), sd.get("max", 0)
-            sc = status_class(v, lo, hi)
-            scol = status_color(v, lo, hi)
-            metrics += f'''<div class="metric-item status-{sc}">
+        for sn, sd in rd.items():
+            if sn == "None" or not sd:
+                continue
+            v = sd.get("value")
+            if v is None:
+                continue
+            cls = classify(rn, sn, v)
+            scol = status_color(cls)
+            # 24h hourly min/max (not the daily period min/max from API)
+            mn = sd.get("min", v)
+            mx = sd.get("max", v)
+            label = (sn.replace("Ambient ", "")
+                       .replace("Solution ", "")
+                       .replace("Substrate ", "Sub "))
+            metrics += f'''<div class="metric-item status-{cls}">
     <div class="metric-value" style="color:{scol}">{fmt(sn, v)}</div>
-    <div class="metric-label">{sn.replace("Ambient ", "").replace("Solution ", "").replace("Substrate ", "Sub ")}</div>
-    <div class="metric-range">{lo:.1f} – {hi:.1f}</div>
+    <div class="metric-label">{label}</div>
+    <div class="metric-range">{fmt(sn, mn)} – {fmt(sn, mx)}</div>
 </div>\n'''
 
+        # Data-driven callouts (no hardcoded warnings)
         callout = ''
-        if rn == "Flower 2":
-            callout = f'<div class="callout callout-warning" style="margin-top:14px"><strong>⚠ Data Gap:</strong> No substrate sensors. Cannot monitor root zone EC, VWC, or temperature for pre-harvest flush.</div>'
-        elif rn == "Mom":
-            callout = f'<div class="callout callout-critical" style="margin-top:14px"><strong>🚨 Irrigation Alert:</strong> Substrate VWC at {sensors.get("Substrate VWC", {}).get("value", 9.8):.1f}% — critically dry. Hand water immediately.</div>'
-        elif rn == "Dry Room":
-            dry = state.get("dry_room", {})
-            callout = f'<div class="callout callout-info" style="margin-top:14px"><strong>📋 Status:</strong> {dry.get("status", "idle").upper()} — Awaiting F2 harvest (~April 13). Currently {dry.get("current_temp", 65.3):.1f}°F / {dry.get("current_humidity", 64.5):.1f}% RH.</div>'
+        present_sensors = {s for s, sd in rd.items() if sd and sd.get("value") is not None}
+        expected = set(KEY_SENSORS.get(rn, []))
+        missing = expected - present_sensors
+        if rn in ("Flower 1", "Flower 2", "Mom"):
+            sub_expected = {"Substrate VWC", "Substrate EC", "Substrate Temperature"}
+            sub_missing = sub_expected - present_sensors
+            if sub_missing == sub_expected:
+                callout = f'<div class="callout callout-warning" style="margin-top:14px"><strong>⚠ No Substrate Sensors:</strong> Cannot monitor root-zone EC / VWC / temperature for {rn}.</div>'
+            elif sub_missing:
+                callout = f'<div class="callout callout-info" style="margin-top:14px"><strong>Data Gap:</strong> Missing: {", ".join(sorted(sub_missing))}.</div>'
+
+        if rn == "Dry Room":
+            days_to_harvest = (F2_HARVEST_DATE - datetime.now()).days
+            t = get_val(rd, "Ambient Temperature")
+            h = get_val(rd, "Ambient Humidity")
+            t_str = fmt("Ambient Temperature", t) if t is not None else "—"
+            h_str = fmt("Ambient Humidity", h) if h is not None else "—"
+            callout = f'<div class="callout callout-info" style="margin-top:14px"><strong>📋 Pre-Harvest:</strong> F2 harvest ~{days_to_harvest} days out. Currently {t_str} / {h_str} RH. Target 58–66°F / 55–65% RH.</div>'
 
         html += f'''<div class="card">
-    <h3><span class="card-status-dot" {dot}></span> {rn} <span class="growth-stage">{stage}</span></h3>
+    <h3><span class="card-status-dot" style="background:{dot}"></span> {rn} <span class="growth-stage">{stage}</span></h3>
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
-        <div class="health-bar" style="flex:1"><div class="health-bar-fill {fill_class}" style="width:{hs}%"></div></div>
+        <div class="health-bar" style="flex:1"><div class="health-bar-fill {fill_cls}" style="width:{hs}%"></div></div>
         <span style="font-size:13px;font-weight:600;color:{h_color}">{hs}%</span>
     </div>
     <div class="metric-grid">{metrics}</div>
@@ -619,411 +695,524 @@ def build_room_cards(state):
     return html
 
 
-def build_feed_section(state):
-    feed = state.get("current_readings", {}).get("rooms", {}).get("Central Feed System", {})
-    trends = state.get("trends", {}).get("Central Feed System", {})
-    tank = state.get("tank_sensors", {})
+# --- Section: Feed / Fertigation deep dive ---
 
-    ph = feed.get("Solution pH", {}).get("value", 6.38)
-    tds = feed.get("Solution TDS", {}).get("value", 868)
-    temp = feed.get("Solution Temperature", {}).get("value", 57.85)
-    flt = feed.get("Solution Float", {}).get("value", 93)
+def build_feed_section(state, hourly, daily_summaries):
+    feed = rooms_of(state).get("Central Feed System", {}) or {}
+    rooms = rooms_of(state)
 
-    ph_1h = trends.get("Solution pH", {}).get("1h", {})
-    tds_1h = trends.get("Solution TDS", {}).get("1h", {})
-    temp_1h = trends.get("Solution Temperature", {}).get("1h", {})
-    flt_1h = trends.get("Solution Float", {}).get("1h", {})
+    ph = get_val(feed, "Solution pH")
+    tds = get_val(feed, "Solution TDS")
+    temp = get_val(feed, "Solution Temperature")
+    flt = get_val(feed, "Solution Float")
 
-    ph_color = C["good"] if 5.5 <= ph <= 6.5 else C["warning"]
-    tds_color = C["good"] if 700 <= tds <= 1100 else C["warning"]
-    temp_color = C["good"] if 55 <= temp <= 72 else C["warning"]
+    def cls_color(room, sensor, val):
+        return status_color(classify(room, sensor, val))
 
-    # Get substrate data for cross-room comparison
-    rooms = state.get("current_readings", {}).get("rooms", {})
-    f1_ec = rooms.get("Flower 1", {}).get("Substrate EC", {}).get("value", 0)
-    f1_vwc = rooms.get("Flower 1", {}).get("Substrate VWC", {}).get("value", 0)
-    mom_ec = rooms.get("Mom", {}).get("Substrate EC", {}).get("value", 0)
-    mom_vwc = rooms.get("Mom", {}).get("Substrate VWC", {}).get("value", 0)
+    ph_col = cls_color("Central Feed System", "Solution pH", ph)
+    tds_col = cls_color("Central Feed System", "Solution TDS", tds)
+    temp_col = cls_color("Central Feed System", "Solution Temperature", temp)
 
     html = f'''<div class="feed-grid">
     <div class="feed-card">
-        <div class="feed-value" style="color:{ph_color}">{ph:.2f}</div>
+        <div class="feed-value" style="color:{ph_col}">{fmt("pH", ph) if ph is not None else "—"}</div>
         <div class="feed-label">Solution pH</div>
-        <div class="feed-range">Target: 5.5 – 6.5</div>
-        <div class="feed-trend">1h: {trend_arrow(ph_1h.get("delta", 0), ph_1h.get("pct", 0))}</div>
+        <div class="feed-range">Target 5.5 – 6.5</div>
     </div>
     <div class="feed-card">
-        <div class="feed-value" style="color:{tds_color}">{tds}</div>
-        <div class="feed-label">TDS (ppm)</div>
-        <div class="feed-range">Target: 700 – 1100</div>
-        <div class="feed-trend">1h: {trend_arrow(tds_1h.get("delta", 0), tds_1h.get("pct", 0))}</div>
+        <div class="feed-value" style="color:{tds_col}">{fmt("TDS", tds) if tds is not None else "—"}</div>
+        <div class="feed-label">TDS</div>
+        <div class="feed-range">Target 700 – 1100 ppm</div>
     </div>
     <div class="feed-card">
-        <div class="feed-value" style="color:{temp_color}">{temp:.1f}°F</div>
+        <div class="feed-value" style="color:{temp_col}">{fmt("Temperature", temp) if temp is not None else "—"}</div>
         <div class="feed-label">Solution Temp</div>
-        <div class="feed-range">Target: 60 – 72°F</div>
-        <div class="feed-trend">1h: {trend_arrow(temp_1h.get("delta", 0), temp_1h.get("pct", 0))}</div>
+        <div class="feed-range">Target 60 – 72°F</div>
     </div>
     <div class="feed-card alert">
-        <div class="feed-value" style="color:{C['critical']}">{flt:.0f}%</div>
+        <div class="feed-value" style="color:{C["warning"]}">{fmt("Float", flt) if flt is not None else "—"}</div>
         <div class="feed-label">Tank Float</div>
-        <div class="feed-range">⚠ Sensors Broken</div>
-        <div class="feed-trend">1h: {trend_arrow(flt_1h.get("delta", 0), flt_1h.get("pct", 0))}</div>
+        <div class="feed-range">⚠ Sensor unreliable</div>
     </div>
 </div>
 
 <div class="card-grid">
     <div class="insight-card feed">
-        <h4>🧪 Solution Chemistry Analysis</h4>
-        <p><strong>pH Status:</strong> At {ph:.2f}, solution pH is {"within" if 5.5 <= ph <= 6.5 else "outside"} the optimal 5.5-6.5 range. {"Nutrient lockout risk is minimal." if 5.5 <= ph <= 6.5 else "Watch for nutrient lockout."}</p>
-        <p><strong>TDS Context:</strong> At {tds} ppm, feed concentration is {"ideal" if 700 <= tds <= 1100 else "outside target"}. TDS moved {tds_1h.get("delta", 0):.0f} ppm in the last hour ({tds_1h.get("pct", 0):.1f}%).</p>
-        <p><strong>Temperature:</strong> Solution at {temp:.1f}°F is {"optimal" if 60 <= temp <= 72 else "cool but acceptable"} — dissolved oxygen maximized below 68°F.</p>
+        <h4>🧪 Solution Chemistry</h4>
+        <p><strong>pH:</strong> {fmt("pH", ph) if ph is not None else "—"} — {"inside" if ph is not None and 5.5 <= ph <= 6.5 else "outside"} the 5.5–6.5 window.</p>
+        <p><strong>TDS:</strong> {fmt("TDS", tds) if tds is not None else "—"} — {"inside" if tds is not None and 700 <= tds <= 1100 else "outside"} the 700–1100 ppm window.</p>
+        <p><strong>Temp:</strong> {fmt("Temperature", temp) if temp is not None else "—"} — dissolved oxygen is maximized below 68°F.</p>
     </div>
     <div class="insight-card" style="border-left-color:{C['warning']}">
-        <h4>🔋 Tank & Delivery Status</h4>
-        <p><strong>Sensor Status:</strong> Both level sensors broken. Float at {flt:.0f}% unreliable (±{tank.get("float_spread", 16)} spread).</p>
-        <p><strong>Consumption:</strong> Cannot track automatically. Typical daily: 15-25 gallons. Verify manually.</p>
-        <div class="callout callout-warning"><strong>Recommendation:</strong> Schedule sensor replacement. Implement twice-daily manual checks.</div>
+        <h4>🔋 Tank Level</h4>
+        <p>Float at {fmt("Float", flt) if flt is not None else "—"}. The tank float sensor has been inconsistent; verify via dip-stick twice daily until the sensor is replaced.</p>
     </div>
 </div>
+'''
 
+    # --- Fertigation Intelligence Deep Dive ---
+    # Now uses live data across all rooms that HAVE substrate sensors.
+    substrate_data = {}
+    for r in PRIMARY_ROOMS:
+        rd = rooms.get(r, {}) or {}
+        if has_sensor(rd, "Substrate EC") or has_sensor(rd, "Substrate VWC"):
+            substrate_data[r] = {
+                "ec": get_val(rd, "Substrate EC"),
+                "vwc": get_val(rd, "Substrate VWC"),
+                "temp": get_val(rd, "Substrate Temperature"),
+            }
+
+    # Cross-room substrate comparison
+    html += f'''
 <div class="card">
     <h3>⚙ Fertigation Intelligence Deep Dive</h3>
     <div class="card-grid">
-                <div class="insight-card" style="border-left-color:{C['cyan']}">
-                    <h4>📊 Substrate Cross-Room Comparison</h4>
-                    <div class="dive-metrics">
-                        <div class="dive-metric"><div class="dive-metric-val" style="color:{C['good']}">{f1_ec:.2f}</div><div class="dive-metric-label">F1 EC (dS/m)</div></div>
-                        <div class="dive-metric"><div class="dive-metric-val" style="color:{C['muted']}">N/A</div><div class="dive-metric-label">F2 EC</div></div>
-                        <div class="dive-metric"><div class="dive-metric-val" style="color:{C['critical']}">{mom_ec:.2f}</div><div class="dive-metric-label">Mom EC (dS/m)</div></div>
-                    </div>
-                    <div class="dive-metrics">
-                        <div class="dive-metric"><div class="dive-metric-val" style="color:{C['good']}">{f1_vwc:.1f}%</div><div class="dive-metric-label">F1 VWC</div></div>
-                        <div class="dive-metric"><div class="dive-metric-val" style="color:{C['muted']}">N/A</div><div class="dive-metric-label">F2 VWC</div></div>
-                        <div class="dive-metric"><div class="dive-metric-val" style="color:{C['critical']}">{mom_vwc:.1f}%</div><div class="dive-metric-label">Mom VWC</div></div>
-                    </div>
-                    <p style="font-size:12px;color:{C['text']};margin-top:8px">F1 root zone thriving. Mom in crisis — severe dehydration and nutrient depletion. F2 has no substrate monitoring.</p>
-                </div>
-                <div class="insight-card" style="border-left-color:{C['purple']}">
-                    <h4>🔬 Nutrient Uptake Intelligence</h4>
-                    <p><strong>F1 Feed-to-Runoff:</strong> Feed EC 0.08 vs substrate EC {f1_ec:.2f} — {int(f1_ec/0.08) if 0.08 > 0 else 0}x concentration factor indicating active uptake with salt buildup.</p>
-                    <p><strong>Mom Feed-to-Runoff:</strong> Feed EC 0.08 vs substrate EC {mom_ec:.2f} — low ratio consistent with dry-down flushing nutrients.</p>
-                    <div class="callout callout-teal"><strong>System Limitation:</strong> Injector dosing rates not available via GrowLink API.</div>
-                </div>
-    </div>
-</div>'''
+        <div class="insight-card" style="border-left-color:{C['cyan']}">
+            <h4>📊 Substrate EC / VWC — All Rooms</h4>
+            <table class="sub-table">
+                <thead><tr><th>Room</th><th>EC</th><th>VWC</th><th>Root Temp</th></tr></thead>
+                <tbody>
+'''
+    for r in PRIMARY_ROOMS:
+        rd = rooms.get(r, {}) or {}
+        ec = get_val(rd, "Substrate EC")
+        vwc = get_val(rd, "Substrate VWC")
+        rtmp = get_val(rd, "Substrate Temperature")
+        if ec is None and vwc is None and rtmp is None:
+            html += f'<tr><td>{r}</td><td colspan="3" style="color:{C["muted"]}">No substrate sensors</td></tr>\n'
+            continue
+        ec_c = status_color(classify(r, "Substrate EC", ec))
+        vwc_c = status_color(classify(r, "Substrate VWC", vwc))
+        rtmp_c = status_color(classify(r, "Substrate Temperature", rtmp))
+        html += f'''<tr>
+    <td>{r}</td>
+    <td style="color:{ec_c};font-weight:700">{fmt("EC", ec)}</td>
+    <td style="color:{vwc_c};font-weight:700">{fmt("VWC", vwc)}</td>
+    <td style="color:{rtmp_c};font-weight:700">{fmt("Temperature", rtmp)}</td>
+</tr>
+'''
+    html += f'''                </tbody>
+            </table>
+        </div>
+        <div class="insight-card" style="border-left-color:{C['purple']}">
+            <h4>🔬 Feed vs. Substrate EC</h4>
+'''
+    if ph is not None and tds is not None:
+        # Rough feed EC from TDS (500 scale): EC ≈ TDS / 500
+        est_feed_ec = tds / 500.0
+        html += f'<p><strong>Est. Feed EC:</strong> ~{est_feed_ec:.2f} dS/m (from TDS {int(tds)} ppm, 500-scale).</p>\n'
+        for r, s in substrate_data.items():
+            if s["ec"] is not None and est_feed_ec > 0:
+                ratio = s["ec"] / est_feed_ec
+                direction = "stacking" if ratio > 1.2 else "flushing" if ratio < 0.8 else "balanced"
+                html += f'<p><strong>{r}:</strong> substrate EC {s["ec"]:.2f} vs. feed ~{est_feed_ec:.2f} → <em>{direction}</em> ({ratio:.1f}× feed).</p>\n'
+    else:
+        html += f'<p style="color:{C["muted"]}">Feed chemistry not available.</p>\n'
 
+    html += '''        </div>
+    </div>
+
+    <div class="card-grid">
+'''
+
+    # Per-room substrate trend over 24h
+    for r in PRIMARY_ROOMS:
+        rd = rooms.get(r, {}) or {}
+        if not (has_sensor(rd, "Substrate EC") or has_sensor(rd, "Substrate VWC")):
+            continue
+        ec_stats = _last24h_stats_from_hourly(hourly, r, "Substrate EC")
+        vwc_stats = _last24h_stats_from_hourly(hourly, r, "Substrate VWC")
+        cur_ec = get_val(rd, "Substrate EC")
+        cur_vwc = get_val(rd, "Substrate VWC")
+
+        def delta_note(cur, stats, label, unit_fmt):
+            if cur is None or not stats:
+                return ""
+            avg = stats.get("avg")
+            mn, mx = stats.get("min"), stats.get("max")
+            d = (cur - avg) if avg is not None else 0
+            arrow = "↑" if d > 0.05 else "↓" if d < -0.05 else "→"
+            return f'<div class="sub-line"><strong>{label}:</strong> {unit_fmt(cur)} {arrow} (24h avg {unit_fmt(avg)}, range {unit_fmt(mn)}–{unit_fmt(mx)})</div>'
+
+        html += f'''<div class="insight-card" style="border-left-color:{C["teal"]}">
+    <h4>🌱 {r} — 24h Substrate Trend</h4>
+    {delta_note(cur_ec, ec_stats, "EC", lambda v: fmt("EC", v))}
+    {delta_note(cur_vwc, vwc_stats, "VWC", lambda v: fmt("VWC", v))}
+</div>
+'''
+
+    html += '    </div>\n</div>'
     return html
 
+
+# --- Section: Day/Night environment ---
 
 def build_day_night(state):
-    trends = state.get("trends", {})
-    rooms = state.get("current_readings", {}).get("rooms", {})
-    hour = datetime.now().hour
-
+    rooms = rooms_of(state)
+    now = datetime.now()
     html = '<div class="dn-grid">\n'
 
-    # Flower 1
-    f1 = rooms.get("Flower 1", {})
-    f1_t = trends.get("Flower 1", {})
-    f1_lights = "☀️ Lights ON" if 7 <= hour < 19 else "🌙 Lights OFF"
-    f1_period = "Day Cycle" if 7 <= hour < 19 else "Night Cycle"
+    for rn in ["Flower 1", "Flower 2", "Mom", "Cure Room"]:
+        rd = rooms.get(rn, {}) or {}
+        if not rd:
+            continue
+        on = lights_on(rn, now)
+        if on is None:
+            light_label = "Passive monitoring"
+        else:
+            light_label = "☀ Lights ON" if on else "🌙 Lights OFF"
 
-    html += f'''<div class="dn-card alert-state">
-    <h4>🌱 Flower 1 — {f1_period} {f1_lights}</h4>
-    <div class="dn-row"><span class="dn-label">Temperature</span><span class="dn-value" style="color:{C['good']}">{f1.get("Ambient Temperature", {}).get("value", 0):.1f}°F</span></div>
-    <div class="dn-row"><span class="dn-label">Humidity</span><span class="dn-value" style="color:{C['warning']}">{f1.get("Ambient Humidity", {}).get("value", 0):.1f}%</span></div>
-    <div class="dn-row"><span class="dn-label">VPD</span><span class="dn-value" style="color:{C['warning']}">{f1.get("Vapor Pressure Deficit", {}).get("value", 0):.2f} kPa</span></div>
-    <div class="dn-row"><span class="dn-label">CO2</span><span class="dn-value" style="color:{C['good']}">{f1.get("Ambient CO2", {}).get("value", 0):.0f} ppm</span></div>
-    <div class="dn-row"><span class="dn-label">6h Temp Change</span><span class="dn-value">{trend_arrow(f1_t.get("Ambient Temperature", {}).get("6h", {}).get("delta", 0), f1_t.get("Ambient Temperature", {}).get("6h", {}).get("pct", 0))}</span></div>
-    <div class="dn-row"><span class="dn-label">6h Humidity Change</span><span class="dn-value">{trend_arrow(f1_t.get("Ambient Humidity", {}).get("6h", {}).get("delta", 0), f1_t.get("Ambient Humidity", {}).get("6h", {}).get("pct", 0))}</span></div>
-    <div class="dn-takeaway"><strong>Key Takeaway:</strong> Humidity is the primary concern. Dehumidification cycle working but hasn't reached target. Temperature differential between day/night needs monitoring — target ≤10°F swing for terpene preservation.</div>
-</div>\n'''
+        card_cls = "dn-card"
+        # Any critical sensor? flag the card
+        any_crit = any(classify(rn, s, get_val(rd, s)) == "critical" for s in rd.keys() if s != "None")
+        if any_crit:
+            card_cls += " alert-state"
 
-    # Flower 2
-    f2 = rooms.get("Flower 2", {})
-    f2_t = trends.get("Flower 2", {})
-    f2_lights = "☀️ Lights ON" if 6 <= hour < 18 else "🌙 Lights OFF"
-    f2_period = "Day Cycle" if 6 <= hour < 18 else "Night Cycle"
+        html += f'''<div class="{card_cls}">
+    <h4>{rn} <span class="dn-stage">{GROWTH_STAGES.get(rn,"")}</span> — {light_label}</h4>
+'''
+        for s in ["Ambient Temperature", "Ambient Humidity", "Vapor Pressure Deficit", "Ambient CO2"]:
+            if not has_sensor(rd, s):
+                continue
+            v = get_val(rd, s)
+            col = status_color(classify(rn, s, v))
+            label = s.replace("Ambient ", "").replace("Vapor Pressure Deficit", "VPD")
+            html += f'    <div class="dn-row"><span class="dn-label">{label}</span><span class="dn-value" style="color:{col}">{fmt(s, v)}</span></div>\n'
+        html += '</div>\n'
 
-    html += f'''<div class="dn-card">
-    <h4>🌱 Flower 2 — {f2_period} {f2_lights}</h4>
-    <div class="dn-row"><span class="dn-label">Temperature</span><span class="dn-value" style="color:{C['good']}">{f2.get("Ambient Temperature", {}).get("value", 0):.1f}°F</span></div>
-    <div class="dn-row"><span class="dn-label">Humidity</span><span class="dn-value" style="color:{C['good']}">{f2.get("Ambient Humidity", {}).get("value", 0):.1f}%</span></div>
-    <div class="dn-row"><span class="dn-label">VPD</span><span class="dn-value" style="color:{C['good']}">{f2.get("Vapor Pressure Deficit", {}).get("value", 0):.2f} kPa</span></div>
-    <div class="dn-row"><span class="dn-label">CO2</span><span class="dn-value" style="color:{C['good']}">{f2.get("Ambient CO2", {}).get("value", 0):.0f} ppm</span></div>
-    <div class="dn-row"><span class="dn-label">6h Temp Change</span><span class="dn-value">{trend_arrow(f2_t.get("Ambient Temperature", {}).get("6h", {}).get("delta", 0), f2_t.get("Ambient Temperature", {}).get("6h", {}).get("pct", 0))}</span></div>
-    <div class="dn-row"><span class="dn-label">6h CO2 Change</span><span class="dn-value">{trend_arrow(f2_t.get("Ambient CO2", {}).get("6h", {}).get("delta", 0), f2_t.get("Ambient CO2", {}).get("6h", {}).get("pct", 0))}</span></div>
-    <div class="dn-takeaway"><strong>Key Takeaway:</strong> Excellent condition for final week. VPD ideal for resin production. Maintain these conditions through harvest.</div>
-</div>\n'''
-
-    # Mom
-    mom = rooms.get("Mom", {})
-    mom_t = trends.get("Mom", {})
-    mom_lights = "☀️ Lights ON" if 8 <= hour or hour < 2 else "🌙 Lights OFF"
-    mom_period = "Day Cycle" if 8 <= hour or hour < 2 else "Night Cycle"
-
-    html += f'''<div class="dn-card alert-state">
-    <h4>🌿 Mom Room — {mom_period} {mom_lights}</h4>
-    <div class="dn-row"><span class="dn-label">Temperature</span><span class="dn-value" style="color:{C['good']}">{mom.get("Ambient Temperature", {}).get("value", 0):.1f}°F</span></div>
-    <div class="dn-row"><span class="dn-label">Humidity</span><span class="dn-value" style="color:{C['good']}">{mom.get("Ambient Humidity", {}).get("value", 0):.1f}%</span></div>
-    <div class="dn-row"><span class="dn-label">VPD</span><span class="dn-value" style="color:{C['good']}">{mom.get("Vapor Pressure Deficit", {}).get("value", 0):.2f} kPa</span></div>
-    <div class="dn-row"><span class="dn-label">6h Humidity Change</span><span class="dn-value">{trend_arrow(mom_t.get("Ambient Humidity", {}).get("6h", {}).get("delta", 0), mom_t.get("Ambient Humidity", {}).get("6h", {}).get("pct", 0))}</span></div>
-    <div class="dn-takeaway"><strong>Key Takeaway:</strong> Environmental conditions are solid — the crisis is underground. Focus all attention on the irrigation emergency. Once VWC recovers above 40%, environmental numbers will maintain themselves.</div>
-</div>\n'''
-
-    # Cure Room
-    cure = rooms.get("Cure Room", {})
-    html += f'''<div class="dn-card">
-    <h4>🏺 Cure Room — Passive Monitoring</h4>
-    <div class="dn-row"><span class="dn-label">Temperature</span><span class="dn-value" style="color:{C['good']}">{cure.get("Ambient Temperature", {}).get("value", 0):.1f}°F</span></div>
-    <div class="dn-row"><span class="dn-label">Humidity</span><span class="dn-value" style="color:{C['good']}">{cure.get("Ambient Humidity", {}).get("value", 0):.1f}%</span></div>
-    <div class="dn-row"><span class="dn-label">Target Temp</span><span class="dn-value" style="color:{C['muted']}">58-68°F</span></div>
-    <div class="dn-row"><span class="dn-label">Target RH</span><span class="dn-value" style="color:{C['muted']}">55-65%</span></div>
-    <div class="dn-takeaway"><strong>Key Takeaway:</strong> Cure conditions excellent. Both temp and humidity within ideal range. No action needed.</div>
-</div>\n'''
-
-    html += '</div>'
-    html += f'''
-<div class="callout callout-teal" style="margin-top:20px">
-    <strong>💡 Light Schedules:</strong> &nbsp; F1: 7:00 AM – 7:00 PM (12h) &nbsp;|&nbsp; F2: 6:00 AM – 6:00 PM (12h) &nbsp;|&nbsp; Mom: 8:00 AM – 1:30 AM (17.5h)
-    <br><span style="font-size:11px;color:{C['muted']}">CO2 supplementation not active in Mom/Veg rooms. Don't flag CO2 drops during lights-off periods.</span>
+    html += '</div>\n'
+    html += f'''<div class="callout callout-teal" style="margin-top:20px">
+    <strong>💡 Light Schedules:</strong> &nbsp; F1: 7:00 AM – 7:00 PM &nbsp;|&nbsp; F2: 6:00 AM – 6:00 PM &nbsp;|&nbsp; Mom: 8:00 AM – 1:30 AM
+    <br><span style="font-size:11px;color:{C["muted"]}">CO2 is not supplemented in Mom or Veg rooms — drops during lights-off are expected.</span>
 </div>'''
-
     return html
 
 
-def build_deep_dive(state):
-    rooms = state.get("current_readings", {}).get("rooms", {})
-    dry = state.get("dry_room", {})
-    anomalies = state.get("anomalies", [])
-    f1 = rooms.get("Flower 1", {})
-    f2 = rooms.get("Flower 2", {})
-    mom = rooms.get("Mom", {})
-    cure = rooms.get("Cure Room", {})
-    stages = state.get("growth_stages", {})
+# --- Section: Cultivation Deep Dive ---
 
+def build_deep_dive(state, hourly):
+    rooms = rooms_of(state)
     html = ''
 
-    # F1
-    html += f'''<div class="dive-card f1">
-    <h3>🌸 Flower 1 — {stages.get("Flower 1", "Week 4 Flower")} Deep Assessment</h3>
+    def env_metrics(rn, rd):
+        out = ''
+        for s in ["Ambient Temperature", "Ambient Humidity", "Vapor Pressure Deficit", "Ambient CO2"]:
+            v = get_val(rd, s)
+            if v is None:
+                continue
+            col = status_color(classify(rn, s, v))
+            label = s.replace("Ambient ", "").replace("Vapor Pressure Deficit", "VPD")
+            out += f'''<div class="dive-metric"><div class="dive-metric-val" style="color:{col}">{fmt(s, v)}</div><div class="dive-metric-label">{label}</div></div>\n'''
+        return out
+
+    def root_metrics(rn, rd):
+        if not (has_sensor(rd, "Substrate EC") or has_sensor(rd, "Substrate VWC") or has_sensor(rd, "Substrate Temperature")):
+            return None
+        out = ''
+        for s in ["Substrate EC", "Substrate VWC", "Substrate Temperature"]:
+            v = get_val(rd, s)
+            if v is None:
+                out += f'<div class="dive-metric"><div class="dive-metric-val" style="color:{C["muted"]}">—</div><div class="dive-metric-label">{s.replace("Substrate ","")}</div></div>\n'
+                continue
+            col = status_color(classify(rn, s, v))
+            short = s.replace("Substrate ", "") + (" (dS/m)" if "EC" in s else "")
+            out += f'<div class="dive-metric"><div class="dive-metric-val" style="color:{col}">{fmt(s, v)}</div><div class="dive-metric-label">{short}</div></div>\n'
+        return out
+
+    def environmental_assessment(rn, rd):
+        """Generate environmental-only narrative from live data — no nutrient recs."""
+        issues = []
+        wins = []
+        for s in ["Ambient Temperature", "Ambient Humidity", "Vapor Pressure Deficit"]:
+            v = get_val(rd, s)
+            if v is None: continue
+            cls = classify(rn, s, v)
+            t = target_for(rn, s)
+            if cls == "critical" and t:
+                lo, hi = t
+                direction = "below" if v < lo else "above"
+                issues.append(f"{s.replace('Ambient ','')} {fmt(s,v)} is {direction} target ({fmt(s,lo)}–{fmt(s,hi)})")
+            elif cls == "warning" and t:
+                lo, hi = t
+                direction = "below" if v < lo else "above"
+                issues.append(f"{s.replace('Ambient ','')} {fmt(s,v)} is slightly {direction} target")
+            elif cls == "good":
+                wins.append(f"{s.replace('Ambient ','')} on target")
+        return issues, wins
+
+    # --- Flower 1 ---
+    if "Flower 1" in rooms:
+        rd = rooms["Flower 1"]
+        issues, wins = environmental_assessment("Flower 1", rd)
+        root = root_metrics("Flower 1", rd)
+        html += f'''<div class="dive-card f1">
+    <h3>🌸 Flower 1 — {GROWTH_STAGES["Flower 1"]}</h3>
     <div class="dive-section">
         <div class="dive-section-title">Environmental Snapshot</div>
-        <div class="dive-metrics">
-            <div class="dive-metric"><div class="dive-metric-val" style="color:{C['good']}">{f1.get("Ambient Temperature", {}).get("value", 0):.1f}°F</div><div class="dive-metric-label">Temperature</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:{C['warning']}">{f1.get("Ambient Humidity", {}).get("value", 0):.1f}%</div><div class="dive-metric-label">Humidity</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:{C['warning']}">{f1.get("Vapor Pressure Deficit", {}).get("value", 0):.2f}</div><div class="dive-metric-label">VPD (kPa)</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:{C['good']}">{f1.get("Ambient CO2", {}).get("value", 0):.0f}</div><div class="dive-metric-label">CO2 (ppm)</div></div>
-        </div>
+        <div class="dive-metrics">{env_metrics("Flower 1", rd)}</div>
     </div>
-    <div class="dive-section">
-        <div class="dive-section-title">Root Zone Health</div>
-        <div class="dive-metrics">
-            <div class="dive-metric"><div class="dive-metric-val" style="color:{C['good']}">{f1.get("Substrate EC", {}).get("value", 0):.2f}</div><div class="dive-metric-label">EC (dS/m)</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:{C['good']}">{f1.get("Substrate VWC", {}).get("value", 0):.1f}%</div><div class="dive-metric-label">VWC</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:{C['good']}">{f1.get("Substrate Temperature", {}).get("value", 0):.1f}°F</div><div class="dive-metric-label">Root Temp</div></div>
-        </div>
-        <p style="margin-top:12px">Root zone thriving — EC at {f1.get("Substrate EC", {}).get("value", 0):.2f} dS/m within ideal range, VWC at {f1.get("Substrate VWC", {}).get("value", 0):.1f}% optimal. Issue is purely environmental air management.</p>
+'''
+        if root:
+            html += f'''    <div class="dive-section">
+        <div class="dive-section-title">Root Zone</div>
+        <div class="dive-metrics">{root}</div>
     </div>
-    <div class="dive-section">
-        <div class="dive-section-title">Recommended Actions</div>
-        <ul class="dive-checklist">
-            <li>🔴 <strong>URGENT:</strong> Increase dehu capacity — target 50-55% RH during lights-on</li>
-            <li>🔴 <strong>URGENT:</strong> Add oscillating fans at canopy level to break boundary layer moisture</li>
-            <li>🟡 Consider potassium silicate foliar (0.5-1g/L) for cuticle strength</li>
-            <li>🟡 Begin PK boost at 20% over baseline for stretch finish and resin</li>
-            <li>🟢 CO2 at {f1.get("Ambient CO2", {}).get("value", 0):.0f} ppm good — maintain current levels</li>
-        </ul>
-    </div>
-</div>\n'''
+'''
+        html += '    <div class="dive-section"><div class="dive-section-title">Environmental Assessment</div>\n'
+        if issues:
+            html += '        <ul class="dive-checklist">\n'
+            for it in issues:
+                html += f'            <li>⚠ {it}</li>\n'
+            for it in wins:
+                html += f'            <li>✅ {it}</li>\n'
+            html += '        </ul>\n'
+        else:
+            html += f'        <p style="color:{C["good"]}">All environmental parameters within target range.</p>\n'
+        html += '    </div>\n</div>\n'
 
-    # F2
-    html += f'''<div class="dive-card f2">
-    <h3>🌿 Flower 2 — Pre-Harvest Analysis ({stages.get("Flower 2", "Late Flower")})</h3>
+    # --- Flower 2 ---
+    if "Flower 2" in rooms:
+        rd = rooms["Flower 2"]
+        issues, wins = environmental_assessment("Flower 2", rd)
+        root = root_metrics("Flower 2", rd)
+        days_out = (F2_HARVEST_DATE - datetime.now()).days
+        html += f'''<div class="dive-card f2">
+    <h3>🌿 Flower 2 — Pre-Harvest (~{days_out} days out)</h3>
     <div class="dive-section">
         <div class="dive-section-title">Environmental Snapshot</div>
-        <div class="dive-metrics">
-            <div class="dive-metric"><div class="dive-metric-val" style="color:{C['good']}">{f2.get("Ambient Temperature", {}).get("value", 0):.1f}°F</div><div class="dive-metric-label">Temperature</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:{C['good']}">{f2.get("Ambient Humidity", {}).get("value", 0):.1f}%</div><div class="dive-metric-label">Humidity</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:{C['good']}">{f2.get("Vapor Pressure Deficit", {}).get("value", 0):.2f}</div><div class="dive-metric-label">VPD (kPa)</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:{C['good']}">{f2.get("Ambient CO2", {}).get("value", 0):.0f}</div><div class="dive-metric-label">CO2 (ppm)</div></div>
-        </div>
-        <div class="callout callout-good" style="margin-top:12px"><strong>✅ All Clear:</strong> Every environmental parameter within optimal range. VPD at {f2.get("Vapor Pressure Deficit", {}).get("value", 0):.2f} kPa ideal for resin production.</div>
+        <div class="dive-metrics">{env_metrics("Flower 2", rd)}</div>
     </div>
-    <div class="dive-section">
-        <div class="dive-section-title">⚠ Critical Blind Spot: No Substrate Sensors</div>
-        <p>Cannot track root zone EC, VWC, or temperature for pre-harvest flush effectiveness.</p>
+'''
+        if root:
+            html += f'''    <div class="dive-section">
+        <div class="dive-section-title">Root Zone</div>
+        <div class="dive-metrics">{root}</div>
     </div>
-    <div class="dive-section">
-        <div class="dive-section-title">Pre-Harvest Countdown Checklist</div>
-        <ul class="dive-checklist">
-            <li>📋 <strong>Trichomes:</strong> Assess daily. Target 70-80% cloudy, 10-20% amber</li>
-            <li>📋 <strong>Flush:</strong> Begin plain pH'd water if not already flushing</li>
-            <li>📋 <strong>Dark Period:</strong> Plan 48-hour dark period 2 days before harvest</li>
-            <li>📋 <strong>Dry Room:</strong> Pre-condition to 60°F / 60% RH (currently {dry.get("current_temp", 65.3):.1f}°F / {dry.get("current_humidity", 64.5):.1f}%)</li>
-            <li>📋 <strong>Equipment:</strong> Hang racks, fans, dehu ready in Dry Room</li>
-            <li>📋 <strong>Trim Crew:</strong> Confirm availability for 4+ hour wet trim</li>
-        </ul>
+'''
+        else:
+            html += f'''    <div class="dive-section">
+        <div class="dive-section-title">Root Zone</div>
+        <div class="callout callout-warning">No substrate sensors detected in current readings.</div>
     </div>
-</div>\n'''
+'''
+        html += '    <div class="dive-section"><div class="dive-section-title">Environmental Assessment</div>\n'
+        if issues:
+            html += '        <ul class="dive-checklist">\n'
+            for it in issues:
+                html += f'            <li>⚠ {it}</li>\n'
+            html += '        </ul>\n'
+        else:
+            html += f'        <p style="color:{C["good"]}">All environmental parameters within target range.</p>\n'
+        html += '    </div>\n</div>\n'
 
-    # Mom
-    html += f'''<div class="dive-card mom">
-    <h3>🚨 Mother Room — Irrigation Emergency Assessment</h3>
+    # --- Mom ---
+    if "Mom" in rooms:
+        rd = rooms["Mom"]
+        issues, wins = environmental_assessment("Mom", rd)
+        root = root_metrics("Mom", rd)
+        html += f'''<div class="dive-card mom">
+    <h3>🌱 Mother Room — {GROWTH_STAGES["Mom"]}</h3>
     <div class="dive-section">
-        <div class="dive-section-title">Substrate Crisis</div>
-        <div class="dive-metrics">
-            <div class="dive-metric"><div class="dive-metric-val" style="color:{C['critical']}">{mom.get("Substrate VWC", {}).get("value", 0):.1f}%</div><div class="dive-metric-label">VWC (Critical)</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:{C['critical']}">{mom.get("Substrate EC", {}).get("value", 0):.2f}</div><div class="dive-metric-label">EC (dS/m)</div></div>
-            <div class="dive-metric"><div class="dive-metric-val" style="color:{C['good']}">{mom.get("Substrate Temperature", {}).get("value", 0):.1f}°F</div><div class="dive-metric-label">Root Temp</div></div>
-        </div>
-        <div class="callout callout-critical"><strong>Permanent Wilt Risk:</strong> If VWC drops below 5-8%, root damage becomes irreversible. Drought-stressed mothers produce weak clones, impacting next production cycle.</div>
+        <div class="dive-section-title">Environmental Snapshot</div>
+        <div class="dive-metrics">{env_metrics("Mom", rd)}</div>
     </div>
-    <div class="dive-section">
-        <div class="dive-section-title">Immediate Response Protocol</div>
-        <ul class="dive-checklist">
-            <li>🔴 <strong>NOW:</strong> Hand water all mothers to field capacity</li>
-            <li>🔴 <strong>NOW:</strong> Check irrigation timer — verify schedule and runtime</li>
-            <li>🔴 <strong>NOW:</strong> Inspect every emitter for clogs, mineral buildup</li>
-            <li>🟡 <strong>24h:</strong> Monitor VWC recovery — should climb above 40%</li>
-            <li>🟡 <strong>48h:</strong> If EC hasn't recovered above 1.2, apply nutrients at 50% strength</li>
-            <li>🟢 <strong>72h:</strong> Resume normal feeding once VWC stabilizes in 30-65%</li>
-        </ul>
+'''
+        if root:
+            html += f'''    <div class="dive-section">
+        <div class="dive-section-title">Root Zone</div>
+        <div class="dive-metrics">{root}</div>
     </div>
-</div>\n'''
+'''
+        html += '    <div class="dive-section"><div class="dive-section-title">Environmental Assessment</div>\n'
+        if issues:
+            html += '        <ul class="dive-checklist">\n'
+            for it in issues:
+                html += f'            <li>⚠ {it}</li>\n'
+            html += '        </ul>\n'
+        else:
+            html += f'        <p style="color:{C["good"]}">All environmental parameters within target range.</p>\n'
+        html += '    </div>\n</div>\n'
 
-    # Facility
+    # --- Facility snapshot (Dry + Cure) ---
+    dry = rooms.get("Dry Room", {}) or {}
+    cure = rooms.get("Cure Room", {}) or {}
+    days_out = (F2_HARVEST_DATE - datetime.now()).days
     html += f'''<div class="dive-card facility">
-    <h3>🏭 Facility Operations Summary</h3>
+    <h3>🏭 Facility Operations</h3>
     <div class="card-grid">
         <div class="insight-card dry">
-            <h4>🌡 Dry Room Readiness</h4>
+            <h4>🌡 Dry Room ({days_out}d to F2 harvest)</h4>
             <div class="dive-metrics">
-                <div class="dive-metric"><div class="dive-metric-val" style="color:{C['blue']}">{dry.get("current_temp", 65.27):.1f}°F</div><div class="dive-metric-label">Current Temp</div></div>
-                <div class="dive-metric"><div class="dive-metric-val" style="color:{C['blue']}">{dry.get("current_humidity", 64.5):.1f}%</div><div class="dive-metric-label">Current RH</div></div>
-                <div class="dive-metric"><div class="dive-metric-val" style="color:{C['muted']}">60°F</div><div class="dive-metric-label">Target Temp</div></div>
-                <div class="dive-metric"><div class="dive-metric-val" style="color:{C['muted']}">60%</div><div class="dive-metric-label">Target RH</div></div>
+                <div class="dive-metric"><div class="dive-metric-val" style="color:{C['blue']}">{fmt("Temperature", get_val(dry, "Ambient Temperature"))}</div><div class="dive-metric-label">Temp</div></div>
+                <div class="dive-metric"><div class="dive-metric-val" style="color:{C['blue']}">{fmt("Humidity", get_val(dry, "Ambient Humidity"))}</div><div class="dive-metric-label">RH</div></div>
             </div>
-            <p>Status: <strong>{dry.get("status", "idle").upper()}</strong>. F2 harvest ~April 13. Pre-condition 48h before harvest.</p>
+            <p>Target 58–66°F / 55–65%. Pre-condition 48h before harvest.</p>
         </div>
         <div class="insight-card cure">
-            <h4>🏺 Cure Room Status</h4>
+            <h4>🏺 Cure Room</h4>
             <div class="dive-metrics">
-                <div class="dive-metric"><div class="dive-metric-val" style="color:{C['good']}">{cure.get("Ambient Temperature", {}).get("value", 0):.1f}°F</div><div class="dive-metric-label">Temperature</div></div>
-                <div class="dive-metric"><div class="dive-metric-val" style="color:{C['good']}">{cure.get("Ambient Humidity", {}).get("value", 0):.1f}%</div><div class="dive-metric-label">Humidity</div></div>
+                <div class="dive-metric"><div class="dive-metric-val" style="color:{status_color(classify("Cure Room","Ambient Temperature",get_val(cure,"Ambient Temperature")))}">{fmt("Temperature", get_val(cure, "Ambient Temperature"))}</div><div class="dive-metric-label">Temp</div></div>
+                <div class="dive-metric"><div class="dive-metric-val" style="color:{status_color(classify("Cure Room","Ambient Humidity",get_val(cure,"Ambient Humidity")))}">{fmt("Humidity", get_val(cure, "Ambient Humidity"))}</div><div class="dive-metric-label">RH</div></div>
             </div>
-            <p>Within ideal cure range (58-68°F, 55-65% RH). Ready for F1 cure ~mid-May.</p>
+            <p>Target 58–68°F / 55–65% RH.</p>
         </div>
     </div>
 </div>\n'''
 
-    # Anomalies
-    if anomalies:
-        html += f'''<div class="card" style="border-left:4px solid {C['purple']}">
-    <h3 style="color:{C['purple']}">🔍 Anomaly Detection Report</h3>
-    <p style="font-size:12px;color:{C['text2']};margin-bottom:16px">Automated detection of readings deviating significantly from 24h average.</p>
-    <div class="card-grid">\n'''
-        for a in anomalies:
-            dev = a.get("deviation_pct", 0)
-            sev = C["critical"] if dev > 50 else C["warning"] if dev > 25 else C["lime"]
-            html += f'''<div class="insight-card" style="border-left-color:{sev}">
-    <h4 style="font-size:13px">{a.get("room", "")} — {a.get("sensor", "")}</h4>
-    <div class="dive-metrics">
-        <div class="dive-metric"><div class="dive-metric-val" style="color:{sev}">{a.get("current", 0):.2f}</div><div class="dive-metric-label">Current</div></div>
-        <div class="dive-metric"><div class="dive-metric-val" style="color:{C['muted']}">{a.get("avg_24h", 0):.2f}</div><div class="dive-metric-label">24h Avg</div></div>
-        <div class="dive-metric"><div class="dive-metric-val" style="color:{sev}">{dev:.1f}%</div><div class="dive-metric-label">Deviation</div></div>
-    </div>
-</div>\n'''
-        html += '</div></div>\n'
-
     return html
 
 
-def build_priorities(state):
-    priorities = [
-        {"level": "urgent", "tag": "URGENT", "title": "Hand Water Mother Room Immediately",
-         "desc": "Substrate VWC at 9.8% — approaching permanent wilt point. Hand water to field capacity. Check irrigation timer and every emitter."},
-        {"level": "urgent", "tag": "URGENT", "title": "Increase Flower 1 Dehumidification",
-         "desc": "Humidity elevated with low VPD. Deploy additional dehu capacity and increase exhaust fan runtime during lights-on."},
-        {"level": "high", "tag": "HIGH", "title": "Pre-Condition Dry Room for F2 Harvest",
-         "desc": "F2 harvest ~April 13. Dry Room needs to reach 60°F / 60% RH. Begin conditioning 48h before harvest."},
-        {"level": "high", "tag": "HIGH", "title": "Begin F2 Trichome Monitoring",
-         "desc": "Daily trichome assessment. Target 70-80% cloudy, 10-20% amber. Plan 48-hour dark period 2 days before chop."},
-        {"level": "medium", "tag": "MEDIUM", "title": "Schedule Tank Sensor Replacement",
-         "desc": "Both sensors broken. Float unreliable (±16 spread). Use manual dip-stick measurements twice daily."},
-        {"level": "medium", "tag": "MEDIUM", "title": "Plan F2 Substrate Sensor Installation",
-         "desc": "No substrate monitoring in F2. Install EC/VWC/temp sensors for next cycle to enable data-driven flush management."},
-        {"level": "low", "tag": "LOW", "title": "Review Offline Module Status",
-         "desc": "5 modules offline. Verify expected vs. unexpected outages. F2 PIC may be relevant for harvest operations."},
-    ]
+# --- Section: Priorities (derived from real events) ---
+
+def build_priorities(state, events):
+    active = events.get("active", [])
+    fac = facility_of(state)
+    priorities = []
+
+    # Critical events come first
+    for e in sorted(active, key=lambda x: (0 if x.get("severity") == "critical" else 1,
+                                           -x.get("consecutive_hours", 0))):
+        if e.get("severity") == "critical":
+            level, tag = "urgent", "URGENT"
+        elif e.get("escalated"):
+            level, tag = "urgent", "ESCALATED"
+        else:
+            level, tag = "high", "HIGH"
+        cur = e.get("current_value")
+        sensor = e.get("sensor", "")
+        room = e.get("room", "")
+        priorities.append({
+            "level": level, "tag": tag,
+            "title": f"{room}: {e.get('label','')}",
+            "desc": f"{e.get('description','')} Currently {format_value(sensor, cur)} · {format_duration(e.get('hours_active', 0))} active.",
+        })
+
+    # Pre-harvest countdown
+    days_to = (F2_HARVEST_DATE - datetime.now()).days
+    if 0 <= days_to <= 10:
+        priorities.append({
+            "level": "high", "tag": "HIGH",
+            "title": f"F2 Harvest Prep ({days_to}d)",
+            "desc": f"Flower 2 harvest ~{F2_HARVEST_DATE.strftime('%b %d')}. Pre-condition Dry Room 48h before chop, plan dark period, assess trichomes daily.",
+        })
+
+    # Offline modules
+    mod_off = int(fac.get("modulesOffline", 0))
+    if mod_off > 0:
+        offline = fac.get("offlineModules") or []
+        priorities.append({
+            "level": "medium", "tag": "MEDIUM",
+            "title": f"Review {mod_off} Offline Module(s)",
+            "desc": f"Offline: {', '.join(offline) if offline else 'modules'}. Confirm expected vs. unexpected outages.",
+        })
+
+    if not priorities:
+        priorities.append({
+            "level": "low", "tag": "OK",
+            "title": "No Priority Actions",
+            "desc": "All active events are warnings only, modules online, no critical thresholds crossed.",
+        })
 
     html = ''
-    for i, p in enumerate(priorities, 1):
-        html += f'''<div class="priority-card priority-{p['level']}">
+    for i, p in enumerate(priorities[:8], 1):
+        html += f'''<div class="priority-card priority-{p["level"]}">
     <div class="priority-num">{i}</div>
     <div class="priority-content">
-        <div class="priority-tag">{p['tag']}</div>
-        <div class="priority-title">{p['title']}</div>
-        <div class="priority-desc">{p['desc']}</div>
+        <div class="priority-tag">{p["tag"]}</div>
+        <div class="priority-title">{p["title"]}</div>
+        <div class="priority-desc">{p["desc"]}</div>
     </div>
 </div>\n'''
-
     return html
 
 
+# --- Section: System Health ---
+
 def build_system_health(state):
-    fac = state.get("facility_health", {})
-    offline = state.get("offline_modules", [])
-    online = fac.get("modules_online", 22)
-    off = fac.get("modules_offline", 6)
+    fac = facility_of(state)
+    rooms = rooms_of(state)
+    online = int(fac.get("modulesOnline", 0))
+    off = int(fac.get("modulesOffline", 0))
     total = online + off
     pct = int(online / total * 100) if total > 0 else 0
-    efficiency = fac.get("system_efficiency", "79%")
-    pct_color = C["good"] if pct >= 85 else C["warning"] if pct >= 70 else C["critical"]
+    pct_c = C["good"] if pct >= 85 else C["warning"] if pct >= 70 else C["critical"]
+    offline_modules = fac.get("offlineModules") or []
+    active_alerts = int(fac.get("activeAlerts", 0))
 
     html = f'''<div class="exec-grid">
     <div class="exec-card"><div class="exec-number">{online}/{total}</div><div class="exec-label">Modules Online</div></div>
     <div class="exec-card"><div class="exec-number" style="color:{C['warning']}">{off}</div><div class="exec-label">Modules Offline</div></div>
-    <div class="exec-card"><div class="exec-number" style="color:{pct_color}">{pct}%</div><div class="exec-label">System Health</div></div>
-    <div class="exec-card"><div class="exec-number" style="color:{C['blue']}">{efficiency}</div><div class="exec-label">Efficiency</div></div>
+    <div class="exec-card"><div class="exec-number" style="color:{pct_c}">{pct}%</div><div class="exec-label">Uptime</div></div>
+    <div class="exec-card"><div class="exec-number" style="color:{C['blue']}">{active_alerts}</div><div class="exec-label">GrowLink Alerts</div></div>
 </div>
 
 <div class="sys-grid">
     <div class="sys-card offline">
-        <h4>📡 Offline Modules ({len(offline)})</h4>
-        <ul class="module-list">\n'''
+        <h4>📡 Offline Modules ({len(offline_modules)})</h4>
+        <ul class="module-list">
+'''
+    if offline_modules:
+        for m in offline_modules:
+            dot = C["warning"] if "Flower" in m else C["muted"]
+            html += f'            <li><span class="module-dot" style="background:{dot}"></span>{m}</li>\n'
+    else:
+        html += f'            <li style="color:{C["muted"]}">All modules online</li>\n'
 
-    for mod in offline:
-        dot = C["warning"] if "Flower" in mod else C["muted"]
-        html += f'            <li><span class="module-dot" style="background:{dot}"></span>{mod}</li>\n'
+    # Data Quality — dynamic per room
+    html += '''        </ul>
+    </div>
+    <div class="sys-card">
+        <h4>📊 Sensor Coverage (Live)</h4>
+        <ul class="module-list">
+'''
+    for rn in ["Flower 1", "Flower 2", "Mom", "Cure Room", "Dry Room", "Central Feed System"]:
+        rd = rooms.get(rn, {}) or {}
+        present = [s for s, sd in rd.items() if s != "None" and sd and sd.get("value") is not None]
+        has_env = any(s in present for s in ["Ambient Temperature", "Ambient Humidity", "Vapor Pressure Deficit"])
+        has_sub = any(s in present for s in ["Substrate VWC", "Substrate EC", "Substrate Temperature"])
+        has_chem = any(s in present for s in ["Solution pH", "Solution TDS", "Solution Temperature"])
+        has_co2 = "Ambient CO2" in present
 
-    html += f'''        </ul>
-        <div class="callout callout-info" style="margin-top:12px"><strong>Assessment:</strong> Clone/Veg modules expected offline. F2 PIC warrants attention with harvest approaching.</div>
+        # Expected coverage by room
+        if rn in ("Flower 1", "Flower 2", "Mom"):
+            full = has_env and has_sub and has_co2
+            label_bits = []
+            if has_env: label_bits.append("env")
+            if has_sub: label_bits.append("substrate")
+            else: label_bits.append("no substrate")
+            if has_co2: label_bits.append("CO2")
+            status_c = C["good"] if full else C["warning"]
+            summary = " · ".join(label_bits)
+        elif rn in ("Cure Room", "Dry Room"):
+            status_c = C["good"] if has_env else C["warning"]
+            summary = "env ✓" if has_env else "no env sensors"
+        elif rn == "Central Feed System":
+            status_c = C["good"] if has_chem else C["warning"]
+            summary = "chemistry ✓" if has_chem else "no chemistry"
+        else:
+            status_c = C["muted"]
+            summary = f"{len(present)} sensors"
+
+        html += f'            <li><span class="module-dot" style="background:{status_c}"></span><strong>{rn}:</strong> {summary} ({len(present)} sensors)</li>\n'
+
+    html += '''        </ul>
     </div>
     <div class="sys-card issues">
         <h4>⚙ Known Issues</h4>
         <ul class="module-list">
-            <li><span class="module-dot" style="background:{C['critical']}"></span><strong>Tank Sensors:</strong> Both broken, readings unreliable</li>
-            <li><span class="module-dot" style="background:{C['warning']}"></span><strong>F2 Substrate:</strong> No sensors installed</li>
-            <li><span class="module-dot" style="background:{C['blue']}"></span><strong>Dry Room:</strong> Idle, awaiting F2 harvest</li>
-            <li><span class="module-dot" style="background:{C['muted']}"></span><strong>API Limits:</strong> Injector dosing rates unavailable</li>
-            <li><span class="module-dot" style="background:{C['muted']}"></span><strong>CO2:</strong> Not supplemented in Mom/Veg</li>
-        </ul>
-    </div>
-    <div class="sys-card">
-        <h4>📊 Data Quality</h4>
-        <ul class="module-list">
-            <li><span class="module-dot" style="background:{C['good']}"></span><strong>Flower 1:</strong> Full suite ✓</li>
-            <li><span class="module-dot" style="background:{C['warning']}"></span><strong>Flower 2:</strong> Environmental only</li>
-            <li><span class="module-dot" style="background:{C['good']}"></span><strong>Mom:</strong> Full suite ✓</li>
-            <li><span class="module-dot" style="background:{C['good']}"></span><strong>Cure Room:</strong> Environmental ✓</li>
-            <li><span class="module-dot" style="background:{C['good']}"></span><strong>Dry Room:</strong> Environmental ✓</li>
-            <li><span class="module-dot" style="background:{C['warning']}"></span><strong>Central Feed:</strong> Chemistry ✓, tank levels unreliable</li>
-        </ul>
+'''
+    # Dynamic known issues
+    feed = rooms.get("Central Feed System", {}) or {}
+    flt = get_val(feed, "Solution Float")
+    if flt is not None:
+        html += f'            <li><span class="module-dot" style="background:{C["warning"]}"></span><strong>Tank Float:</strong> sensor unreliable — verify manually</li>\n'
+    if off > 0:
+        html += f'            <li><span class="module-dot" style="background:{C["warning"]}"></span><strong>{off} Offline Module(s)</strong></li>\n'
+
+    html += f'            <li><span class="module-dot" style="background:{C["muted"]}"></span><strong>CO2:</strong> Not supplemented in Mom/Veg</li>\n'
+    html += '''        </ul>
     </div>
 </div>'''
-
     return html
 
 
@@ -1031,44 +1220,40 @@ def build_system_health(state):
 
 def main():
     print("Loading data...")
-    state = load_json(STATE_PATH)
+    state = load_json(STATE_PATH, default={})
+    hourly = load_json(HOURLY_PATH, default=[])
+    daily_summaries = load_json(DAILY_PATH, default={})
+
     logo = load_text(LOGO_PATH)
     wordmark = load_text(WORDMARK_PATH)
     logo_svg = load_text(LOGO_SVG_PATH)
     wordmark_svg = load_text(WORDMARK_SVG_PATH)
 
     print("Loading template...")
-    with open(TEMPLATE_PATH, 'r') as f:
+    with open(TEMPLATE_PATH) as f:
         template = f.read()
 
-    # Parse timestamps — convert UTC to Eastern time for display
-    last_updated = state.get("last_updated", "")
+    # Compute events once, reused by several sections
+    events = process_readings(state)
+
+    # Timestamps — display in Eastern Time
+    last_updated = state_timestamp(state)
     try:
-        from datetime import timezone, timedelta
         dt = datetime.fromisoformat(last_updated.replace("Z", "+00:00"))
-        # Convert to Eastern time (EDT = UTC-4, EST = UTC-5; use -4 for Apr–Oct)
         eastern = timezone(timedelta(hours=-4))
         dt_et = dt.astimezone(eastern)
         data_time = dt_et.strftime("%B %d, %Y · %I:%M %p") + " ET"
-    except:
+    except Exception:
         data_time = "Unknown"
 
     now = datetime.now()
     gen_time = now.strftime("%B %d, %Y · %I:%M %p")
 
-    # Calculate facility health — use module uptime (matches System Health section)
-    fac = state.get("facility_health", {})
-    mod_online = fac.get("modules_online", 22)
-    mod_offline = fac.get("modules_offline", 6)
-    mod_total = mod_online + mod_offline
-    overall = int(mod_online / mod_total * 100) if mod_total > 0 else 80
-    h_color = C["good"] if overall >= 80 else C["warning"] if overall >= 60 else C["critical"]
+    # Header growth stage summary
+    header_stages = (f"F1: {GROWTH_STAGES['Flower 1']} · "
+                     f"F2: {GROWTH_STAGES['Flower 2']} · "
+                     f"Mom: {GROWTH_STAGES['Mom']}")
 
-    # Growth stages for header
-    stages = state.get("growth_stages", {})
-    header_stages = f"F1: {stages.get('Flower 1', 'Flower')} · F2: {stages.get('Flower 2', 'Late Flower')} · Mom: {stages.get('Mom', 'Vegetative')}"
-
-    # Build replacements
     replacements = {
         "{{LOGO_DATA_URI}}": logo,
         "{{WORDMARK_DATA_URI}}": wordmark,
@@ -1076,45 +1261,39 @@ def main():
         "{{WORDMARK_SVG_URI}}": wordmark_svg,
         "{{HEADER_GROWTH_STAGES}}": header_stages,
         "{{HEADER_TIMESTAMPS}}": f"Data as of {data_time} · Report generated {gen_time}",
-        "{{PERFORMANCE_24H_SECTION}}": build_24h_performance(state),
-        "{{ALERTS_SECTION}}": build_alerts(state),
+        "{{PERFORMANCE_24H_SECTION}}": build_24h_performance(state, hourly, daily_summaries, events),
+        "{{ALERTS_SECTION}}": build_alerts(state, events),
         "{{EVENTS_SECTION}}": build_events_section(state),
         "{{ROOMS_SECTION}}": build_room_cards(state),
-        "{{FEED_SECTION}}": build_feed_section(state),
+        "{{FEED_SECTION}}": build_feed_section(state, hourly, daily_summaries),
         "{{DAYNIGHT_SECTION}}": build_day_night(state),
-        "{{DEEPDIVE_SECTION}}": build_deep_dive(state),
-        "{{PRIORITIES_SECTION}}": build_priorities(state),
+        "{{DEEPDIVE_SECTION}}": build_deep_dive(state, hourly),
+        "{{PRIORITIES_SECTION}}": build_priorities(state, events),
         "{{HEALTH_SECTION}}": build_system_health(state),
         "{{FOOTER_META}}": f"Generated by CCGL GrowLink Analyst · {gen_time}",
     }
 
     print(f"Filling {len(replacements)} placeholders...")
     html = template
-    for placeholder, value in replacements.items():
-        html = html.replace(placeholder, value)
+    for k, v in replacements.items():
+        html = html.replace(k, v)
 
-    # Check for unfilled placeholders
     import re
-    unfilled = re.findall(r'\{\{[A-Z_]+\}\}', html)
+    unfilled = re.findall(r"\{\{[A-Z_]+\}\}", html)
     if unfilled:
-        print(f"  ⚠ Unfilled placeholders: {unfilled}")
+        print(f"  ⚠ Unfilled: {unfilled}")
     else:
         print("  ✓ All placeholders filled")
 
-    # Write output
     print(f"Writing report to {OUTPUT_PATH}...")
-    with open(OUTPUT_PATH, 'w') as f:
+    with open(OUTPUT_PATH, "w") as f:
         f.write(html)
 
-    # Copy to index.html for GitHub Pages
     index_path = BASE_DIR / "index.html"
     shutil.copy2(OUTPUT_PATH, index_path)
-    print(f"  GitHub Pages: {index_path}")
 
-    # Archive copy
     ARCHIVE_DIR.mkdir(exist_ok=True)
-    archive_name = f"CCGL-Report-{now.strftime('%Y-%m-%d-%H%M')}.html"
-    archive_path = ARCHIVE_DIR / archive_name
+    archive_path = ARCHIVE_DIR / f"CCGL-Report-{now.strftime('%Y-%m-%d-%H%M')}.html"
     shutil.copy2(OUTPUT_PATH, archive_path)
 
     size = os.path.getsize(OUTPUT_PATH)

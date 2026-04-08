@@ -191,6 +191,57 @@ section h2{font-size:20px;color:#4E9E8E;font-weight:600;letter-spacing:.5px;text
 .evt-log-date{color:#5a7088;font-size:10px}
 .evt-empty{text-align:center;padding:40px 20px;color:#5a7088;font-size:13px}
 
+/* Room-grouped events (v4) */
+.roomevt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:16px;margin-bottom:20px}
+.roomevt-card{background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:18px;border-top:3px solid #4E9E8E}
+.roomevt-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #1a3050}
+.roomevt-name{font-size:15px;font-weight:700;color:white;display:flex;align-items:baseline;gap:10px}
+.roomevt-stage{font-size:10px;padding:3px 8px;background:#4E9E8E22;border-radius:4px;color:#4E9E8E;text-transform:uppercase;letter-spacing:.5px;font-weight:400}
+.roomevt-status{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.evt-chip{background:#07131866;border:1px solid #1a3050;border-left:3px solid var(--chip-c,#7a8fa3);border-radius:6px;margin-bottom:8px;font-size:12px;overflow:hidden;transition:all .2s}
+.evt-chip summary{padding:10px 12px;cursor:pointer;display:flex;align-items:center;gap:10px;list-style:none;user-select:none}
+.evt-chip summary::-webkit-details-marker{display:none}
+.evt-chip summary:hover{background:#0f1f3599}
+.evt-chip[open] summary{background:#0f1f35;border-bottom:1px solid #1a3050}
+.chip-dot{width:8px;height:8px;border-radius:50%;background:var(--chip-c,#7a8fa3);flex-shrink:0}
+.chip-title{flex:1;color:white;font-weight:600;display:flex;align-items:center;gap:8px}
+.chip-esc{background:#e74c3c33;color:#ff6b6b;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700}
+.chip-reopen{background:#f39c1222;color:#f39c12;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700}
+.chip-meta{color:#7a8fa3;font-size:11px;white-space:nowrap}
+.chip-when{color:#5a7088;font-size:10px;margin-left:auto}
+.chip-body{padding:12px}
+.chip-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px}
+.chip-grid > div{background:#07131899;border-radius:4px;padding:8px;text-align:center}
+.chip-val{font-size:14px;font-weight:700;color:white;margin-bottom:2px}
+.chip-lab{font-size:9px;color:#7a8fa3;text-transform:uppercase;letter-spacing:.4px}
+.chip-desc{font-size:11px;color:#7a8fa3;line-height:1.5;margin-bottom:10px}
+.evt-chip.resolved{padding:10px 12px;display:flex;align-items:center;gap:10px;opacity:0.75;border-left-color:#2ecc71}
+.evt-history{background:#07131844;border-radius:6px;margin-top:8px;font-size:11px}
+.evt-history summary{padding:8px 12px;cursor:pointer;color:#7a8fa3;list-style:none}
+.evt-history summary::-webkit-details-marker{display:none}
+.evt-history summary:hover{color:white}
+.evt-history summary::before{content:"▸ ";color:#5a7088}
+.evt-history[open] summary::before{content:"▾ "}
+.history-list{padding:4px 12px 10px}
+.history-row{display:grid;grid-template-columns:10px 1fr auto auto auto;gap:10px;align-items:center;padding:5px 0;font-size:11px;border-bottom:1px solid #1a305033}
+.history-row:last-child{border-bottom:none}
+.history-dot{width:8px;height:8px;border-radius:50%}
+.history-label{color:#d0d8e0}
+.history-stage{color:#5a7088;font-size:9px;text-transform:uppercase;letter-spacing:.4px}
+.history-dur{color:#7a8fa3;font-size:10px}
+.history-date{color:#5a7088;font-size:10px}
+.evt-quiet{color:#5a7088;font-size:11px;text-align:center;padding:12px;font-style:italic}
+
+/* Fertigation deep-dive table */
+.sub-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.sub-table thead th{font-size:9px;color:#5a7088;text-transform:uppercase;letter-spacing:.5px;text-align:left;padding:6px 8px;border-bottom:1px solid #1a3050}
+.sub-table tbody td{padding:8px;border-bottom:1px solid #1a305033;color:#d0d8e0}
+.sub-table tbody tr:last-child td{border-bottom:none}
+.sub-line{padding:4px 0;font-size:12px;color:#d0d8e0}
+.sub-line strong{color:#4E9E8E}
+
+.dn-stage{font-size:9px;padding:2px 6px;background:#4E9E8E22;border-radius:3px;color:#4E9E8E;text-transform:uppercase;letter-spacing:.5px;font-weight:400;margin-left:6px}
+
 /* Day/Night analysis cards */
 .dn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px}
 .dn-card{background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:20px;border-top:3px solid #4E9E8E}
