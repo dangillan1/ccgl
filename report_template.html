@@ -37,20 +37,20 @@ section h2{font-size:20px;color:#4E9E8E;font-weight:600;letter-spacing:.5px;text
 .card-status-dot{display:inline-block;width:12px;height:12px;border-radius:50%;flex-shrink:0}
 
 /* Alert Cards - Enhanced */
-.alert-card{border-left:4px solid #e74c3c;background:linear-gradient(135deg,#e74c3c08 0%,#0f1f35 100%)}
+.alert-card{border-left:4px solid #e74c3c;background:linear-gradient(135deg,#e74c3c08 0%,#0f1f35 100%);padding:16px 18px;margin-bottom:12px}
 .alert-card.warning{border-left-color:#f39c12;background:linear-gradient(135deg,#f39c1208 0%,#0f1f35 100%)}
 .alert-card.info{border-left-color:#4A90B5;background:linear-gradient(135deg,#4A90B508 0%,#0f1f35 100%)}
 .alert-card.good{border-left-color:#2ecc71;background:linear-gradient(135deg,#2ecc7108 0%,#0f1f35 100%)}
-.alert-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.alert-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .alert-icon{font-size:24px;flex-shrink:0}
 .alert-title{font-size:14px;font-weight:600;color:white;flex:1}
-.alert-description{font-size:13px;color:#d0d8e0;margin-bottom:12px;line-height:1.6}
-.alert-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:12px}
-.alert-metric{background:#07131888;border-radius:8px;padding:10px 12px;text-align:center}
-.alert-metric-value{font-size:16px;font-weight:700;margin-bottom:2px}
-.alert-metric-label{font-size:10px;color:#7a8fa3;text-transform:uppercase;letter-spacing:.5px}
-.alert-action{padding:12px;background:#07131888;border-radius:8px;font-size:12px;color:#8DC63F;border-left:3px solid #8DC63F;margin-top:8px}
-.alert-ai{padding:12px;background:linear-gradient(135deg,#4E9E8E11 0%,#4A90B508 100%);border-radius:8px;font-size:12px;color:#d0d8e0;border-left:3px solid #4E9E8E;margin-top:8px;line-height:1.6}
+.alert-description{font-size:12px;color:#d0d8e0;margin-bottom:0;line-height:1.5}
+.alert-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:6px;margin-bottom:8px}
+.alert-metric{background:#07131888;border-radius:6px;padding:6px 8px;text-align:center}
+.alert-metric-value{font-size:15px;font-weight:700;margin-bottom:1px;line-height:1.2}
+.alert-metric-label{font-size:9px;color:#7a8fa3;text-transform:uppercase;letter-spacing:.5px}
+.alert-action{padding:8px 10px;background:#07131888;border-radius:6px;font-size:11px;color:#8DC63F;border-left:3px solid #8DC63F;margin-top:6px}
+.alert-ai{padding:8px 10px;background:linear-gradient(135deg,#4E9E8E11 0%,#4A90B508 100%);border-radius:6px;font-size:11px;color:#d0d8e0;border-left:3px solid #4E9E8E;margin-top:6px;line-height:1.5}
 .alert-ai strong{color:#4E9E8E}
 
 /* Badges */
@@ -88,15 +88,16 @@ section h2{font-size:20px;color:#4E9E8E;font-weight:600;letter-spacing:.5px;text
 .exec-label{font-size:11px;color:#7a8fa3;text-transform:uppercase;letter-spacing:.5px}
 
 /* Colored insight cards */
-.insight-card{background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:20px;border-left:4px solid #4E9E8E;margin-bottom:16px}
+.insight-card{background:#0f1f35;border:1px solid #1a3050;border-radius:10px;padding:14px 16px;border-left:4px solid #4E9E8E;margin-bottom:12px}
 .insight-card.f1{border-left-color:#f39c12}
 .insight-card.f2{border-left-color:#8DC63F}
 .insight-card.mom{border-left-color:#e74c3c}
 .insight-card.cure{border-left-color:#9b59b6}
 .insight-card.dry{border-left-color:#4A90B5}
 .insight-card.feed{border-left-color:#00cec9}
-.insight-card h4{font-size:14px;font-weight:600;color:white;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.insight-card p{font-size:12px;color:#d0d8e0;line-height:1.7;margin-bottom:10px}
+.insight-card h4{font-size:13px;font-weight:600;color:white;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.insight-card p{font-size:12px;color:#d0d8e0;line-height:1.5;margin-bottom:6px}
+.insight-card p:last-child{margin-bottom:0}
 
 /* 24h Performance Module */
 .perf24-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;margin-bottom:20px}
@@ -266,14 +267,14 @@ section h2{font-size:20px;color:#4E9E8E;font-weight:600;letter-spacing:.5px;text
 .module-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 
 /* Feed cards */
-.feed-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:20px}
-.feed-card{background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:20px;border-top:3px solid #4E9E8E;text-align:center;transition:all .3s}
+.feed-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:12px}
+.feed-card{background:#0f1f35;border:1px solid #1a3050;border-radius:10px;padding:12px 14px;border-top:3px solid #4E9E8E;text-align:center;transition:all .3s}
 .feed-card:hover{border-color:#4E9E8E44;transform:translateY(-2px)}
 .feed-card.alert{border-top-color:#e74c3c}
-.feed-value{font-size:28px;font-weight:700;margin-bottom:4px}
-.feed-label{font-size:11px;color:#7a8fa3;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
-.feed-range{font-size:10px;color:#5a7088}
-.feed-trend{font-size:11px;margin-top:6px}
+.feed-value{font-size:24px;font-weight:700;margin-bottom:2px;line-height:1.1}
+.feed-label{font-size:10px;color:#7a8fa3;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.feed-range{font-size:9px;color:#5a7088}
+.feed-trend{font-size:10px;margin-top:4px}
 
 /* Deep dive cards */
 .dive-card{background:#0f1f35;border:1px solid #1a3050;border-radius:12px;padding:24px;margin-bottom:20px;border-left:4px solid #4E9E8E}
@@ -504,7 +505,7 @@ body{background:white;color:black}
         </section>
 
         <section id="alerts">
-            <h2>Critical Alerts & AI Analysis</h2>
+            <h2>Critical Alerts</h2>
             
             {{ALERTS_SECTION}}
         </section>
@@ -522,7 +523,7 @@ body{background:white;color:black}
         </section>
 
         <section id="feed">
-            <h2>Central Feed & Fertigation Intelligence</h2>
+            <h2>Central Feed & Fertigation</h2>
             
             {{FEED_SECTION}}
         </section>
