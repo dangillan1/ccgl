@@ -491,7 +491,6 @@ body{background:white;color:black}
             <a href="#rooms" class="nav-link">Room Status</a>
             <a href="#feed" class="nav-link">Feed & Fertigation</a>
             <div class="nav-divider"></div>
-            <a href="#daynight" class="nav-link">Day vs Night</a>
             <a href="#priorities" class="nav-link">Priority Actions</a>
             <div class="nav-divider"></div>
             <a href="#health" class="nav-link">System Health</a>
@@ -538,12 +537,6 @@ body{background:white;color:black}
             <h2>Central Feed & Fertigation</h2>
             
             {{FEED_SECTION}}
-        </section>
-
-        <section id="daynight">
-            <h2>Day vs Night Analysis</h2>
-            
-            {{DAYNIGHT_SECTION}}
         </section>
 
         <section id="priorities">
@@ -629,6 +622,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeMobileNav);
     navLinks.forEach(link => link.addEventListener('click', closeMobileNav));
+
+    // Event chip row-sync: opening a chip opens chips at the same row index
+    // across all room columns; closing closes them too.
+    let __chipSyncing = false;
+    document.querySelectorAll('.roomevt-grid .evt-chip[data-row]').forEach(chip => {
+        chip.addEventListener('toggle', function() {
+            if (__chipSyncing) return;
+            const row = this.getAttribute('data-row');
+            if (row === null) return;
+            __chipSyncing = true;
+            document.querySelectorAll('.roomevt-grid .evt-chip[data-row="' + row + '"]').forEach(other => {
+                if (other === chip) return;
+                if (other.open !== chip.open) other.open = chip.open;
+            });
+            __chipSyncing = false;
+        });
+    });
 });
 </script>
 </body>
