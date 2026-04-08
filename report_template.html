@@ -43,6 +43,9 @@ body{display:flex;font-size:13px}
 .health-label{font-size:11px;color:#7a8fa3;text-transform:uppercase;letter-spacing:.5px}
 section{margin-bottom:32px}
 section h2{font-size:17px;color:#4E9E8E;font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #4E9E8E33}
+section h2.h2-with-live{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.h2-live-meta{display:inline-flex;align-items:center;gap:8px;text-transform:none;letter-spacing:.3px}
+.h2-live-time{font-size:10px;color:#5a7088;font-weight:500;letter-spacing:.5px}
 
 /* Cards */
 .card{background:#0f1f35;border:1px solid #1a3050;border-radius:10px;padding:16px 18px;transition:all .3s;margin-bottom:12px}
@@ -548,14 +551,14 @@ body{background:white;color:black}
         </section>
 
         <section id="rooms">
-            <h2>Room-by-Room Status</h2>
-            
+            <h2 class="h2-with-live">Room-by-Room Status<span class="h2-live-meta"><span class="live-dot">Live</span><span class="h2-live-time">as of {{ROOMS_LIVE_TIME}}</span></span></h2>
+
             {{ROOMS_SECTION}}
         </section>
 
         <section id="feed">
-            <h2>Central Feed & Fertigation</h2>
-            
+            <h2 class="h2-with-live">Central Feed &amp; Fertigation<span class="h2-live-meta"><span class="live-dot">Live</span><span class="h2-live-time">as of {{ROOMS_LIVE_TIME}}</span></span></h2>
+
             {{FEED_SECTION}}
         </section>
 

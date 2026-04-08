@@ -1508,6 +1508,7 @@ def main():
         "{{WORDMARK_SVG_URI}}": wordmark_svg,
         "{{HEADER_GROWTH_STAGES}}": header_stages,
         "{{HEADER_TIMESTAMPS}}": f"Data as of {data_time} · Report generated {gen_time}",
+        "{{ROOMS_LIVE_TIME}}": data_time,
         "{{PERFORMANCE_24H_SECTION}}": build_24h_performance(state, hourly, daily_summaries, events),
         "{{ALERTS_SECTION}}": build_alerts(state, events),
         "{{EVENTS_SECTION}}": build_events_section(state),
