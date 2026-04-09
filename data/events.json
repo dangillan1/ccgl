@@ -1,5 +1,71 @@
 {
-  "active": [],
+  "active": [
+    {
+      "key": "Flower 2::substrate_dry",
+      "room": "Flower 2",
+      "rule_id": "substrate_dry",
+      "sensor": "Substrate VWC",
+      "label": "Substrate Dry",
+      "description": "VWC below 15% \u2014 irrigation may be insufficient",
+      "severity": "warning",
+      "condition": "below",
+      "threshold": 15,
+      "status": "active",
+      "started": "2026-04-07T21:04:27.050726-04:00",
+      "last_seen": "2026-04-09T18:00:02.358807-04:00",
+      "current_value": 14.59,
+      "peak_value": 11.76,
+      "peak_time": "2026-04-09T08:12:00.653860-04:00",
+      "hours_active": 44.926474469999995,
+      "consecutive_hours": 1,
+      "escalated": true,
+      "reopened_count": 1,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-07T21:04:27.050726-04:00",
+          "value": 13.64
+        },
+        {
+          "time": "2026-04-07T23:41:38.715939-04:00",
+          "value": 12.81
+        },
+        {
+          "time": "2026-04-08T00:27:44.334811-04:00",
+          "value": 12.81
+        },
+        {
+          "time": "2026-04-08T01:03:23.890180-04:00",
+          "value": 12.45
+        },
+        {
+          "time": "2026-04-08T16:38:08.979996-04:00",
+          "value": 12.86
+        },
+        {
+          "time": "2026-04-09T08:01:04.799526-04:00",
+          "value": 12.86
+        },
+        {
+          "time": "2026-04-09T12:00:05.803942-04:00",
+          "value": 11.76
+        },
+        {
+          "time": "2026-04-09T13:04:49.481404-04:00",
+          "value": 11.76
+        },
+        {
+          "time": "2026-04-09T14:03:15.319008-04:00",
+          "value": 11.76
+        },
+        {
+          "time": "2026-04-09T18:00:02.357159-04:00",
+          "value": 14.59
+        }
+      ],
+      "duration_hours": 41.93775031388889
+    }
+  ],
   "resolved": [
     {
       "key": "Flower 1::high_humidity",
@@ -124,68 +190,6 @@
       ],
       "resolved_at": "2026-04-08T16:38:08.979996-04:00",
       "duration_hours": 19.561647047222223
-    },
-    {
-      "key": "Flower 2::substrate_dry",
-      "room": "Flower 2",
-      "rule_id": "substrate_dry",
-      "sensor": "Substrate VWC",
-      "label": "Substrate Dry",
-      "description": "VWC below 15% \u2014 irrigation may be insufficient",
-      "severity": "warning",
-      "condition": "below",
-      "threshold": 15,
-      "status": "resolved",
-      "started": "2026-04-07T21:04:27.050726-04:00",
-      "last_seen": "2026-04-09T14:03:15.320512-04:00",
-      "current_value": 11.76,
-      "peak_value": 11.76,
-      "peak_time": "2026-04-09T08:12:00.653860-04:00",
-      "hours_active": 40.98007494722222,
-      "consecutive_hours": 9,
-      "escalated": true,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-07T21:04:27.050726-04:00",
-          "value": 13.64
-        },
-        {
-          "time": "2026-04-07T23:41:38.715939-04:00",
-          "value": 12.81
-        },
-        {
-          "time": "2026-04-08T00:27:44.334811-04:00",
-          "value": 12.81
-        },
-        {
-          "time": "2026-04-08T01:03:23.890180-04:00",
-          "value": 12.45
-        },
-        {
-          "time": "2026-04-08T16:38:08.979996-04:00",
-          "value": 12.86
-        },
-        {
-          "time": "2026-04-09T08:01:04.799526-04:00",
-          "value": 12.86
-        },
-        {
-          "time": "2026-04-09T12:00:05.803942-04:00",
-          "value": 11.76
-        },
-        {
-          "time": "2026-04-09T13:04:49.481404-04:00",
-          "value": 11.76
-        },
-        {
-          "time": "2026-04-09T14:03:15.319008-04:00",
-          "value": 11.76
-        }
-      ],
-      "resolved_at": "2026-04-09T15:00:42.951687-04:00",
-      "duration_hours": 41.93775031388889
     },
     {
       "key": "Flower 1::low_vpd",
