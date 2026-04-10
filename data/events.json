@@ -2,48 +2,6 @@
   "active": [],
   "resolved": [
     {
-      "key": "Flower 2::low_temp",
-      "room": "Flower 2",
-      "rule_id": "low_temp",
-      "sensor": "Ambient Temperature",
-      "label": "Low Temperature",
-      "description": "Temperature below optimal \u2014 slowed metabolism",
-      "severity": "warning",
-      "condition": "below",
-      "threshold": 65,
-      "status": "resolved",
-      "started": "2026-04-07T21:04:27.050726-04:00",
-      "last_seen": "2026-04-08T01:28:28.579372-04:00",
-      "current_value": 62.1,
-      "peak_value": 60.9,
-      "peak_time": "2026-04-07T23:41:38.715939-04:00",
-      "hours_active": 4.40042463,
-      "consecutive_hours": 4,
-      "escalated": true,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-07T21:04:27.050726-04:00",
-          "value": 63.1
-        },
-        {
-          "time": "2026-04-07T23:41:38.715939-04:00",
-          "value": 60.9
-        },
-        {
-          "time": "2026-04-08T00:27:44.334811-04:00",
-          "value": 60.9
-        },
-        {
-          "time": "2026-04-08T01:03:23.890180-04:00",
-          "value": 62.3
-        }
-      ],
-      "resolved_at": "2026-04-08T16:38:08.979996-04:00",
-      "duration_hours": 19.561647047222223
-    },
-    {
       "key": "Flower 1::low_vpd",
       "room": "Flower 1",
       "rule_id": "low_vpd",
