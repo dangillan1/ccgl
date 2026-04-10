@@ -1,5 +1,39 @@
 {
-  "active": [],
+  "active": [
+    {
+      "key": "Flower 1::high_humidity",
+      "room": "Flower 1",
+      "rule_id": "high_humidity",
+      "sensor": "Ambient Humidity",
+      "label": "High Humidity",
+      "description": "Elevated humidity increases botrytis risk in flower",
+      "severity": "warning",
+      "condition": "above",
+      "threshold": 70,
+      "status": "active",
+      "started": "2026-04-10T08:00:06.246941-04:00",
+      "last_seen": "2026-04-10T14:09:32.733209-04:00",
+      "current_value": 71.1,
+      "peak_value": 71.1,
+      "peak_time": "2026-04-10T14:09:32.733209-04:00",
+      "hours_active": 6.157357299166667,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 1,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-10T08:00:06.246941-04:00",
+          "value": 70.57
+        },
+        {
+          "time": "2026-04-10T14:09:32.731512-04:00",
+          "value": 71.1
+        }
+      ],
+      "duration_hours": 0.9997803238888889
+    }
+  ],
   "resolved": [
     {
       "key": "Flower 2::low_temp",
@@ -326,36 +360,6 @@
       ],
       "duration_hours": 59.92733482583333,
       "resolved_at": "2026-04-10T09:00:05.456076-04:00"
-    },
-    {
-      "key": "Flower 1::high_humidity",
-      "room": "Flower 1",
-      "rule_id": "high_humidity",
-      "sensor": "Ambient Humidity",
-      "label": "High Humidity",
-      "description": "Elevated humidity increases botrytis risk in flower",
-      "severity": "warning",
-      "condition": "above",
-      "threshold": 70,
-      "status": "resolved",
-      "started": "2026-04-10T08:00:06.246941-04:00",
-      "last_seen": "2026-04-10T08:00:06.248505-04:00",
-      "current_value": 70.57,
-      "peak_value": 70.57,
-      "peak_time": "2026-04-10T08:00:06.246941-04:00",
-      "hours_active": 4.366666666666667e-07,
-      "consecutive_hours": 1,
-      "escalated": false,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-10T08:00:06.246941-04:00",
-          "value": 70.57
-        }
-      ],
-      "resolved_at": "2026-04-10T09:00:05.456076-04:00",
-      "duration_hours": 0.9997803238888889
     }
   ],
   "cycle_log": {

@@ -3396,235 +3396,235 @@
     "Central Feed System": {
       "day": {
         "Solution Temperature": {
-          "avg": 70.736,
+          "avg": 70.857,
           "min": 64.7,
           "max": 75.1,
-          "count": 14
+          "count": 15
         },
         "Substrate EC": {
-          "avg": 0.07,
+          "avg": 0.183,
           "min": 0.07,
-          "max": 0.07,
-          "count": 14
+          "max": 1.76,
+          "count": 15
         },
         "Solution pH": {
-          "avg": 6.39,
-          "min": 5.7,
+          "avg": 6.345,
+          "min": 5.0,
           "max": 7.1,
-          "count": 14
+          "count": 15
         },
         "Solution TDS": {
-          "avg": 771.929,
+          "avg": 763.3,
           "min": 462.0,
           "max": 948.0,
-          "count": 14
+          "count": 15
         },
         "Solution Float": {
-          "avg": 75.104,
+          "avg": 72.487,
           "min": 24.1,
           "max": 104.6,
-          "count": 14
+          "count": 15
         },
         "None": {
-          "avg": 0.0,
+          "avg": 0.333,
           "min": 0.0,
-          "max": 0.0,
-          "count": 14
+          "max": 5.0,
+          "count": 15
         }
       },
       "night": {},
       "all": {
         "Solution Temperature": {
-          "avg": 70.736,
+          "avg": 70.857,
           "min": 64.7,
           "max": 75.1,
-          "count": 14
+          "count": 15
         },
         "Substrate EC": {
-          "avg": 0.07,
+          "avg": 0.183,
           "min": 0.07,
-          "max": 0.07,
-          "count": 14
+          "max": 1.76,
+          "count": 15
         },
         "Solution pH": {
-          "avg": 6.39,
-          "min": 5.7,
+          "avg": 6.345,
+          "min": 5.0,
           "max": 7.1,
-          "count": 14
+          "count": 15
         },
         "Solution TDS": {
-          "avg": 771.929,
+          "avg": 763.3,
           "min": 462.0,
           "max": 948.0,
-          "count": 14
+          "count": 15
         },
         "Solution Float": {
-          "avg": 75.104,
+          "avg": 72.487,
           "min": 24.1,
           "max": 104.6,
-          "count": 14
+          "count": 15
         },
         "None": {
-          "avg": 0.0,
+          "avg": 0.333,
           "min": 0.0,
-          "max": 0.0,
-          "count": 14
+          "max": 5.0,
+          "count": 15
         }
       }
     },
     "Cure Room": {
       "day": {
         "Ambient CO2": {
-          "avg": 930.786,
+          "avg": 937.867,
           "min": 860.0,
-          "max": 1021.0,
-          "count": 14
+          "max": 1037.0,
+          "count": 15
         },
         "Vapor Pressure Deficit": {
-          "avg": 0.643,
+          "avg": 0.647,
           "min": 0.6,
           "max": 0.7,
-          "count": 14
+          "count": 15
         },
         "Ambient Temperature": {
-          "avg": 61.121,
+          "avg": 61.087,
           "min": 60.0,
           "max": 62.2,
-          "count": 14
+          "count": 15
         },
         "Ambient Humidity": {
-          "avg": 64.65,
+          "avg": 64.373,
           "min": 58.9,
           "max": 68.1,
-          "count": 14
+          "count": 15
         }
       },
       "night": {},
       "all": {
         "Ambient CO2": {
-          "avg": 930.786,
+          "avg": 937.867,
           "min": 860.0,
-          "max": 1021.0,
-          "count": 14
+          "max": 1037.0,
+          "count": 15
         },
         "Vapor Pressure Deficit": {
-          "avg": 0.643,
+          "avg": 0.647,
           "min": 0.6,
           "max": 0.7,
-          "count": 14
+          "count": 15
         },
         "Ambient Temperature": {
-          "avg": 61.121,
+          "avg": 61.087,
           "min": 60.0,
           "max": 62.2,
-          "count": 14
+          "count": 15
         },
         "Ambient Humidity": {
-          "avg": 64.65,
+          "avg": 64.373,
           "min": 58.9,
           "max": 68.1,
-          "count": 14
+          "count": 15
         }
       }
     },
     "Dry Room": {
       "day": {
         "Vapor Pressure Deficit": {
-          "avg": 1.072,
-          "min": 1.0,
+          "avg": 1.047,
+          "min": 0.7,
           "max": 1.2,
-          "count": 14
+          "count": 15
         },
         "Ambient Temperature": {
-          "avg": 68.341,
-          "min": 67.6,
+          "avg": 67.751,
+          "min": 59.1,
           "max": 69.3,
-          "count": 14
+          "count": 15
         },
         "Ambient Humidity": {
-          "avg": 54.774,
+          "avg": 55.129,
           "min": 52.2,
-          "max": 56.8,
-          "count": 14
+          "max": 60.3,
+          "count": 15
         },
         "Ambient CO2": {
-          "avg": 651.094,
+          "avg": 656.932,
           "min": 593.0,
-          "max": 718.0,
-          "count": 14
+          "max": 753.0,
+          "count": 15
         }
       },
       "night": {},
       "all": {
         "Vapor Pressure Deficit": {
-          "avg": 1.072,
-          "min": 1.0,
+          "avg": 1.047,
+          "min": 0.7,
           "max": 1.2,
-          "count": 14
+          "count": 15
         },
         "Ambient Temperature": {
-          "avg": 68.341,
-          "min": 67.6,
+          "avg": 67.751,
+          "min": 59.1,
           "max": 69.3,
-          "count": 14
+          "count": 15
         },
         "Ambient Humidity": {
-          "avg": 54.774,
+          "avg": 55.129,
           "min": 52.2,
-          "max": 56.8,
-          "count": 14
+          "max": 60.3,
+          "count": 15
         },
         "Ambient CO2": {
-          "avg": 651.094,
+          "avg": 656.932,
           "min": 593.0,
-          "max": 718.0,
-          "count": 14
+          "max": 753.0,
+          "count": 15
         }
       }
     },
     "Flower 1": {
       "day": {
         "Ambient Humidity": {
-          "avg": 68.161,
+          "avg": 68.529,
           "min": 50.2,
           "max": 80.5,
-          "count": 7
+          "count": 8
         },
         "Vapor Pressure Deficit": {
-          "avg": 1.18,
+          "avg": 1.17,
           "min": 0.6,
           "max": 2.2,
-          "count": 7
+          "count": 8
         },
         "Ambient Temperature": {
-          "avg": 81.449,
+          "avg": 81.496,
           "min": 75.6,
           "max": 86.3,
-          "count": 7
+          "count": 8
         },
         "Ambient CO2": {
-          "avg": 1138.094,
+          "avg": 1145.082,
           "min": 820.0,
           "max": 1222.0,
-          "count": 7
+          "count": 8
         },
         "Substrate EC": {
-          "avg": 3.151,
+          "avg": 3.144,
           "min": 2.31,
           "max": 4.47,
-          "count": 7
+          "count": 8
         },
         "Substrate VWC": {
-          "avg": 39.354,
+          "avg": 40.206,
           "min": 12.3,
           "max": 54.7,
-          "count": 7
+          "count": 8
         },
         "Substrate Temperature": {
-          "avg": 81.289,
+          "avg": 81.34,
           "min": 77.0,
           "max": 86.7,
-          "count": 7
+          "count": 8
         }
       },
       "night": {
@@ -3673,62 +3673,62 @@
       },
       "all": {
         "Ambient Humidity": {
-          "avg": 66.479,
+          "avg": 66.787,
           "min": 48.9,
           "max": 80.5,
-          "count": 14
+          "count": 15
         },
         "Vapor Pressure Deficit": {
-          "avg": 1.264,
+          "avg": 1.253,
           "min": 0.6,
           "max": 2.2,
-          "count": 14
+          "count": 15
         },
         "Ambient Temperature": {
-          "avg": 80.921,
+          "avg": 80.982,
           "min": 75.0,
           "max": 86.6,
-          "count": 14
+          "count": 15
         },
         "Ambient CO2": {
-          "avg": 988.689,
+          "avg": 1002.377,
           "min": 806.0,
           "max": 1222.0,
-          "count": 14
+          "count": 15
         },
         "Substrate EC": {
-          "avg": 3.109,
+          "avg": 3.107,
           "min": 2.3,
           "max": 4.47,
-          "count": 14
+          "count": 15
         },
         "Substrate VWC": {
-          "avg": 32.277,
+          "avg": 33.203,
           "min": 12.3,
           "max": 54.7,
-          "count": 14
+          "count": 15
         },
         "Substrate Temperature": {
-          "avg": 80.897,
+          "avg": 80.951,
           "min": 76.8,
           "max": 86.9,
-          "count": 14
+          "count": 15
         }
       }
     },
     "Flower 2": {
       "day": {
         "Ambient Temperature": {
-          "avg": 70.879,
+          "avg": 71.118,
           "min": 62.1,
           "max": 74.8,
-          "count": 8
+          "count": 9
         },
         "Ambient Humidity": {
-          "avg": 53.331,
+          "avg": 53.428,
           "min": 47.7,
           "max": 58.1,
-          "count": 8
+          "count": 9
         },
         "Substrate Temperature": {
           "avg": 69.045,
@@ -3743,16 +3743,16 @@
           "count": 4
         },
         "Ambient CO2": {
-          "avg": 766.793,
+          "avg": 767.446,
           "min": 400.0,
           "max": 924.0,
-          "count": 8
+          "count": 9
         },
         "Vapor Pressure Deficit": {
-          "avg": 1.211,
+          "avg": 1.221,
           "min": 0.9,
           "max": 1.4,
-          "count": 8
+          "count": 9
         },
         "Substrate VWC": {
           "avg": 12.35,
@@ -3807,16 +3807,16 @@
       },
       "all": {
         "Ambient Temperature": {
-          "avg": 67.121,
+          "avg": 67.515,
           "min": 61.4,
           "max": 74.8,
-          "count": 14
+          "count": 15
         },
         "Ambient Humidity": {
-          "avg": 52.813,
+          "avg": 52.905,
           "min": 47.7,
           "max": 58.1,
-          "count": 14
+          "count": 15
         },
         "Substrate Temperature": {
           "avg": 65.39,
@@ -3831,16 +3831,16 @@
           "count": 10
         },
         "Ambient CO2": {
-          "avg": 787.524,
+          "avg": 786.533,
           "min": 400.0,
           "max": 924.0,
-          "count": 14
+          "count": 15
         },
         "Vapor Pressure Deficit": {
-          "avg": 1.083,
+          "avg": 1.097,
           "min": 0.8,
           "max": 1.4,
-          "count": 14
+          "count": 15
         },
         "Substrate VWC": {
           "avg": 11.737,
@@ -3853,46 +3853,46 @@
     "Mom": {
       "day": {
         "Substrate VWC": {
-          "avg": 43.704,
+          "avg": 45.557,
           "min": 15.6,
-          "max": 71.4,
-          "count": 8
+          "max": 73.4,
+          "count": 9
         },
         "Ambient Temperature": {
-          "avg": 77.981,
+          "avg": 77.861,
           "min": 76.4,
           "max": 79.3,
-          "count": 8
+          "count": 9
         },
         "Substrate Temperature": {
-          "avg": 77.692,
-          "min": 72.1,
+          "avg": 77.138,
+          "min": 70.7,
           "max": 81.3,
-          "count": 8
+          "count": 9
         },
         "Substrate EC": {
-          "avg": 3.873,
+          "avg": 3.792,
           "min": 2.32,
           "max": 7.58,
-          "count": 8
+          "count": 9
         },
         "Vapor Pressure Deficit": {
-          "avg": 1.006,
+          "avg": 0.994,
           "min": 0.9,
           "max": 1.2,
-          "count": 8
+          "count": 9
         },
         "Ambient Humidity": {
-          "avg": 69.569,
+          "avg": 69.956,
           "min": 64.4,
-          "max": 72.4,
-          "count": 8
+          "max": 74.2,
+          "count": 9
         },
         "Ambient CO2": {
-          "avg": 653.875,
+          "avg": 651.944,
           "min": 409.0,
           "max": 838.0,
-          "count": 8
+          "count": 9
         }
       },
       "night": {
@@ -3941,46 +3941,46 @@
       },
       "all": {
         "Substrate VWC": {
-          "avg": 37.381,
+          "avg": 38.914,
           "min": 15.6,
-          "max": 71.4,
-          "count": 14
+          "max": 73.4,
+          "count": 15
         },
         "Ambient Temperature": {
-          "avg": 77.454,
+          "avg": 77.417,
           "min": 76.2,
           "max": 79.3,
-          "count": 14
+          "count": 15
         },
         "Substrate Temperature": {
-          "avg": 77.83,
-          "min": 72.1,
+          "avg": 77.488,
+          "min": 70.7,
           "max": 81.3,
-          "count": 14
+          "count": 15
         },
         "Substrate EC": {
-          "avg": 4.081,
+          "avg": 4.019,
           "min": 2.32,
           "max": 7.84,
-          "count": 14
+          "count": 15
         },
         "Vapor Pressure Deficit": {
-          "avg": 0.946,
+          "avg": 0.943,
           "min": 0.8,
           "max": 1.2,
-          "count": 14
+          "count": 15
         },
         "Ambient Humidity": {
-          "avg": 70.739,
+          "avg": 70.893,
           "min": 64.4,
           "max": 75.5,
-          "count": 14
+          "count": 15
         },
         "Ambient CO2": {
-          "avg": 642.821,
+          "avg": 642.4,
           "min": 409.0,
           "max": 838.0,
-          "count": 14
+          "count": 15
         }
       }
     }
