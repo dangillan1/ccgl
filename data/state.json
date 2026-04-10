@@ -1,58 +1,59 @@
 {
-  "last_updated": "2026-04-10T13:00:05.000Z",
+  "last_updated": "2026-04-10T14:05:59.000Z",
   "current_readings": {
-    "timestamp": "2026-04-10T13:00:05.000Z",
+    "timestamp": "2026-04-10T14:05:59.000Z",
     "facility": {
-      "modulesOnline": 24,
-      "modulesOffline": 4,
+      "modulesOnline": 23,
+      "modulesOffline": 5,
       "activeAlerts": 0,
       "totalAlerts": 8,
       "offlineModules": [
         "Clone Nutrient Module",
         "Clone Room Environment Module ",
         "Environment Module 2",
+        "Flower 2 PIC ",
         "Veg Room PIC "
       ]
     },
     "rooms": {
       "Central Feed System": {
-        "Solution Temperature": {
-          "value": 72.95,
-          "min": 71.7,
-          "max": 74.2
+        "None": {
+          "value": 0.0,
+          "min": 0.0,
+          "max": 0.0
         },
         "Substrate EC": {
           "value": 0.07,
           "min": 0.07,
           "max": 0.07
         },
+        "Solution Temperature": {
+          "value": 73.3,
+          "min": 73.1,
+          "max": 73.5
+        },
         "Solution TDS": {
-          "value": 687.5,
-          "min": 493.0,
-          "max": 882.0
+          "value": 670.0,
+          "min": 477.0,
+          "max": 863.0
         },
         "Solution pH": {
-          "value": 6.42,
+          "value": 6.55,
           "min": 5.9,
-          "max": 6.9
+          "max": 7.1
         },
         "Solution Float": {
-          "value": 47.7,
-          "min": 31.6,
-          "max": 63.8
-        },
-        "None": {
-          "value": 0.0,
-          "min": 0.0,
-          "max": 0.0
+          "value": 29.9,
+          "min": 24.1,
+          "max": 35.7
         }
       },
       "Clone": {},
       "Cure Room": {
         "Ambient CO2": {
-          "value": 875.0,
-          "min": 875.0,
-          "max": 875.0
+          "value": 903.0,
+          "min": 903.0,
+          "max": 903.0
         },
         "Vapor Pressure Deficit": {
           "value": 0.7,
@@ -60,147 +61,132 @@
           "max": 0.7
         },
         "Ambient Temperature": {
+          "value": 60.3,
+          "min": 60.3,
+          "max": 60.3
+        },
+        "Ambient Humidity": {
           "value": 60.6,
           "min": 60.6,
           "max": 60.6
-        },
-        "Ambient Humidity": {
-          "value": 63.5,
-          "min": 63.5,
-          "max": 63.5
         }
       },
       "Dry Room": {
-        "Ambient Temperature": {
-          "value": 68.5,
-          "min": 68.4,
-          "max": 68.6
-        },
         "Vapor Pressure Deficit": {
-          "value": 1.1,
-          "min": 1.1,
+          "value": 1.07,
+          "min": 1.0,
           "max": 1.1
         },
+        "Ambient Temperature": {
+          "value": 68.5,
+          "min": 68.3,
+          "max": 68.7
+        },
         "Ambient Humidity": {
-          "value": 54.53,
-          "min": 54.5,
-          "max": 54.6
+          "value": 55.47,
+          "min": 55.4,
+          "max": 55.5
         },
         "Ambient CO2": {
-          "value": 636.33,
-          "min": 612.0,
-          "max": 658.0
+          "value": 642.33,
+          "min": 618.0,
+          "max": 666.0
         }
       },
       "Flower 1": {
         "Vapor Pressure Deficit": {
-          "value": 1.1,
-          "min": 1.0,
-          "max": 1.2
+          "value": 1.23,
+          "min": 1.2,
+          "max": 1.3
         },
         "Ambient Humidity": {
-          "value": 68.43,
-          "min": 68.0,
-          "max": 69.0
+          "value": 67.37,
+          "min": 65.7,
+          "max": 68.8
         },
         "Ambient CO2": {
-          "value": 1190.0,
-          "min": 1175.0,
-          "max": 1207.0
+          "value": 1196.33,
+          "min": 1181.0,
+          "max": 1208.0
         },
         "Ambient Temperature": {
-          "value": 80.0,
-          "min": 78.6,
-          "max": 81.4
-        },
-        "Substrate EC": {
-          "value": 3.72,
-          "min": 3.02,
-          "max": 4.47
+          "value": 83.27,
+          "min": 82.5,
+          "max": 84.0
         },
         "Substrate VWC": {
-          "value": 38.3,
-          "min": 29.8,
-          "max": 46.4
+          "value": 50.36,
+          "min": 45.9,
+          "max": 54.7
         },
         "Substrate Temperature": {
-          "value": 80.99,
-          "min": 79.5,
-          "max": 82.4
+          "value": 81.2,
+          "min": 79.2,
+          "max": 82.8
+        },
+        "Substrate EC": {
+          "value": 2.97,
+          "min": 2.57,
+          "max": 3.65
         }
       },
       "Flower 2": {
-        "Vapor Pressure Deficit": {
-          "value": 1.23,
-          "min": 1.1,
-          "max": 1.4
-        },
         "Ambient Temperature": {
-          "value": 72.4,
-          "min": 70.2,
-          "max": 74.6
+          "value": 71.53,
+          "min": 69.5,
+          "max": 73.6
         },
         "Ambient Humidity": {
-          "value": 54.97,
-          "min": 53.5,
-          "max": 56.4
+          "value": 55.17,
+          "min": 53.9,
+          "max": 56.3
+        },
+        "Vapor Pressure Deficit": {
+          "value": 1.2,
+          "min": 1.1,
+          "max": 1.3
         },
         "Ambient CO2": {
-          "value": 863.33,
-          "min": 830.0,
-          "max": 909.0
-        },
-        "Substrate EC": {
-          "value": 2.84,
-          "min": 1.61,
-          "max": 4.7
-        },
-        "Substrate Temperature": {
-          "value": 72.97,
-          "min": 71.4,
-          "max": 74.8
-        },
-        "Substrate VWC": {
-          "value": 17.36,
-          "min": 6.0,
-          "max": 38.7
+          "value": 872.67,
+          "min": 828.0,
+          "max": 924.0
         }
       },
       "Mom": {
-        "Ambient Temperature": {
-          "value": 78.8,
-          "min": 78.3,
-          "max": 79.3
-        },
         "Substrate Temperature": {
-          "value": 78.0,
-          "min": 75.4,
-          "max": 81.0
+          "value": 74.4,
+          "min": 72.1,
+          "max": 78.4
         },
         "Substrate EC": {
-          "value": 4.03,
-          "min": 2.38,
-          "max": 7.58
+          "value": 3.45,
+          "min": 3.16,
+          "max": 4.01
+        },
+        "Ambient Temperature": {
+          "value": 77.95,
+          "min": 77.7,
+          "max": 78.2
         },
         "Substrate VWC": {
-          "value": 32.42,
-          "min": 15.6,
-          "max": 69.1
+          "value": 60.5,
+          "min": 53.9,
+          "max": 70.9
         },
         "Ambient Humidity": {
-          "value": 70.35,
-          "min": 70.0,
-          "max": 70.7
+          "value": 69.15,
+          "min": 68.2,
+          "max": 70.1
+        },
+        "Ambient CO2": {
+          "value": 795.5,
+          "min": 753.0,
+          "max": 838.0
         },
         "Vapor Pressure Deficit": {
           "value": 1.0,
           "min": 1.0,
           "max": 1.0
-        },
-        "Ambient CO2": {
-          "value": 771.0,
-          "min": 721.0,
-          "max": 821.0
         }
       }
     }
