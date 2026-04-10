@@ -11,6 +11,12 @@ setup-repo.sh
 __pycache__/
 *.pyc
 
+# Backups (pre-redesign snapshots, etc.)
+backups/
+
+# Temp debug data files
+data/_*.json
+
 # Editor
 *.swp
 *.swo
@@ -18,3 +24,6 @@ __pycache__/
 
 # Secrets (GrowLink API bearer token, captured from browser localStorage)
 data/config.json
+
+# Logs (may contain credentials in error output)
+logs/
