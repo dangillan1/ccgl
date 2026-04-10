@@ -12,12 +12,12 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-07T21:04:27.050726-04:00",
-      "last_seen": "2026-04-10T07:00:36.733621-04:00",
-      "current_value": 9.79,
+      "last_seen": "2026-04-10T08:00:06.248505-04:00",
+      "current_value": 11.97,
       "peak_value": 9.79,
       "peak_time": "2026-04-10T07:00:36.731800-04:00",
-      "hours_active": 57.936023030277774,
-      "consecutive_hours": 14,
+      "hours_active": 58.92755494361111,
+      "consecutive_hours": 15,
       "escalated": true,
       "reopened_count": 1,
       "growth_stage": "Unknown",
@@ -113,9 +113,41 @@
         {
           "time": "2026-04-10T07:00:36.731800-04:00",
           "value": 9.79
+        },
+        {
+          "time": "2026-04-10T08:00:06.246941-04:00",
+          "value": 11.97
         }
       ],
       "duration_hours": 41.93775031388889
+    },
+    {
+      "key": "Flower 1::high_humidity",
+      "room": "Flower 1",
+      "rule_id": "high_humidity",
+      "sensor": "Ambient Humidity",
+      "label": "High Humidity",
+      "description": "Elevated humidity increases botrytis risk in flower",
+      "severity": "warning",
+      "condition": "above",
+      "threshold": 70,
+      "status": "active",
+      "started": "2026-04-10T08:00:06.246941-04:00",
+      "last_seen": "2026-04-10T08:00:06.248505-04:00",
+      "current_value": 70.57,
+      "peak_value": 70.57,
+      "peak_time": "2026-04-10T08:00:06.246941-04:00",
+      "hours_active": 4.366666666666667e-07,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-10T08:00:06.246941-04:00",
+          "value": 70.57
+        }
+      ]
     }
   ],
   "resolved": [
