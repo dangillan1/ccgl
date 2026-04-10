@@ -1,155 +1,5 @@
 {
-  "active": [
-    {
-      "key": "Flower 2::substrate_dry",
-      "room": "Flower 2",
-      "rule_id": "substrate_dry",
-      "sensor": "Substrate VWC",
-      "label": "Substrate Dry",
-      "description": "VWC below 15% \u2014 irrigation may be insufficient",
-      "severity": "warning",
-      "condition": "below",
-      "threshold": 15,
-      "status": "active",
-      "started": "2026-04-07T21:04:27.050726-04:00",
-      "last_seen": "2026-04-10T08:00:06.248505-04:00",
-      "current_value": 11.97,
-      "peak_value": 9.79,
-      "peak_time": "2026-04-10T07:00:36.731800-04:00",
-      "hours_active": 58.92755494361111,
-      "consecutive_hours": 15,
-      "escalated": true,
-      "reopened_count": 1,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-07T21:04:27.050726-04:00",
-          "value": 13.64
-        },
-        {
-          "time": "2026-04-07T23:41:38.715939-04:00",
-          "value": 12.81
-        },
-        {
-          "time": "2026-04-08T00:27:44.334811-04:00",
-          "value": 12.81
-        },
-        {
-          "time": "2026-04-08T01:03:23.890180-04:00",
-          "value": 12.45
-        },
-        {
-          "time": "2026-04-08T16:38:08.979996-04:00",
-          "value": 12.86
-        },
-        {
-          "time": "2026-04-09T08:01:04.799526-04:00",
-          "value": 12.86
-        },
-        {
-          "time": "2026-04-09T12:00:05.803942-04:00",
-          "value": 11.76
-        },
-        {
-          "time": "2026-04-09T13:04:49.481404-04:00",
-          "value": 11.76
-        },
-        {
-          "time": "2026-04-09T14:03:15.319008-04:00",
-          "value": 11.76
-        },
-        {
-          "time": "2026-04-09T18:00:02.357159-04:00",
-          "value": 14.59
-        },
-        {
-          "time": "2026-04-09T19:00:36.358010-04:00",
-          "value": 14.04
-        },
-        {
-          "time": "2026-04-09T20:00:08.379268-04:00",
-          "value": 13.68
-        },
-        {
-          "time": "2026-04-09T21:00:07.131419-04:00",
-          "value": 13.27
-        },
-        {
-          "time": "2026-04-09T22:00:10.152418-04:00",
-          "value": 12.82
-        },
-        {
-          "time": "2026-04-09T23:00:07.772874-04:00",
-          "value": 12.48
-        },
-        {
-          "time": "2026-04-10T00:00:03.260581-04:00",
-          "value": 12.14
-        },
-        {
-          "time": "2026-04-10T01:00:04.205031-04:00",
-          "value": 11.79
-        },
-        {
-          "time": "2026-04-10T02:00:06.334090-04:00",
-          "value": 11.51
-        },
-        {
-          "time": "2026-04-10T03:00:07.194635-04:00",
-          "value": 11.18
-        },
-        {
-          "time": "2026-04-10T04:00:38.973557-04:00",
-          "value": 10.84
-        },
-        {
-          "time": "2026-04-10T05:00:06.794055-04:00",
-          "value": 10.51
-        },
-        {
-          "time": "2026-04-10T06:00:16.202375-04:00",
-          "value": 10.28
-        },
-        {
-          "time": "2026-04-10T07:00:36.731800-04:00",
-          "value": 9.79
-        },
-        {
-          "time": "2026-04-10T08:00:06.246941-04:00",
-          "value": 11.97
-        }
-      ],
-      "duration_hours": 41.93775031388889
-    },
-    {
-      "key": "Flower 1::high_humidity",
-      "room": "Flower 1",
-      "rule_id": "high_humidity",
-      "sensor": "Ambient Humidity",
-      "label": "High Humidity",
-      "description": "Elevated humidity increases botrytis risk in flower",
-      "severity": "warning",
-      "condition": "above",
-      "threshold": 70,
-      "status": "active",
-      "started": "2026-04-10T08:00:06.246941-04:00",
-      "last_seen": "2026-04-10T08:00:06.248505-04:00",
-      "current_value": 70.57,
-      "peak_value": 70.57,
-      "peak_time": "2026-04-10T08:00:06.246941-04:00",
-      "hours_active": 4.366666666666667e-07,
-      "consecutive_hours": 1,
-      "escalated": false,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-10T08:00:06.246941-04:00",
-          "value": 70.57
-        }
-      ]
-    }
-  ],
+  "active": [],
   "resolved": [
     {
       "key": "Flower 2::low_temp",
@@ -354,6 +204,158 @@
       ],
       "resolved_at": "2026-04-10T07:00:36.731800-04:00",
       "duration_hours": 11.007875714444445
+    },
+    {
+      "key": "Flower 2::substrate_dry",
+      "room": "Flower 2",
+      "rule_id": "substrate_dry",
+      "sensor": "Substrate VWC",
+      "label": "Substrate Dry",
+      "description": "VWC below 15% \u2014 irrigation may be insufficient",
+      "severity": "warning",
+      "condition": "below",
+      "threshold": 15,
+      "status": "resolved",
+      "started": "2026-04-07T21:04:27.050726-04:00",
+      "last_seen": "2026-04-10T08:00:06.248505-04:00",
+      "current_value": 11.97,
+      "peak_value": 9.79,
+      "peak_time": "2026-04-10T07:00:36.731800-04:00",
+      "hours_active": 58.92755494361111,
+      "consecutive_hours": 15,
+      "escalated": true,
+      "reopened_count": 1,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-07T21:04:27.050726-04:00",
+          "value": 13.64
+        },
+        {
+          "time": "2026-04-07T23:41:38.715939-04:00",
+          "value": 12.81
+        },
+        {
+          "time": "2026-04-08T00:27:44.334811-04:00",
+          "value": 12.81
+        },
+        {
+          "time": "2026-04-08T01:03:23.890180-04:00",
+          "value": 12.45
+        },
+        {
+          "time": "2026-04-08T16:38:08.979996-04:00",
+          "value": 12.86
+        },
+        {
+          "time": "2026-04-09T08:01:04.799526-04:00",
+          "value": 12.86
+        },
+        {
+          "time": "2026-04-09T12:00:05.803942-04:00",
+          "value": 11.76
+        },
+        {
+          "time": "2026-04-09T13:04:49.481404-04:00",
+          "value": 11.76
+        },
+        {
+          "time": "2026-04-09T14:03:15.319008-04:00",
+          "value": 11.76
+        },
+        {
+          "time": "2026-04-09T18:00:02.357159-04:00",
+          "value": 14.59
+        },
+        {
+          "time": "2026-04-09T19:00:36.358010-04:00",
+          "value": 14.04
+        },
+        {
+          "time": "2026-04-09T20:00:08.379268-04:00",
+          "value": 13.68
+        },
+        {
+          "time": "2026-04-09T21:00:07.131419-04:00",
+          "value": 13.27
+        },
+        {
+          "time": "2026-04-09T22:00:10.152418-04:00",
+          "value": 12.82
+        },
+        {
+          "time": "2026-04-09T23:00:07.772874-04:00",
+          "value": 12.48
+        },
+        {
+          "time": "2026-04-10T00:00:03.260581-04:00",
+          "value": 12.14
+        },
+        {
+          "time": "2026-04-10T01:00:04.205031-04:00",
+          "value": 11.79
+        },
+        {
+          "time": "2026-04-10T02:00:06.334090-04:00",
+          "value": 11.51
+        },
+        {
+          "time": "2026-04-10T03:00:07.194635-04:00",
+          "value": 11.18
+        },
+        {
+          "time": "2026-04-10T04:00:38.973557-04:00",
+          "value": 10.84
+        },
+        {
+          "time": "2026-04-10T05:00:06.794055-04:00",
+          "value": 10.51
+        },
+        {
+          "time": "2026-04-10T06:00:16.202375-04:00",
+          "value": 10.28
+        },
+        {
+          "time": "2026-04-10T07:00:36.731800-04:00",
+          "value": 9.79
+        },
+        {
+          "time": "2026-04-10T08:00:06.246941-04:00",
+          "value": 11.97
+        }
+      ],
+      "duration_hours": 59.92733482583333,
+      "resolved_at": "2026-04-10T09:00:05.456076-04:00"
+    },
+    {
+      "key": "Flower 1::high_humidity",
+      "room": "Flower 1",
+      "rule_id": "high_humidity",
+      "sensor": "Ambient Humidity",
+      "label": "High Humidity",
+      "description": "Elevated humidity increases botrytis risk in flower",
+      "severity": "warning",
+      "condition": "above",
+      "threshold": 70,
+      "status": "resolved",
+      "started": "2026-04-10T08:00:06.246941-04:00",
+      "last_seen": "2026-04-10T08:00:06.248505-04:00",
+      "current_value": 70.57,
+      "peak_value": 70.57,
+      "peak_time": "2026-04-10T08:00:06.246941-04:00",
+      "hours_active": 4.366666666666667e-07,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-10T08:00:06.246941-04:00",
+          "value": 70.57
+        }
+      ],
+      "resolved_at": "2026-04-10T09:00:05.456076-04:00",
+      "duration_hours": 0.9997803238888889
     }
   ],
   "cycle_log": {
@@ -602,6 +604,17 @@
         "peak_time": "2026-04-09T22:00:10.152418-04:00",
         "reopened_count": 0,
         "sensor": "Ambient Temperature"
+      },
+      {
+        "label": "Substrate Dry",
+        "severity": "warning",
+        "started": "2026-04-07T21:04:27.050726-04:00",
+        "resolved": "2026-04-10T09:00:05.456076-04:00",
+        "duration_hours": 59.9,
+        "peak_value": 9.79,
+        "peak_time": "2026-04-10T07:00:36.731800-04:00",
+        "reopened_count": 1,
+        "sensor": "Substrate VWC"
       }
     ],
     "Flower 1::Unknown": [
@@ -624,6 +637,17 @@
         "duration_hours": 23.4,
         "peak_value": 79.57,
         "peak_time": "2026-04-09T08:12:00.653860-04:00",
+        "reopened_count": 0,
+        "sensor": "Ambient Humidity"
+      },
+      {
+        "label": "High Humidity",
+        "severity": "warning",
+        "started": "2026-04-10T08:00:06.246941-04:00",
+        "resolved": "2026-04-10T09:00:05.456076-04:00",
+        "duration_hours": 1.0,
+        "peak_value": 70.57,
+        "peak_time": "2026-04-10T08:00:06.246941-04:00",
         "reopened_count": 0,
         "sensor": "Ambient Humidity"
       }
