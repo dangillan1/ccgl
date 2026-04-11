@@ -33,6 +33,7 @@ LOGO_PATH = BASE_DIR / "data" / "logo_base64.txt"
 WORDMARK_PATH = BASE_DIR / "data" / "wordmark_base64.txt"
 LOGO_SVG_PATH = BASE_DIR / "data" / "logo_svg_b64.txt"
 WORDMARK_SVG_PATH = BASE_DIR / "data" / "wordmark_svg_b64.txt"
+FAVICON_PATH = BASE_DIR / "data" / "favicon_b64.txt"
 OUTPUT_PATH = BASE_DIR / "CCGL-Hourly-Report-Latest.html"
 ARCHIVE_DIR = BASE_DIR / "reports"
 
@@ -1473,6 +1474,7 @@ def main():
     wordmark = load_text(WORDMARK_PATH)
     logo_svg = load_text(LOGO_SVG_PATH)
     wordmark_svg = load_text(WORDMARK_SVG_PATH)
+    favicon_b64 = load_text(FAVICON_PATH)
 
     print("Loading template...")
     with open(TEMPLATE_PATH) as f:
@@ -1504,6 +1506,7 @@ def main():
     replacements = {
         "{{LOGO_DATA_URI}}": logo,
         "{{WORDMARK_DATA_URI}}": wordmark,
+        "{{FAVICON_B64}}": favicon_b64,
         "{{LOGO_SVG_URI}}": logo_svg,
         "{{WORDMARK_SVG_URI}}": wordmark_svg,
         "{{HEADER_GROWTH_STAGES}}": header_stages,
