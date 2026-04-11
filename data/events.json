@@ -12,12 +12,12 @@
       "threshold": 65,
       "status": "active",
       "started": "2026-04-10T20:13:21.876070-04:00",
-      "last_seen": "2026-04-11T01:00:07.790356-04:00",
-      "current_value": 62.4,
+      "last_seen": "2026-04-11T02:00:08.055090-04:00",
+      "current_value": 62.7,
       "peak_value": 61.2,
       "peak_time": "2026-04-10T23:00:10.878771-04:00",
-      "hours_active": 4.779420640555555,
-      "consecutive_hours": 6,
+      "hours_active": 5.779494179722223,
+      "consecutive_hours": 7,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -45,6 +45,10 @@
         {
           "time": "2026-04-11T01:00:07.788661-04:00",
           "value": 62.4
+        },
+        {
+          "time": "2026-04-11T02:00:08.053190-04:00",
+          "value": 62.7
         }
       ]
     },
@@ -60,12 +64,12 @@
       "threshold": 70,
       "status": "active",
       "started": "2026-04-10T21:14:37.680289-04:00",
-      "last_seen": "2026-04-11T01:00:07.790356-04:00",
-      "current_value": 77.43,
+      "last_seen": "2026-04-11T02:00:08.055090-04:00",
+      "current_value": 78.37,
       "peak_value": 81.27,
       "peak_time": "2026-04-10T21:14:37.680289-04:00",
-      "hours_active": 3.7583639094444443,
-      "consecutive_hours": 5,
+      "hours_active": 4.758437446944445,
+      "consecutive_hours": 6,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -89,8 +93,53 @@
         {
           "time": "2026-04-11T01:00:07.788661-04:00",
           "value": 77.43
+        },
+        {
+          "time": "2026-04-11T02:00:08.053190-04:00",
+          "value": 78.37
         }
       ]
+    },
+    {
+      "key": "Flower 1::low_vpd",
+      "room": "Flower 1",
+      "rule_id": "low_vpd",
+      "sensor": "Vapor Pressure Deficit",
+      "label": "Low VPD",
+      "description": "VPD below optimal \u2014 reduced transpiration, moisture risk",
+      "severity": "warning",
+      "condition": "below",
+      "threshold": 0.8,
+      "status": "active",
+      "started": "2026-04-10T21:14:37.680289-04:00",
+      "last_seen": "2026-04-11T02:00:08.055090-04:00",
+      "current_value": 0.73,
+      "peak_value": 0.57,
+      "peak_time": "2026-04-10T21:14:37.680289-04:00",
+      "hours_active": 4.758437449444444,
+      "consecutive_hours": 1,
+      "escalated": true,
+      "reopened_count": 1,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-10T21:14:37.680289-04:00",
+          "value": 0.57
+        },
+        {
+          "time": "2026-04-10T22:00:05.261366-04:00",
+          "value": 0.7
+        },
+        {
+          "time": "2026-04-10T23:00:10.878771-04:00",
+          "value": 0.7
+        },
+        {
+          "time": "2026-04-11T02:00:08.053190-04:00",
+          "value": 0.73
+        }
+      ],
+      "duration_hours": 2.7569098772222222
     }
   ],
   "resolved": [
@@ -411,44 +460,6 @@
       ],
       "duration_hours": 7.094166689444444,
       "resolved_at": "2026-04-10T15:05:45.246988-04:00"
-    },
-    {
-      "key": "Flower 1::low_vpd",
-      "room": "Flower 1",
-      "rule_id": "low_vpd",
-      "sensor": "Vapor Pressure Deficit",
-      "label": "Low VPD",
-      "description": "VPD below optimal \u2014 reduced transpiration, moisture risk",
-      "severity": "warning",
-      "condition": "below",
-      "threshold": 0.8,
-      "status": "resolved",
-      "started": "2026-04-10T21:14:37.680289-04:00",
-      "last_seen": "2026-04-10T23:00:10.880453-04:00",
-      "current_value": 0.7,
-      "peak_value": 0.57,
-      "peak_time": "2026-04-10T21:14:37.680289-04:00",
-      "hours_active": 1.7592222722222222,
-      "consecutive_hours": 3,
-      "escalated": true,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-10T21:14:37.680289-04:00",
-          "value": 0.57
-        },
-        {
-          "time": "2026-04-10T22:00:05.261366-04:00",
-          "value": 0.7
-        },
-        {
-          "time": "2026-04-10T23:00:10.878771-04:00",
-          "value": 0.7
-        }
-      ],
-      "resolved_at": "2026-04-11T00:00:02.555807-04:00",
-      "duration_hours": 2.7569098772222222
     }
   ],
   "cycle_log": {
