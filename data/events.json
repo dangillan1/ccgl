@@ -12,12 +12,12 @@
       "threshold": 65,
       "status": "active",
       "started": "2026-04-10T20:13:21.876070-04:00",
-      "last_seen": "2026-04-10T20:13:21.877670-04:00",
-      "current_value": 63.03,
-      "peak_value": 63.03,
-      "peak_time": "2026-04-10T20:13:21.876070-04:00",
-      "hours_active": 4.483333333333333e-07,
-      "consecutive_hours": 1,
+      "last_seen": "2026-04-10T21:14:37.681923-04:00",
+      "current_value": 61.5,
+      "peak_value": 61.5,
+      "peak_time": "2026-04-10T21:14:37.680289-04:00",
+      "hours_active": 1.0210571888888889,
+      "consecutive_hours": 2,
       "escalated": false,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -25,6 +25,66 @@
         {
           "time": "2026-04-10T20:13:21.876070-04:00",
           "value": 63.03
+        },
+        {
+          "time": "2026-04-10T21:14:37.680289-04:00",
+          "value": 61.5
+        }
+      ]
+    },
+    {
+      "key": "Flower 1::high_humidity",
+      "room": "Flower 1",
+      "rule_id": "high_humidity",
+      "sensor": "Ambient Humidity",
+      "label": "High Humidity",
+      "description": "Elevated humidity increases botrytis risk in flower",
+      "severity": "warning",
+      "condition": "above",
+      "threshold": 70,
+      "status": "active",
+      "started": "2026-04-10T21:14:37.680289-04:00",
+      "last_seen": "2026-04-10T21:14:37.681923-04:00",
+      "current_value": 81.27,
+      "peak_value": 81.27,
+      "peak_time": "2026-04-10T21:14:37.680289-04:00",
+      "hours_active": 4.561111111111111e-07,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-10T21:14:37.680289-04:00",
+          "value": 81.27
+        }
+      ]
+    },
+    {
+      "key": "Flower 1::low_vpd",
+      "room": "Flower 1",
+      "rule_id": "low_vpd",
+      "sensor": "Vapor Pressure Deficit",
+      "label": "Low VPD",
+      "description": "VPD below optimal \u2014 reduced transpiration, moisture risk",
+      "severity": "warning",
+      "condition": "below",
+      "threshold": 0.8,
+      "status": "active",
+      "started": "2026-04-10T21:14:37.680289-04:00",
+      "last_seen": "2026-04-10T21:14:37.681923-04:00",
+      "current_value": 0.57,
+      "peak_value": 0.57,
+      "peak_time": "2026-04-10T21:14:37.680289-04:00",
+      "hours_active": 4.586111111111111e-07,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-10T21:14:37.680289-04:00",
+          "value": 0.57
         }
       ]
     }
