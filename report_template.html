@@ -2,7 +2,7 @@
 <html lang="en" class="auth-locked">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CCGL Growlink Data & Analytics</title>
     <link rel="icon" type="image/png" href="{{FAVICON_B64}}">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -339,7 +339,8 @@ details[open] summary{margin-bottom:12px}
 
 /* Responsive */
 @media(max-width:768px){
-html,body{overflow-x:hidden;max-width:100vw}
+html{width:100vw;max-width:100vw;overflow-x:hidden}
+body{width:100vw;max-width:100vw;overflow-x:hidden;-webkit-overflow-scrolling:touch}
 /* Mobile header bar with logo + hamburger */
 .mobile-header{display:flex;align-items:center;justify-content:flex-start;gap:14px;position:fixed;top:0;left:0;right:0;height:72px;background:#071318;border-bottom:1px solid #1a3050;padding:0 20px;z-index:1001}
 .mobile-brand{display:flex;align-items:center;gap:10px}
@@ -607,11 +608,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const authError = document.getElementById('authError');
     function hashStr(s) { let h=0; for(let i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;} return Math.abs(h); }
     function unlockPage() {
+        var vp=document.querySelector('meta[name="viewport"]');
+        if(vp) vp.setAttribute('content','width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no');
         document.documentElement.classList.remove('auth-locked');
         document.body.classList.remove('auth-locked');
         window.scrollTo({top:0,left:0,behavior:'instant'});
-        setTimeout(()=>window.scrollTo({top:0,left:0,behavior:'instant'}),50);
-        setTimeout(()=>window.scrollTo({top:0,left:0,behavior:'instant'}),200);
+        setTimeout(()=>{
+            window.scrollTo({top:0,left:0,behavior:'instant'});
+            if(vp) vp.setAttribute('content','width=device-width,initial-scale=1.0,maximum-scale=5.0,user-scalable=yes');
+        },500);
     }
     function tryAuth() {
         if(hashStr(authInput.value.toLowerCase()) === AUTH_HASH) {
