@@ -6,6 +6,9 @@ Designed for Gmail rendering with inline styles and table-based layout.
 """
 
 import json
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -15,6 +18,7 @@ EVENTS_PATH = BASE_DIR / "data" / "events.json"
 DAILY_SUMMARY_PATH = BASE_DIR / "data" / "daily-summaries.json"
 LOGO_PATH = BASE_DIR / "data" / "logo_base64.txt"
 WORDMARK_PATH = BASE_DIR / "data" / "wordmark_base64.txt"
+CONFIG_PATH = BASE_DIR / "data" / "config.json"
 REPORT_URL = "https://dangillan1.github.io/ccgl/"
 LOGO_URL = "https://dangillan1.github.io/ccgl/logo.png"
 WORDMARK_URL = "https://dangillan1.github.io/ccgl/wordmark.png"
@@ -829,7 +833,41 @@ def generate_email_html():
     return subject, html
 
 
+def send_email(subject, html):
+    """Send email via Gmail SMTP to configured recipients."""
+    config = load_json(CONFIG_PATH)
+    smtp_user = config.get("smtp_user", "")
+    smtp_pass = config.get("smtp_app_password", "")
+    recipients = config.get("email_recipients", [])
+
+    if not smtp_user or not smtp_pass:
+        print("⚠ SMTP credentials missing in config.json — skipping send")
+        return False
+    if not recipients:
+        print("⚠ No email_recipients in config.json — skipping send")
+        return False
+
+    msg = MIMEMultipart("alternative")
+    msg["From"] = f"CCGL GrowLink <{smtp_user}>"
+    msg["To"] = ", ".join(recipients)
+    msg["Subject"] = subject
+    msg.attach(MIMEText(html, "html"))
+
+    try:
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()
+            server.login(smtp_user, smtp_pass)
+            server.sendmail(smtp_user, recipients, msg.as_string())
+        print(f"✅ Email sent to {len(recipients)} recipients: {', '.join(recipients)}")
+        return True
+    except Exception as e:
+        print(f"❌ SMTP send failed: {e}")
+        return False
+
+
 if __name__ == "__main__":
+    import sys
+
     subject, html = generate_email_html()
     print(f"Subject: {subject}")
     print(f"HTML length: {len(html):,} bytes")
@@ -839,3 +877,9 @@ if __name__ == "__main__":
     with open(preview_path, "w") as f:
         f.write(html)
     print(f"Preview saved: {preview_path}")
+
+    # Send unless --preview-only flag
+    if "--preview-only" not in sys.argv:
+        send_email(subject, html)
+    else:
+        print("Preview only — skipping send")
