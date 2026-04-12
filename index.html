@@ -337,151 +337,233 @@ details[open] summary{margin-bottom:12px}
 .mobile-header{display:none}
 .sidebar-overlay{display:none}
 
-/* Responsive */
+/* Responsive — Mobile-Optimized View */
 @media(max-width:768px){
 html{width:100vw;max-width:100vw;overflow-x:hidden}
-body{width:100vw;max-width:100vw;overflow-x:hidden;-webkit-overflow-scrolling:touch;font-size:15px}
+body{width:100vw;max-width:100vw;overflow-x:hidden;-webkit-overflow-scrolling:touch;font-size:16px;line-height:1.6}
 
-/* Mobile header bar with logo + hamburger */
-.mobile-header{display:flex;align-items:center;justify-content:flex-start;gap:14px;position:fixed;top:0;left:0;right:0;height:60px;background:#071318;border-bottom:1px solid #1a3050;padding:0 16px;z-index:1001}
+/* ── Mobile Header Bar ── */
+.mobile-header{display:flex;align-items:center;justify-content:flex-start;gap:14px;position:fixed;top:0;left:0;right:0;height:56px;background:#071318;border-bottom:1px solid #1a3050;padding:0 16px;z-index:1001}
 .mobile-brand{display:flex;align-items:center;gap:10px}
-.mobile-brand img.brand-logo{width:34px;height:34px;border-radius:8px;border:1px solid #1a305066}
-.mobile-brand img.brand-wordmark{width:110px;height:auto;opacity:0.9}
-.hamburger{background:none;border:none;cursor:pointer;padding:10px;display:flex;flex-direction:column;gap:5px}
+.mobile-brand img.brand-logo{width:32px;height:32px;border-radius:8px;border:1px solid #1a305066}
+.mobile-brand img.brand-wordmark{width:100px;height:auto;opacity:0.9}
+.hamburger{background:none;border:none;cursor:pointer;padding:12px;display:flex;flex-direction:column;gap:5px;min-width:44px;min-height:44px;align-items:center;justify-content:center}
 .hamburger span{display:block;width:22px;height:2px;background:#d0d8e0;border-radius:1px;transition:all .3s}
 .hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
 .hamburger.open span:nth-child(2){opacity:0}
 .hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
 
-/* Sidebar as slide-in overlay */
-.sidebar{position:fixed;left:-280px;top:60px;width:260px;height:calc(100vh - 60px);transition:left .3s ease;z-index:1002;border-right:1px solid #1a3050}
+/* ── Sidebar Slide-In ── */
+.sidebar{position:fixed;left:-280px;top:56px;width:270px;height:calc(100vh - 56px);transition:left .3s ease;z-index:1002;border-right:1px solid #1a3050;padding-top:8px}
 .sidebar.open{left:0}
-.sidebar-overlay{display:none;position:fixed;inset:0;top:60px;background:rgba(0,0,0,.6);z-index:1001}
+.sidebar-overlay{display:none;position:fixed;inset:0;top:56px;background:rgba(0,0,0,.6);z-index:1001}
 .sidebar-overlay.open{display:block}
-
-/* Desktop brand hidden on mobile */
 .sidebar-brand{display:none}
 
-/* Main content */
-.main-content{margin-left:0;padding:16px 14px 32px;padding-top:76px;max-width:100vw}
+/* ── Nav Links (touch-friendly 48px targets) ── */
+.nav-link{padding:14px 20px;font-size:16px;min-height:48px;display:flex;align-items:center}
 
-/* Section spacing */
-section{margin-bottom:32px}
-section h2{font-size:18px;margin-bottom:14px;padding-bottom:10px}
+/* ── Main Content ── */
+.main-content{margin-left:0;padding:16px 16px 40px;padding-top:72px;max-width:100vw}
 
-/* Report header */
-.report-header{flex-direction:column;align-items:flex-start;gap:12px;padding:16px 18px;margin-bottom:24px;border-radius:10px}
-.report-header::before{width:120px}
+/* ── Sections ── */
+section{margin-bottom:36px}
+section h2{font-size:17px;margin-bottom:16px;padding-bottom:10px;letter-spacing:.5px}
+section h2.h2-with-live{flex-direction:column;align-items:flex-start;gap:4px}
+.h2-live-meta{margin-top:2px}
+.h2-live-time{font-size:12px}
+
+/* ── Report Header ── */
+.report-header{flex-direction:column;align-items:flex-start;gap:14px;padding:18px 16px;margin-bottom:24px;border-radius:10px}
+.report-header::before{display:none}
 .hdr-left{width:100%}
-.hdr-title-row{flex-wrap:wrap;gap:6px 10px;margin-bottom:6px;align-items:baseline}
-.report-header h1{font-size:20px;letter-spacing:-.2px}
-.hdr-sub{font-size:11px;letter-spacing:1px}
-.header-time{font-size:11px;letter-spacing:.3px;gap:8px;flex-wrap:wrap}
-.live-dot{font-size:10px;padding:2px 8px 2px 6px;gap:4px}
-.live-dot::before{width:6px;height:6px}
-.hdr-stages{width:100%;gap:6px;justify-content:flex-start}
-.hdr-pill{padding:6px 10px;font-size:12px;gap:5px;flex:1 1 auto;justify-content:center;min-width:0}
-.hdr-pill .pill-tag{font-size:10px;padding:2px 6px}
-.health-number{font-size:28px}
-.health-label{font-size:11px}
+.hdr-title-row{flex-wrap:wrap;gap:6px 10px;margin-bottom:8px;align-items:baseline}
+.report-header h1{font-size:22px;letter-spacing:-.3px}
+.hdr-sub{font-size:12px;letter-spacing:.8px}
+.header-time{font-size:12px;letter-spacing:.3px;gap:8px;flex-wrap:wrap;margin-top:4px}
+.live-dot{font-size:11px;padding:3px 10px 3px 7px;gap:5px}
+.live-dot::before{width:7px;height:7px}
+.hdr-stages{width:100%;gap:8px;justify-content:flex-start;flex-wrap:wrap;margin-top:4px}
+.hdr-pill{padding:8px 12px;font-size:14px;gap:6px;flex:1 1 auto;justify-content:center;min-width:0}
+.hdr-pill .pill-tag{font-size:11px;padding:2px 8px}
+.health-number{font-size:32px}
+.health-label{font-size:12px}
 
-/* All grids single column */
-.card-grid,.dn-grid,.sys-grid,.exec-grid{grid-template-columns:1fr}
-.feed-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+/* ── Grids: All Single Column ── */
+.card-grid,.dn-grid,.sys-grid,.exec-grid,.evt-grid,.roomevt-grid{grid-template-columns:1fr}
+.feed-grid{grid-template-columns:repeat(2,1fr);gap:12px}
 
-/* Cards */
-.card{padding:16px;border-radius:10px;margin-bottom:12px}
-.card h3{font-size:16px;margin-bottom:12px}
+/* ── Cards ── */
+.card{padding:18px 16px;border-radius:12px;margin-bottom:14px}
+.card h3{font-size:17px;margin-bottom:14px;gap:10px;flex-wrap:wrap}
+.card-status-dot{width:14px;height:14px}
+.growth-stage{font-size:12px;padding:4px 10px}
+.health-bar{height:10px;margin:14px 0 18px}
 
-/* Alert cards */
-.alert-header{gap:8px;margin-bottom:10px}
-.alert-icon{font-size:22px}
-.alert-title{font-size:16px}
-.alert-description{font-size:14px;margin-bottom:10px;line-height:1.5}
-.alert-metrics{grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
-.alert-metric{padding:10px 8px}
-.alert-metric-value{font-size:16px}
-.alert-metric-label{font-size:10px}
-.alert-ai,.alert-action{padding:12px;font-size:13px;margin-top:8px;line-height:1.5}
+/* ── Metric Grid (the sensor readings in room cards) ── */
+.metric-grid{grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.metric-item{padding:14px 12px;border-radius:8px;border-left-width:4px}
+.metric-value{font-size:20px;font-weight:700;margin-bottom:4px;white-space:normal}
+.metric-label{font-size:12px;margin-bottom:4px;white-space:normal;letter-spacing:.3px}
+.metric-range{font-size:11px}
 
-/* Metric grid */
-.metric-grid{grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
-.metric-item{padding:12px}
-.metric-value{font-size:15px}
-.metric-label{font-size:11px}
+/* ── Alert Cards ── */
+.alert-card{padding:18px 16px;margin-bottom:14px;border-radius:12px;border-left-width:5px}
+.alert-header{gap:10px;margin-bottom:12px}
+.alert-icon{font-size:26px}
+.alert-title{font-size:17px}
+.alert-description{font-size:15px;margin-bottom:12px;line-height:1.6}
+.alert-metrics{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.alert-metric{padding:12px 10px;border-radius:8px}
+.alert-metric-value{font-size:20px}
+.alert-metric-label{font-size:11px}
+.alert-ai,.alert-action{padding:14px;font-size:14px;margin-top:10px;line-height:1.6;border-radius:8px}
 
-/* Exec grid — 2 col */
-.exec-grid{grid-template-columns:repeat(2,1fr);gap:10px}
-.exec-card{padding:16px;border-radius:10px}
-.exec-number{font-size:26px}
-.exec-label{font-size:11px}
+/* ── Badges ── */
+.badge{padding:4px 10px;font-size:11px;border-radius:4px}
 
-/* 24h Performance */
-.perf24-grid{grid-template-columns:1fr;gap:12px}
-.perf24-card{padding:16px;border-radius:10px}
-.perf24-header{margin-bottom:12px}
-.perf24-room{font-size:16px}
-.perf24-stage{font-size:11px;padding:3px 8px}
-.perf24-table thead th{font-size:10px;padding:4px 0 8px}
-.perf24-table tbody td{padding:8px 0;font-size:13px}
-.perf24-vpd{font-size:13px;padding:8px 12px;margin-top:10px;line-height:1.5}
-.perf24-events{font-size:13px;margin-top:10px;line-height:1.5}
-.perf24-assessment{font-size:13px;margin-top:10px;padding-top:10px;line-height:1.5}
+/* ── Exec Summary Grid ── */
+.exec-grid{grid-template-columns:1fr 1fr;gap:12px}
+.exec-card{padding:18px 14px;border-radius:12px}
+.exec-number{font-size:28px}
+.exec-label{font-size:12px;margin-top:2px}
 
-/* Feed cards */
-.feed-card{padding:14px;border-radius:10px}
-.feed-value{font-size:24px}
-.feed-label{font-size:11px}
-.feed-range{font-size:11px}
+/* ── 24h Performance Cards ── */
+.perf24-grid{grid-template-columns:1fr;gap:16px}
+.perf24-card{padding:18px 16px;border-radius:12px;border-top-width:4px}
+.perf24-header{margin-bottom:14px}
+.perf24-room{font-size:18px;gap:8px;flex-wrap:wrap}
+.perf24-stage{font-size:12px;padding:4px 10px}
+/* Table: keep 4 cols but size up */
+.perf24-table{margin-top:4px}
+.perf24-table thead th{font-size:11px;padding:6px 4px 10px;letter-spacing:.3px}
+.perf24-table tbody td{padding:10px 4px;font-size:14px}
+.perf24-table tbody td:first-child{font-size:13px}
+.perf24-trends{margin-top:14px;padding-top:12px}
+.perf24-trends-label{font-size:11px;margin-bottom:8px}
+.perf24-trend-row{font-size:14px;padding:6px 0;line-height:1.5;gap:10px}
+.perf24-trend-row .trend-icon{font-size:16px;width:20px}
+.perf24-trend-row .trend-text{padding:4px 0 4px 10px}
+.perf24-vpd{font-size:14px;padding:12px 14px;margin-top:12px;line-height:1.6;border-radius:8px}
+.perf24-events{font-size:14px;margin-top:12px;line-height:1.7}
+.perf24-events .evt-line{padding:4px 0}
+.perf24-assessment{font-size:14px;margin-top:14px;padding-top:12px;line-height:1.6}
 
-/* Insight cards */
-.insight-card{padding:16px;margin-bottom:12px;border-radius:10px}
-.insight-card h4{font-size:16px;margin-bottom:10px}
-.insight-card p{font-size:14px;margin-bottom:8px;line-height:1.5}
+/* ── Feed Cards ── */
+.feed-card{padding:16px 12px;border-radius:12px;border-top-width:4px}
+.feed-value{font-size:26px}
+.feed-label{font-size:12px;margin-bottom:4px}
+.feed-range{font-size:12px}
+.feed-trend{font-size:12px;margin-top:6px}
 
-/* Callout */
-.callout{padding:12px 14px;font-size:13px;margin:10px 0;line-height:1.5}
+/* ── Event Cards (room-grouped) ── */
+.roomevt-grid{gap:16px}
+.roomevt-card{padding:18px 16px;border-radius:12px;border-top-width:4px}
+.roomevt-head{margin-bottom:16px;padding-bottom:12px}
+.roomevt-name{font-size:18px;gap:8px;flex-wrap:wrap}
+.roomevt-stage{font-size:12px;padding:4px 10px}
+.roomevt-status{font-size:12px}
+.evt-chip{font-size:14px;border-radius:8px;margin-bottom:10px;border-left-width:4px}
+.evt-chip summary{padding:14px 14px;gap:10px;min-height:48px}
+.chip-dot{width:10px;height:10px}
+.chip-title{font-size:15px;gap:8px;flex-wrap:wrap}
+.chip-esc,.chip-reopen{font-size:11px;padding:3px 8px}
+.chip-meta{font-size:13px}
+.chip-when{font-size:12px}
+.chip-body{padding:14px}
+.chip-grid{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.chip-grid > div{padding:12px 10px;border-radius:6px}
+.chip-val{font-size:18px}
+.chip-lab{font-size:11px}
+.chip-desc{font-size:14px;line-height:1.6;margin-bottom:12px}
+.evt-chip.resolved{padding:14px;gap:10px;font-size:14px}
+.evt-history{font-size:13px;border-radius:8px;margin-top:10px}
+.evt-history summary{padding:12px 14px;font-size:14px}
+.history-row{font-size:13px;padding:8px 0;gap:8px;grid-template-columns:12px 1fr auto auto}
+.history-dot{width:10px;height:10px}
+.history-dur{font-size:12px}
+.history-date{font-size:12px}
+.evt-quiet{font-size:14px;padding:16px}
+.evt-empty{font-size:15px;padding:32px 16px}
 
-/* Priority cards */
-.priority-card{padding:14px 16px;margin-bottom:10px;gap:14px;border-radius:10px}
-.priority-num{font-size:18px;min-width:32px;height:32px}
-.priority-title{font-size:15px}
-.priority-desc{font-size:13px;line-height:1.5}
+/* ── Standalone Event Cards (if used) ── */
+.evt-grid{gap:14px}
+.evt-card{padding:18px 16px;border-radius:12px;border-left-width:5px}
+.evt-badge{font-size:11px;padding:3px 10px;margin-bottom:10px}
+.evt-title{font-size:16px;margin-bottom:6px}
+.evt-room{font-size:13px;margin-bottom:12px}
+.evt-desc{font-size:14px;line-height:1.6;margin-bottom:14px}
+.evt-meta{grid-template-columns:1fr 1fr;gap:10px}
+.evt-meta-item{padding:12px;border-radius:8px}
+.evt-meta-val{font-size:20px}
+.evt-meta-label{font-size:11px}
+.evt-sparkline{height:28px;margin-top:12px}
+.evt-cycle-header{font-size:15px;margin-bottom:12px}
+.evt-cycle-header .room-tag{font-size:12px;padding:3px 10px}
+.evt-log-row{padding:10px 14px;font-size:14px;gap:10px}
+.evt-log-dot{width:10px;height:10px}
+.evt-log-duration{font-size:13px}
+.evt-log-date{font-size:12px}
 
-/* Day/Night cards */
-.dn-grid{gap:12px}
-.dn-card{padding:16px;border-radius:10px}
-.dn-card h4{font-size:16px;margin-bottom:12px}
-.dn-row{font-size:13px;padding:8px 0}
-.dn-takeaway{padding:12px;font-size:13px;margin-top:12px;line-height:1.5}
+/* ── Insight Cards ── */
+.insight-card{padding:18px 16px;margin-bottom:14px;border-radius:12px;border-left-width:5px}
+.insight-card h4{font-size:17px;margin-bottom:12px}
+.insight-card p{font-size:15px;margin-bottom:10px;line-height:1.6}
 
-/* System health cards */
-.sys-grid{gap:12px}
-.sys-card{padding:16px;border-radius:10px}
-.sys-card h4{font-size:16px;margin-bottom:12px}
-.module-list li{font-size:13px;padding:8px 0}
+/* ── Callout Boxes ── */
+.callout{padding:14px 16px;font-size:15px;margin:12px 0;line-height:1.6;border-radius:8px;border-left-width:4px}
+.rec-box{padding:14px 16px;font-size:15px;line-height:1.6;border-radius:8px;margin-top:14px}
 
-/* Deep dive cards */
-.dive-card{padding:16px;margin-bottom:14px;border-radius:10px}
-.dive-card h3{font-size:17px;margin-bottom:14px}
-.dive-card p{font-size:14px;margin-bottom:10px;line-height:1.5}
-.dive-metrics{grid-template-columns:repeat(2,1fr);gap:10px}
-.dive-metric{padding:12px}
-.dive-metric-val{font-size:17px}
-.dive-metric-label{font-size:10px}
-.dive-checklist{font-size:13px;line-height:1.6}
+/* ── Priority Action Cards ── */
+.priority-card{padding:16px 18px;margin-bottom:12px;gap:14px;border-radius:12px}
+.priority-num{font-size:18px;min-width:36px;height:36px}
+.priority-title{font-size:16px;margin-bottom:6px}
+.priority-desc{font-size:14px;line-height:1.6}
+.priority-tag{font-size:11px;padding:3px 10px;margin-bottom:8px}
 
-/* Footer */
-.report-footer{margin-top:40px;padding:24px 14px}
-.footer-brand{font-size:14px}
-.footer-tagline{font-size:13px;margin-bottom:10px}
-.footer-meta{font-size:12px}
+/* ── Day/Night Analysis ── */
+.dn-grid{gap:14px}
+.dn-card{padding:18px 16px;border-radius:12px;border-top-width:4px}
+.dn-card h4{font-size:16px;margin-bottom:14px}
+.dn-stage{font-size:11px;padding:3px 8px}
+.dn-row{font-size:15px;padding:10px 0}
+.dn-label{font-size:14px}
+.dn-value{font-size:15px}
+.dn-takeaway{padding:14px;font-size:14px;margin-top:14px;line-height:1.6;border-radius:8px}
 
-/* Nav links in mobile sidebar */
-.nav-link{padding:14px 18px;font-size:16px}
+/* ── System Health ── */
+.sys-grid{gap:14px}
+.sys-card{padding:18px 16px;border-radius:12px;border-top-width:4px}
+.sys-card h4{font-size:16px;margin-bottom:14px}
+.module-list li{font-size:15px;padding:10px 0;gap:10px}
+.module-dot{width:8px;height:8px}
 
-/* Events */
-.evt-chip{font-size:13px}
+/* ── Deep Dive Cards ── */
+.dive-card{padding:18px 16px;margin-bottom:16px;border-radius:12px;border-left-width:5px}
+.dive-card h3{font-size:18px;margin-bottom:16px}
+.dive-card p{font-size:15px;margin-bottom:12px;line-height:1.6}
+.dive-section-title{font-size:14px;margin-bottom:10px}
+.dive-metrics{grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.dive-metric{padding:14px;border-radius:8px}
+.dive-metric-val{font-size:22px}
+.dive-metric-label{font-size:11px}
+.dive-checklist{font-size:14px;line-height:1.8;margin:10px 0 10px 20px}
+.dive-checklist li{margin-bottom:6px}
+
+/* ── Fertigation Tables ── */
+.sub-table{font-size:14px;margin-top:10px}
+.sub-table thead th{font-size:11px;padding:8px}
+.sub-table tbody td{padding:10px 8px}
+.sub-line{font-size:14px;padding:6px 0}
+
+/* ── Details/Summary (expandable sections) ── */
+summary{padding:14px 0;font-size:15px}
+
+/* ── Footer ── */
+.report-footer{margin-top:40px;padding:28px 16px}
+.footer-brand{font-size:15px}
+.footer-tagline{font-size:14px;margin-bottom:12px}
+.footer-meta{font-size:13px}
 }
 @media print{
 .sidebar{display:none}
@@ -536,7 +618,7 @@ body{background:white;color:black}
                     <h1>Growlink Data &amp; Analytics</h1>
                     <span class="hdr-sub">Cape Cod Grow Lab</span>
                 </div>
-                <div class="header-time"><span class="live-dot">Live</span>Data as of April 12, 2026 · 08:00 AM ET · Report generated April 12, 2026 · 08:00 AM</div>
+                <div class="header-time"><span class="live-dot">Live</span>Data as of April 12, 2026 · 08:00 AM ET · Report generated April 12, 2026 · 12:00 PM</div>
             </div>
             <div class="hdr-stages"><div class="hdr-pill f1"><span class="pill-tag">F1</span>Week 4 Flower</div><div class="hdr-pill f2"><span class="pill-tag">F2</span>Late Flower</div><div class="hdr-pill mom"><span class="pill-tag">MOM</span>Vegetative</div></div>
         </header>
@@ -1180,7 +1262,7 @@ body{background:white;color:black}
         <footer class="report-footer">
             <div class="footer-brand">Cape Cod Grow Lab</div>
             <div class="footer-tagline">Mindfully Cultivated Cannabis · Brewster, MA</div>
-            <div class="footer-meta">Generated by CCGL GrowLink Analyst · April 12, 2026 · 08:00 AM</div>
+            <div class="footer-meta">Generated by CCGL GrowLink Analyst · April 12, 2026 · 12:00 PM</div>
         </footer>
     </div>
 
