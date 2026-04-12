@@ -12,11 +12,11 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-11T21:00:09.829308-04:00",
-      "last_seen": "2026-04-12T11:55:07.452414+00:00",
-      "current_value": 5.12,
-      "peak_value": 5.12,
-      "peak_time": "2026-04-12T07:00:08.440825-04:00",
-      "hours_active": 10.916006425555556,
+      "last_seen": "2026-04-12T08:00:18.665539-04:00",
+      "current_value": 5.05,
+      "peak_value": 5.05,
+      "peak_time": "2026-04-12T08:00:18.663189-04:00",
+      "hours_active": 11.002454514722222,
       "consecutive_hours": 12,
       "escalated": true,
       "reopened_count": 0,
@@ -84,11 +84,11 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-12T00:00:09.119911-04:00",
-      "last_seen": "2026-04-12T11:55:07.452414+00:00",
-      "current_value": 5.12,
-      "peak_value": 5.12,
-      "peak_time": "2026-04-12T07:00:08.440825-04:00",
-      "hours_active": 7.916203483055555,
+      "last_seen": "2026-04-12T08:00:18.665539-04:00",
+      "current_value": 5.05,
+      "peak_value": 5.05,
+      "peak_time": "2026-04-12T08:00:18.663189-04:00",
+      "hours_active": 8.002651571388888,
       "consecutive_hours": 9,
       "escalated": true,
       "reopened_count": 0,
@@ -129,6 +129,34 @@
         {
           "time": "2026-04-12T11:44:10.754604+00:00",
           "value": 5.12
+        }
+      ]
+    },
+    {
+      "key": "Flower 1::high_humidity",
+      "room": "Flower 1",
+      "rule_id": "high_humidity",
+      "sensor": "Ambient Humidity",
+      "label": "High Humidity",
+      "description": "Elevated humidity increases botrytis risk in flower",
+      "severity": "warning",
+      "condition": "above",
+      "threshold": 70,
+      "status": "active",
+      "started": "2026-04-12T08:00:18.663189-04:00",
+      "last_seen": "2026-04-12T08:00:18.665539-04:00",
+      "current_value": 72.57,
+      "peak_value": 72.57,
+      "peak_time": "2026-04-12T08:00:18.663189-04:00",
+      "hours_active": 6.555555555555556e-07,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-12T08:00:18.663189-04:00",
+          "value": 72.57
         }
       ]
     }
