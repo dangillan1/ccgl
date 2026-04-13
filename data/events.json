@@ -12,12 +12,12 @@
       "threshold": 65,
       "status": "active",
       "started": "2026-04-12T20:00:08.095200-04:00",
-      "last_seen": "2026-04-13T04:00:05.904070-04:00",
-      "current_value": 62.0,
+      "last_seen": "2026-04-13T05:00:07.451299-04:00",
+      "current_value": 62.3,
       "peak_value": 61.13,
       "peak_time": "2026-04-13T02:00:09.791197-04:00",
-      "hours_active": 7.999391358611112,
-      "consecutive_hours": 9,
+      "hours_active": 8.999821144722222,
+      "consecutive_hours": 10,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -57,6 +57,10 @@
         {
           "time": "2026-04-13T04:00:05.902150-04:00",
           "value": 62.0
+        },
+        {
+          "time": "2026-04-13T05:00:07.449319-04:00",
+          "value": 62.3
         }
       ]
     },
@@ -72,12 +76,12 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-12T22:00:07.770780-04:00",
-      "last_seen": "2026-04-13T04:00:05.904070-04:00",
-      "current_value": 9.5,
-      "peak_value": 9.5,
-      "peak_time": "2026-04-13T04:00:05.902150-04:00",
-      "hours_active": 5.999481472777777,
-      "consecutive_hours": 7,
+      "last_seen": "2026-04-13T05:00:07.451299-04:00",
+      "current_value": 9.32,
+      "peak_value": 9.32,
+      "peak_time": "2026-04-13T05:00:07.449319-04:00",
+      "hours_active": 6.999911258888888,
+      "consecutive_hours": 8,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -109,57 +113,15 @@
         {
           "time": "2026-04-13T04:00:05.902150-04:00",
           "value": 9.5
+        },
+        {
+          "time": "2026-04-13T05:00:07.449319-04:00",
+          "value": 9.32
         }
       ]
     }
   ],
   "resolved": [
-    {
-      "key": "Flower 1::low_vpd",
-      "room": "Flower 1",
-      "rule_id": "low_vpd",
-      "sensor": "Vapor Pressure Deficit",
-      "label": "Low VPD",
-      "description": "VPD below optimal \u2014 reduced transpiration, moisture risk",
-      "severity": "warning",
-      "condition": "below",
-      "threshold": 0.8,
-      "status": "resolved",
-      "started": "2026-04-10T21:14:37.680289-04:00",
-      "last_seen": "2026-04-11T03:00:08.105215-04:00",
-      "current_value": 0.77,
-      "peak_value": 0.57,
-      "peak_time": "2026-04-10T21:14:37.680289-04:00",
-      "hours_active": 5.758451373333333,
-      "consecutive_hours": 2,
-      "escalated": true,
-      "reopened_count": 1,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-10T21:14:37.680289-04:00",
-          "value": 0.57
-        },
-        {
-          "time": "2026-04-10T22:00:05.261366-04:00",
-          "value": 0.7
-        },
-        {
-          "time": "2026-04-10T23:00:10.878771-04:00",
-          "value": 0.7
-        },
-        {
-          "time": "2026-04-11T02:00:08.053190-04:00",
-          "value": 0.73
-        },
-        {
-          "time": "2026-04-11T03:00:08.103188-04:00",
-          "value": 0.77
-        }
-      ],
-      "duration_hours": 6.758326374722222,
-      "resolved_at": "2026-04-11T04:00:07.655200-04:00"
-    },
     {
       "key": "Flower 2::low_temp",
       "room": "Flower 2",
