@@ -1,5 +1,62 @@
 {
-  "active": [],
+  "active": [
+    {
+      "key": "Flower 2::substrate_dry",
+      "room": "Flower 2",
+      "rule_id": "substrate_dry",
+      "sensor": "Substrate VWC",
+      "label": "Substrate Dry",
+      "description": "VWC below 15% \u2014 irrigation may be insufficient",
+      "severity": "warning",
+      "condition": "below",
+      "threshold": 15,
+      "status": "active",
+      "started": "2026-04-13T12:00:07.304717-04:00",
+      "last_seen": "2026-04-13T12:00:07.306859-04:00",
+      "current_value": 4.6,
+      "peak_value": 4.6,
+      "peak_time": "2026-04-13T12:00:07.304717-04:00",
+      "hours_active": 5.980555555555555e-07,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-13T12:00:07.304717-04:00",
+          "value": 4.6
+        }
+      ]
+    },
+    {
+      "key": "Flower 2::substrate_critical",
+      "room": "Flower 2",
+      "rule_id": "substrate_critical",
+      "sensor": "Substrate VWC",
+      "label": "Substrate Critically Dry",
+      "description": "VWC approaching permanent wilt point",
+      "severity": "critical",
+      "condition": "below",
+      "threshold": 8,
+      "status": "active",
+      "started": "2026-04-13T12:00:07.304717-04:00",
+      "last_seen": "2026-04-13T12:00:07.306859-04:00",
+      "current_value": 4.6,
+      "peak_value": 4.6,
+      "peak_time": "2026-04-13T12:00:07.304717-04:00",
+      "hours_active": 6.002777777777778e-07,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-13T12:00:07.304717-04:00",
+          "value": 4.6
+        }
+      ]
+    }
+  ],
   "resolved": [
     {
       "key": "Flower 2::low_temp",
