@@ -12,12 +12,12 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-13T19:00:07.313941-04:00",
-      "current_value": 5.17,
+      "last_seen": "2026-04-13T20:00:02.525743-04:00",
+      "current_value": 5.01,
       "peak_value": 4.6,
       "peak_time": "2026-04-13T12:00:07.304717-04:00",
-      "hours_active": 7.0000025655555564,
-      "consecutive_hours": 8,
+      "hours_active": 7.998672510277777,
+      "consecutive_hours": 9,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -53,6 +53,10 @@
         {
           "time": "2026-04-13T19:00:07.311762-04:00",
           "value": 5.17
+        },
+        {
+          "time": "2026-04-13T20:00:02.523507-04:00",
+          "value": 5.01
         }
       ]
     },
@@ -68,12 +72,12 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-13T19:00:07.313941-04:00",
-      "current_value": 5.17,
+      "last_seen": "2026-04-13T20:00:02.525743-04:00",
+      "current_value": 5.01,
       "peak_value": 4.6,
       "peak_time": "2026-04-13T12:00:07.304717-04:00",
-      "hours_active": 7.000002567777778,
-      "consecutive_hours": 8,
+      "hours_active": 7.9986725125,
+      "consecutive_hours": 9,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -109,6 +113,38 @@
         {
           "time": "2026-04-13T19:00:07.311762-04:00",
           "value": 5.17
+        },
+        {
+          "time": "2026-04-13T20:00:02.523507-04:00",
+          "value": 5.01
+        }
+      ]
+    },
+    {
+      "key": "Flower 2::low_temp",
+      "room": "Flower 2",
+      "rule_id": "low_temp",
+      "sensor": "Ambient Temperature",
+      "label": "Low Temperature",
+      "description": "Temperature below optimal \u2014 slowed metabolism",
+      "severity": "warning",
+      "condition": "below",
+      "threshold": 65,
+      "status": "active",
+      "started": "2026-04-13T20:00:02.523507-04:00",
+      "last_seen": "2026-04-13T20:00:02.525743-04:00",
+      "current_value": 62.7,
+      "peak_value": 62.7,
+      "peak_time": "2026-04-13T20:00:02.523507-04:00",
+      "hours_active": 6.283333333333334e-07,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-13T20:00:02.523507-04:00",
+          "value": 62.7
         }
       ]
     }
