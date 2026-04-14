@@ -12,12 +12,12 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-13T21:00:38.417038-04:00",
-      "current_value": 4.98,
+      "last_seen": "2026-04-13T22:00:28.761878-04:00",
+      "current_value": 4.82,
       "peak_value": 4.6,
       "peak_time": "2026-04-13T12:00:07.304717-04:00",
-      "hours_active": 9.008642319444444,
-      "consecutive_hours": 10,
+      "hours_active": 10.005960327499999,
+      "consecutive_hours": 11,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -61,6 +61,10 @@
         {
           "time": "2026-04-13T21:00:38.414544-04:00",
           "value": 4.98
+        },
+        {
+          "time": "2026-04-13T22:00:28.759680-04:00",
+          "value": 4.82
         }
       ]
     },
@@ -76,12 +80,12 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-13T21:00:38.417038-04:00",
-      "current_value": 4.98,
+      "last_seen": "2026-04-13T22:00:28.761878-04:00",
+      "current_value": 4.82,
       "peak_value": 4.6,
       "peak_time": "2026-04-13T12:00:07.304717-04:00",
-      "hours_active": 9.008642321111111,
-      "consecutive_hours": 10,
+      "hours_active": 10.005960329166667,
+      "consecutive_hours": 11,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -125,6 +129,10 @@
         {
           "time": "2026-04-13T21:00:38.414544-04:00",
           "value": 4.98
+        },
+        {
+          "time": "2026-04-13T22:00:28.759680-04:00",
+          "value": 4.82
         }
       ]
     },
@@ -140,13 +148,13 @@
       "threshold": 65,
       "status": "active",
       "started": "2026-04-13T20:00:02.523507-04:00",
-      "last_seen": "2026-04-13T21:00:38.417038-04:00",
-      "current_value": 61.5,
-      "peak_value": 61.5,
-      "peak_time": "2026-04-13T21:00:38.414544-04:00",
-      "hours_active": 1.0099704369444444,
-      "consecutive_hours": 2,
-      "escalated": false,
+      "last_seen": "2026-04-13T22:00:28.761878-04:00",
+      "current_value": 61.07,
+      "peak_value": 61.07,
+      "peak_time": "2026-04-13T22:00:28.759680-04:00",
+      "hours_active": 2.007288445,
+      "consecutive_hours": 3,
+      "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
@@ -157,6 +165,10 @@
         {
           "time": "2026-04-13T21:00:38.414544-04:00",
           "value": 61.5
+        },
+        {
+          "time": "2026-04-13T22:00:28.759680-04:00",
+          "value": 61.07
         }
       ]
     },
@@ -172,12 +184,12 @@
       "threshold": 70,
       "status": "active",
       "started": "2026-04-13T21:00:38.414544-04:00",
-      "last_seen": "2026-04-13T21:00:38.417038-04:00",
-      "current_value": 94.87,
+      "last_seen": "2026-04-13T22:00:28.761878-04:00",
+      "current_value": 70.7,
       "peak_value": 94.87,
       "peak_time": "2026-04-13T21:00:38.414544-04:00",
-      "hours_active": 6.952777777777777e-07,
-      "consecutive_hours": 1,
+      "hours_active": 0.9973187061111111,
+      "consecutive_hours": 2,
       "escalated": false,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -185,62 +197,10 @@
         {
           "time": "2026-04-13T21:00:38.414544-04:00",
           "value": 94.87
-        }
-      ]
-    },
-    {
-      "key": "Flower 1::extreme_humidity",
-      "room": "Flower 1",
-      "rule_id": "extreme_humidity",
-      "sensor": "Ambient Humidity",
-      "label": "Extreme Humidity Spike",
-      "description": "Dangerously high humidity \u2014 immediate botrytis risk",
-      "severity": "critical",
-      "condition": "above",
-      "threshold": 85,
-      "status": "active",
-      "started": "2026-04-13T21:00:38.414544-04:00",
-      "last_seen": "2026-04-13T21:00:38.417038-04:00",
-      "current_value": 94.87,
-      "peak_value": 94.87,
-      "peak_time": "2026-04-13T21:00:38.414544-04:00",
-      "hours_active": 6.975000000000001e-07,
-      "consecutive_hours": 1,
-      "escalated": false,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
+        },
         {
-          "time": "2026-04-13T21:00:38.414544-04:00",
-          "value": 94.87
-        }
-      ]
-    },
-    {
-      "key": "Flower 1::low_vpd",
-      "room": "Flower 1",
-      "rule_id": "low_vpd",
-      "sensor": "Vapor Pressure Deficit",
-      "label": "Low VPD",
-      "description": "VPD below optimal \u2014 reduced transpiration, moisture risk",
-      "severity": "warning",
-      "condition": "below",
-      "threshold": 0.8,
-      "status": "active",
-      "started": "2026-04-13T21:00:38.414544-04:00",
-      "last_seen": "2026-04-13T21:00:38.417038-04:00",
-      "current_value": 0.13,
-      "peak_value": 0.13,
-      "peak_time": "2026-04-13T21:00:38.414544-04:00",
-      "hours_active": 6.991666666666667e-07,
-      "consecutive_hours": 1,
-      "escalated": false,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-13T21:00:38.414544-04:00",
-          "value": 0.13
+          "time": "2026-04-13T22:00:28.759680-04:00",
+          "value": 70.7
         }
       ]
     }
@@ -725,6 +685,66 @@
       ],
       "resolved_at": "2026-04-13T10:00:03.440906-04:00",
       "duration_hours": 1.9982055505555556
+    },
+    {
+      "key": "Flower 1::extreme_humidity",
+      "room": "Flower 1",
+      "rule_id": "extreme_humidity",
+      "sensor": "Ambient Humidity",
+      "label": "Extreme Humidity Spike",
+      "description": "Dangerously high humidity \u2014 immediate botrytis risk",
+      "severity": "critical",
+      "condition": "above",
+      "threshold": 85,
+      "status": "resolved",
+      "started": "2026-04-13T21:00:38.414544-04:00",
+      "last_seen": "2026-04-13T21:00:38.417038-04:00",
+      "current_value": 94.87,
+      "peak_value": 94.87,
+      "peak_time": "2026-04-13T21:00:38.414544-04:00",
+      "hours_active": 6.975000000000001e-07,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-13T21:00:38.414544-04:00",
+          "value": 94.87
+        }
+      ],
+      "resolved_at": "2026-04-13T22:00:28.759680-04:00",
+      "duration_hours": 0.9973181094444444
+    },
+    {
+      "key": "Flower 1::low_vpd",
+      "room": "Flower 1",
+      "rule_id": "low_vpd",
+      "sensor": "Vapor Pressure Deficit",
+      "label": "Low VPD",
+      "description": "VPD below optimal \u2014 reduced transpiration, moisture risk",
+      "severity": "warning",
+      "condition": "below",
+      "threshold": 0.8,
+      "status": "resolved",
+      "started": "2026-04-13T21:00:38.414544-04:00",
+      "last_seen": "2026-04-13T21:00:38.417038-04:00",
+      "current_value": 0.13,
+      "peak_value": 0.13,
+      "peak_time": "2026-04-13T21:00:38.414544-04:00",
+      "hours_active": 6.991666666666667e-07,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-13T21:00:38.414544-04:00",
+          "value": 0.13
+        }
+      ],
+      "resolved_at": "2026-04-13T22:00:28.759680-04:00",
+      "duration_hours": 0.9973181108333333
     }
   ],
   "cycle_log": {
@@ -1173,6 +1193,28 @@
         "peak_time": "2026-04-13T07:00:06.818204-04:00",
         "reopened_count": 1,
         "sensor": "Ambient Humidity"
+      },
+      {
+        "label": "Extreme Humidity Spike",
+        "severity": "critical",
+        "started": "2026-04-13T21:00:38.414544-04:00",
+        "resolved": "2026-04-13T22:00:28.759680-04:00",
+        "duration_hours": 1.0,
+        "peak_value": 94.87,
+        "peak_time": "2026-04-13T21:00:38.414544-04:00",
+        "reopened_count": 0,
+        "sensor": "Ambient Humidity"
+      },
+      {
+        "label": "Low VPD",
+        "severity": "warning",
+        "started": "2026-04-13T21:00:38.414544-04:00",
+        "resolved": "2026-04-13T22:00:28.759680-04:00",
+        "duration_hours": 1.0,
+        "peak_value": 0.13,
+        "peak_time": "2026-04-13T21:00:38.414544-04:00",
+        "reopened_count": 0,
+        "sensor": "Vapor Pressure Deficit"
       }
     ],
     "Mom::Unknown": [
