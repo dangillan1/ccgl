@@ -12,12 +12,12 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-15T19:00:03.706259-04:00",
-      "current_value": 10.04,
+      "last_seen": "2026-04-15T20:07:24.845827-04:00",
+      "current_value": 9.85,
       "peak_value": 3.9,
       "peak_time": "2026-04-14T07:00:18.658603-04:00",
-      "hours_active": 54.99900043166667,
-      "consecutive_hours": 8,
+      "hours_active": 56.12153920055555,
+      "consecutive_hours": 9,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
@@ -217,9 +217,41 @@
         {
           "time": "2026-04-15T19:00:03.703937-04:00",
           "value": 10.04
+        },
+        {
+          "time": "2026-04-15T20:07:24.843494-04:00",
+          "value": 9.85
         }
       ],
       "duration_hours": 44.99924074361111
+    },
+    {
+      "key": "Flower 2::low_temp",
+      "room": "Flower 2",
+      "rule_id": "low_temp",
+      "sensor": "Ambient Temperature",
+      "label": "Low Temperature",
+      "description": "Temperature below optimal \u2014 slowed metabolism",
+      "severity": "warning",
+      "condition": "below",
+      "threshold": 65,
+      "status": "active",
+      "started": "2026-04-15T20:07:24.843494-04:00",
+      "last_seen": "2026-04-15T20:07:24.845827-04:00",
+      "current_value": 62.9,
+      "peak_value": 62.9,
+      "peak_time": "2026-04-15T20:07:24.843494-04:00",
+      "hours_active": 6.544444444444444e-07,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-15T20:07:24.843494-04:00",
+          "value": 62.9
+        }
+      ]
     }
   ],
   "resolved": [
