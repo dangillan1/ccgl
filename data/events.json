@@ -12,12 +12,12 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-16T13:00:11.308314-04:00",
-      "current_value": 12.93,
+      "last_seen": "2026-04-16T14:00:07.899449-04:00",
+      "current_value": 12.84,
       "peak_value": 3.9,
       "peak_time": "2026-04-14T07:00:18.658603-04:00",
-      "hours_active": 73.00111211444444,
-      "consecutive_hours": 26,
+      "hours_active": 74.00016520888889,
+      "consecutive_hours": 27,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
@@ -289,9 +289,46 @@
         {
           "time": "2026-04-16T13:00:11.305458-04:00",
           "value": 12.93
+        },
+        {
+          "time": "2026-04-16T14:00:07.896644-04:00",
+          "value": 12.84
         }
       ],
       "duration_hours": 44.99924074361111
+    },
+    {
+      "key": "Flower 2::high_vpd",
+      "room": "Flower 2",
+      "rule_id": "high_vpd",
+      "sensor": "Vapor Pressure Deficit",
+      "label": "High VPD",
+      "description": "VPD elevated \u2014 potential plant stress",
+      "severity": "warning",
+      "condition": "above",
+      "threshold": 1.6,
+      "status": "active",
+      "started": "2026-04-16T08:00:07.700187-04:00",
+      "last_seen": "2026-04-16T14:00:07.899449-04:00",
+      "current_value": 1.8,
+      "peak_value": 1.9,
+      "peak_time": "2026-04-16T08:00:07.700187-04:00",
+      "hours_active": 6.0000553538888886,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 1,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-16T08:00:07.700187-04:00",
+          "value": 1.9
+        },
+        {
+          "time": "2026-04-16T14:00:07.896644-04:00",
+          "value": 1.8
+        }
+      ],
+      "duration_hours": 0.9996861347222222
     }
   ],
   "resolved": [
@@ -742,36 +779,6 @@
       ],
       "resolved_at": "2026-04-16T09:00:06.570212-04:00",
       "duration_hours": 0.9996861325
-    },
-    {
-      "key": "Flower 2::high_vpd",
-      "room": "Flower 2",
-      "rule_id": "high_vpd",
-      "sensor": "Vapor Pressure Deficit",
-      "label": "High VPD",
-      "description": "VPD elevated \u2014 potential plant stress",
-      "severity": "warning",
-      "condition": "above",
-      "threshold": 1.6,
-      "status": "resolved",
-      "started": "2026-04-16T08:00:07.700187-04:00",
-      "last_seen": "2026-04-16T08:00:07.702890-04:00",
-      "current_value": 1.9,
-      "peak_value": 1.9,
-      "peak_time": "2026-04-16T08:00:07.700187-04:00",
-      "hours_active": 7.566666666666666e-07,
-      "consecutive_hours": 1,
-      "escalated": false,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-16T08:00:07.700187-04:00",
-          "value": 1.9
-        }
-      ],
-      "resolved_at": "2026-04-16T09:00:06.570212-04:00",
-      "duration_hours": 0.9996861347222222
     }
   ],
   "cycle_log": {
