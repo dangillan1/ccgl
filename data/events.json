@@ -12,12 +12,12 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-16T14:00:07.899449-04:00",
-      "current_value": 12.84,
+      "last_seen": "2026-04-16T15:00:08.059678-04:00",
+      "current_value": 12.82,
       "peak_value": 3.9,
       "peak_time": "2026-04-14T07:00:18.658603-04:00",
-      "hours_active": 74.00016520888889,
-      "consecutive_hours": 27,
+      "hours_active": 75.00020972,
+      "consecutive_hours": 28,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
@@ -293,6 +293,10 @@
         {
           "time": "2026-04-16T14:00:07.896644-04:00",
           "value": 12.84
+        },
+        {
+          "time": "2026-04-16T15:00:08.050696-04:00",
+          "value": 12.82
         }
       ],
       "duration_hours": 44.99924074361111
@@ -309,12 +313,12 @@
       "threshold": 1.6,
       "status": "active",
       "started": "2026-04-16T08:00:07.700187-04:00",
-      "last_seen": "2026-04-16T14:00:07.899449-04:00",
+      "last_seen": "2026-04-16T15:00:08.059678-04:00",
       "current_value": 1.8,
       "peak_value": 1.9,
       "peak_time": "2026-04-16T08:00:07.700187-04:00",
-      "hours_active": 6.0000553538888886,
-      "consecutive_hours": 1,
+      "hours_active": 7.000099865277778,
+      "consecutive_hours": 2,
       "escalated": false,
       "reopened_count": 1,
       "growth_stage": "Unknown",
@@ -326,9 +330,41 @@
         {
           "time": "2026-04-16T14:00:07.896644-04:00",
           "value": 1.8
+        },
+        {
+          "time": "2026-04-16T15:00:08.050696-04:00",
+          "value": 1.8
         }
       ],
       "duration_hours": 0.9996861347222222
+    },
+    {
+      "key": "Flower 1::high_humidity",
+      "room": "Flower 1",
+      "rule_id": "high_humidity",
+      "sensor": "Ambient Humidity",
+      "label": "High Humidity",
+      "description": "Elevated humidity increases botrytis risk in flower",
+      "severity": "warning",
+      "condition": "above",
+      "threshold": 70,
+      "status": "active",
+      "started": "2026-04-16T15:00:08.050696-04:00",
+      "last_seen": "2026-04-16T15:00:08.059678-04:00",
+      "current_value": 71.0,
+      "peak_value": 71.0,
+      "peak_time": "2026-04-16T15:00:08.050696-04:00",
+      "hours_active": 2.498611111111111e-06,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-16T15:00:08.050696-04:00",
+          "value": 71.0
+        }
+      ]
     }
   ],
   "resolved": [
