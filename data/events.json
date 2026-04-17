@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-17T07:08:51.634480-04:00",
-      "current_value": 10.61,
+      "last_seen": "2026-04-17T08:00:04.155193-04:00",
+      "current_value": 10.53,
       "peak_value": 3.9,
       "peak_time": "2026-04-14T07:00:18.658603-04:00",
-      "hours_active": 91.14564715972222,
-      "consecutive_hours": 44,
+      "hours_active": 91.99912513805555,
+      "consecutive_hours": 45,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-14T01:00:08.776889-04:00",
-          "value": 4.46
-        },
         {
           "time": "2026-04-14T02:00:36.058610-04:00",
           "value": 4.46
@@ -309,79 +305,39 @@
         {
           "time": "2026-04-17T07:08:51.631886-04:00",
           "value": 10.61
+        },
+        {
+          "time": "2026-04-17T08:00:04.152469-04:00",
+          "value": 10.53
         }
       ],
       "duration_hours": 44.99924074361111
     },
     {
-      "key": "Flower 2::low_temp",
-      "room": "Flower 2",
-      "rule_id": "low_temp",
-      "sensor": "Ambient Temperature",
-      "label": "Low Temperature",
-      "description": "Temperature below optimal \u2014 slowed metabolism",
+      "key": "Flower 1::high_humidity",
+      "room": "Flower 1",
+      "rule_id": "high_humidity",
+      "sensor": "Ambient Humidity",
+      "label": "High Humidity",
+      "description": "Elevated humidity increases botrytis risk in flower",
       "severity": "warning",
-      "condition": "below",
-      "threshold": 65,
+      "condition": "above",
+      "threshold": 70,
       "status": "active",
-      "started": "2026-04-16T20:00:47.520004-04:00",
-      "last_seen": "2026-04-17T07:08:51.634480-04:00",
-      "current_value": 62.9,
-      "peak_value": 62.3,
-      "peak_time": "2026-04-17T05:00:09.470926-04:00",
-      "hours_active": 11.134476249444445,
-      "consecutive_hours": 12,
-      "escalated": true,
+      "started": "2026-04-17T08:00:04.152469-04:00",
+      "last_seen": "2026-04-17T08:00:04.155193-04:00",
+      "current_value": 71.63,
+      "peak_value": 71.63,
+      "peak_time": "2026-04-17T08:00:04.152469-04:00",
+      "hours_active": 7.591666666666667e-07,
+      "consecutive_hours": 1,
+      "escalated": false,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
         {
-          "time": "2026-04-16T20:00:47.520004-04:00",
-          "value": 63.17
-        },
-        {
-          "time": "2026-04-16T21:00:07.252211-04:00",
-          "value": 62.57
-        },
-        {
-          "time": "2026-04-16T22:00:05.744860-04:00",
-          "value": 62.77
-        },
-        {
-          "time": "2026-04-16T23:00:07.923916-04:00",
-          "value": 62.63
-        },
-        {
-          "time": "2026-04-17T00:00:07.248579-04:00",
-          "value": 62.73
-        },
-        {
-          "time": "2026-04-17T01:00:07.684267-04:00",
-          "value": 62.83
-        },
-        {
-          "time": "2026-04-17T02:00:08.186304-04:00",
-          "value": 63.1
-        },
-        {
-          "time": "2026-04-17T03:00:05.638461-04:00",
-          "value": 63.2
-        },
-        {
-          "time": "2026-04-17T04:00:09.528760-04:00",
-          "value": 62.5
-        },
-        {
-          "time": "2026-04-17T05:00:09.470926-04:00",
-          "value": 62.3
-        },
-        {
-          "time": "2026-04-17T06:00:05.626541-04:00",
-          "value": 62.9
-        },
-        {
-          "time": "2026-04-17T07:08:51.631886-04:00",
-          "value": 62.9
+          "time": "2026-04-17T08:00:04.152469-04:00",
+          "value": 71.63
         }
       ]
     }
@@ -680,6 +636,80 @@
       ],
       "duration_hours": 10.999665454722223,
       "resolved_at": "2026-04-16T19:00:06.495788-04:00"
+    },
+    {
+      "key": "Flower 2::low_temp",
+      "room": "Flower 2",
+      "rule_id": "low_temp",
+      "sensor": "Ambient Temperature",
+      "label": "Low Temperature",
+      "description": "Temperature below optimal \u2014 slowed metabolism",
+      "severity": "warning",
+      "condition": "below",
+      "threshold": 65,
+      "status": "resolved",
+      "started": "2026-04-16T20:00:47.520004-04:00",
+      "last_seen": "2026-04-17T07:08:51.634480-04:00",
+      "current_value": 62.9,
+      "peak_value": 62.3,
+      "peak_time": "2026-04-17T05:00:09.470926-04:00",
+      "hours_active": 11.134476249444445,
+      "consecutive_hours": 12,
+      "escalated": true,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-16T20:00:47.520004-04:00",
+          "value": 63.17
+        },
+        {
+          "time": "2026-04-16T21:00:07.252211-04:00",
+          "value": 62.57
+        },
+        {
+          "time": "2026-04-16T22:00:05.744860-04:00",
+          "value": 62.77
+        },
+        {
+          "time": "2026-04-16T23:00:07.923916-04:00",
+          "value": 62.63
+        },
+        {
+          "time": "2026-04-17T00:00:07.248579-04:00",
+          "value": 62.73
+        },
+        {
+          "time": "2026-04-17T01:00:07.684267-04:00",
+          "value": 62.83
+        },
+        {
+          "time": "2026-04-17T02:00:08.186304-04:00",
+          "value": 63.1
+        },
+        {
+          "time": "2026-04-17T03:00:05.638461-04:00",
+          "value": 63.2
+        },
+        {
+          "time": "2026-04-17T04:00:09.528760-04:00",
+          "value": 62.5
+        },
+        {
+          "time": "2026-04-17T05:00:09.470926-04:00",
+          "value": 62.3
+        },
+        {
+          "time": "2026-04-17T06:00:05.626541-04:00",
+          "value": 62.9
+        },
+        {
+          "time": "2026-04-17T07:08:51.631886-04:00",
+          "value": 62.9
+        }
+      ],
+      "resolved_at": "2026-04-17T08:00:04.152469-04:00",
+      "duration_hours": 11.987953479722222
     }
   ],
   "cycle_log": {
@@ -1093,6 +1123,17 @@
         "peak_time": "2026-04-16T08:00:07.700187-04:00",
         "reopened_count": 1,
         "sensor": "Vapor Pressure Deficit"
+      },
+      {
+        "label": "Low Temperature",
+        "severity": "warning",
+        "started": "2026-04-16T20:00:47.520004-04:00",
+        "resolved": "2026-04-17T08:00:04.152469-04:00",
+        "duration_hours": 12.0,
+        "peak_value": 62.3,
+        "peak_time": "2026-04-17T05:00:09.470926-04:00",
+        "reopened_count": 0,
+        "sensor": "Ambient Temperature"
       }
     ],
     "Flower 1::Unknown": [
