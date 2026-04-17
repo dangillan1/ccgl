@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-16T20:00:47.522978-04:00",
-      "current_value": 11.19,
+      "last_seen": "2026-04-16T21:00:07.254611-04:00",
+      "current_value": 11.16,
       "peak_value": 3.9,
       "peak_time": "2026-04-14T07:00:18.658603-04:00",
-      "hours_active": 80.01117174277778,
-      "consecutive_hours": 33,
+      "hours_active": 80.999986085,
+      "consecutive_hours": 34,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-13T14:00:06.711568-04:00",
-          "value": 5.79
-        },
         {
           "time": "2026-04-13T15:00:36.999770-04:00",
           "value": 5.79
@@ -309,6 +305,10 @@
         {
           "time": "2026-04-16T20:00:47.520004-04:00",
           "value": 11.19
+        },
+        {
+          "time": "2026-04-16T21:00:07.252211-04:00",
+          "value": 11.16
         }
       ],
       "duration_hours": 44.99924074361111
@@ -325,12 +325,12 @@
       "threshold": 65,
       "status": "active",
       "started": "2026-04-16T20:00:47.520004-04:00",
-      "last_seen": "2026-04-16T20:00:47.522978-04:00",
-      "current_value": 63.17,
-      "peak_value": 63.17,
-      "peak_time": "2026-04-16T20:00:47.520004-04:00",
-      "hours_active": 8.327777777777777e-07,
-      "consecutive_hours": 1,
+      "last_seen": "2026-04-16T21:00:07.254611-04:00",
+      "current_value": 62.57,
+      "peak_value": 62.57,
+      "peak_time": "2026-04-16T21:00:07.252211-04:00",
+      "hours_active": 0.9888151749999999,
+      "consecutive_hours": 2,
       "escalated": false,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -338,6 +338,10 @@
         {
           "time": "2026-04-16T20:00:47.520004-04:00",
           "value": 63.17
+        },
+        {
+          "time": "2026-04-16T21:00:07.252211-04:00",
+          "value": 62.57
         }
       ]
     }
