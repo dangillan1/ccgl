@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-19T13:00:06.106952-04:00",
-      "current_value": 6.52,
+      "last_seen": "2026-04-19T14:00:08.282594-04:00",
+      "current_value": 6.54,
       "peak_value": 3.9,
       "peak_time": "2026-04-14T07:00:18.658603-04:00",
-      "hours_active": 144.99966729583335,
-      "consecutive_hours": 98,
+      "hours_active": 146.00027163861114,
+      "consecutive_hours": 99,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-16T14:00:07.896644-04:00",
-          "value": 12.84
-        },
         {
           "time": "2026-04-16T15:00:08.050696-04:00",
           "value": 12.82
@@ -309,6 +305,10 @@
         {
           "time": "2026-04-19T13:00:06.103675-04:00",
           "value": 6.52
+        },
+        {
+          "time": "2026-04-19T14:00:08.278931-04:00",
+          "value": 6.54
         }
       ],
       "duration_hours": 44.99924074361111
@@ -325,12 +325,12 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-19T13:00:06.106952-04:00",
-      "current_value": 6.52,
+      "last_seen": "2026-04-19T14:00:08.282594-04:00",
+      "current_value": 6.54,
       "peak_value": 6.49,
       "peak_time": "2026-04-19T11:00:07.484536-04:00",
-      "hours_active": 45.999177169166664,
-      "consecutive_hours": 47,
+      "hours_active": 46.99978151194444,
+      "consecutive_hours": 48,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -522,6 +522,10 @@
         {
           "time": "2026-04-19T13:00:06.103675-04:00",
           "value": 6.52
+        },
+        {
+          "time": "2026-04-19T14:00:08.278931-04:00",
+          "value": 6.54
         }
       ]
     },
@@ -537,12 +541,12 @@
       "threshold": 0.8,
       "status": "active",
       "started": "2026-04-17T20:05:03.556710-04:00",
-      "last_seen": "2026-04-19T13:00:06.106952-04:00",
+      "last_seen": "2026-04-19T14:00:08.282594-04:00",
       "current_value": 0.7,
       "peak_value": 0.3,
       "peak_time": "2026-04-18T21:00:08.451954-04:00",
-      "hours_active": 40.91737507333333,
-      "consecutive_hours": 18,
+      "hours_active": 41.91797941583333,
+      "consecutive_hours": 19,
       "escalated": true,
       "reopened_count": 3,
       "growth_stage": "Unknown",
@@ -694,42 +698,13 @@
         {
           "time": "2026-04-19T13:00:06.103675-04:00",
           "value": 0.7
+        },
+        {
+          "time": "2026-04-19T14:00:08.278931-04:00",
+          "value": 0.7
         }
       ],
       "duration_hours": 22.917471110555557
-    },
-    {
-      "key": "Flower 1::high_humidity",
-      "room": "Flower 1",
-      "rule_id": "high_humidity",
-      "sensor": "Ambient Humidity",
-      "label": "High Humidity",
-      "description": "Elevated humidity increases botrytis risk in flower",
-      "severity": "warning",
-      "condition": "above",
-      "threshold": 70,
-      "status": "active",
-      "started": "2026-04-19T11:00:07.484536-04:00",
-      "last_seen": "2026-04-19T13:00:06.106952-04:00",
-      "current_value": 71.87,
-      "peak_value": 71.87,
-      "peak_time": "2026-04-19T13:00:06.106952-04:00",
-      "hours_active": 1.9996173411111111,
-      "consecutive_hours": 1,
-      "escalated": false,
-      "reopened_count": 1,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-19T11:00:07.484536-04:00",
-          "value": 70.7
-        },
-        {
-          "time": "2026-04-19T13:00:06.103675-04:00",
-          "value": 71.87
-        }
-      ],
-      "duration_hours": 1.0000756705555556
     }
   ],
   "resolved": [
@@ -1230,6 +1205,40 @@
       ],
       "resolved_at": "2026-04-19T11:00:07.484536-04:00",
       "duration_hours": 16.000286653333333
+    },
+    {
+      "key": "Flower 1::high_humidity",
+      "room": "Flower 1",
+      "rule_id": "high_humidity",
+      "sensor": "Ambient Humidity",
+      "label": "High Humidity",
+      "description": "Elevated humidity increases botrytis risk in flower",
+      "severity": "warning",
+      "condition": "above",
+      "threshold": 70,
+      "status": "resolved",
+      "started": "2026-04-19T11:00:07.484536-04:00",
+      "last_seen": "2026-04-19T13:00:06.106952-04:00",
+      "current_value": 71.87,
+      "peak_value": 71.87,
+      "peak_time": "2026-04-19T13:00:06.106952-04:00",
+      "hours_active": 1.9996173411111111,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 1,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-19T11:00:07.484536-04:00",
+          "value": 70.7
+        },
+        {
+          "time": "2026-04-19T13:00:06.103675-04:00",
+          "value": 71.87
+        }
+      ],
+      "duration_hours": 3.000220683055556,
+      "resolved_at": "2026-04-19T14:00:08.278931-04:00"
     }
   ],
   "cycle_log": {
@@ -2106,6 +2115,17 @@
         "peak_value": 70.7,
         "peak_time": "2026-04-19T11:00:07.484536-04:00",
         "reopened_count": 0,
+        "sensor": "Ambient Humidity"
+      },
+      {
+        "label": "High Humidity",
+        "severity": "warning",
+        "started": "2026-04-19T11:00:07.484536-04:00",
+        "resolved": "2026-04-19T14:00:08.278931-04:00",
+        "duration_hours": 3.0,
+        "peak_value": 71.87,
+        "peak_time": "2026-04-19T13:00:06.106952-04:00",
+        "reopened_count": 1,
         "sensor": "Ambient Humidity"
       }
     ],
