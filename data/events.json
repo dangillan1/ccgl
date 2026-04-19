@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-19T17:00:06.712999-04:00",
-      "current_value": 6.52,
+      "last_seen": "2026-04-19T18:00:07.173768-04:00",
+      "current_value": 6.54,
       "peak_value": 3.9,
       "peak_time": "2026-04-14T07:00:18.658603-04:00",
-      "hours_active": 148.9998356408333,
-      "consecutive_hours": 102,
+      "hours_active": 149.9999636302778,
+      "consecutive_hours": 103,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-16T18:00:01.378386-04:00",
-          "value": 11.25
-        },
         {
           "time": "2026-04-16T19:00:06.495788-04:00",
           "value": 11.18
@@ -309,6 +305,10 @@
         {
           "time": "2026-04-19T17:00:06.709493-04:00",
           "value": 6.52
+        },
+        {
+          "time": "2026-04-19T18:00:07.170749-04:00",
+          "value": 6.54
         }
       ],
       "duration_hours": 44.99924074361111
@@ -325,12 +325,12 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-19T17:00:06.712999-04:00",
-      "current_value": 6.52,
+      "last_seen": "2026-04-19T18:00:07.173768-04:00",
+      "current_value": 6.54,
       "peak_value": 6.49,
       "peak_time": "2026-04-19T11:00:07.484536-04:00",
-      "hours_active": 49.99934551416667,
-      "consecutive_hours": 51,
+      "hours_active": 50.999473503611114,
+      "consecutive_hours": 52,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -538,6 +538,10 @@
         {
           "time": "2026-04-19T17:00:06.709493-04:00",
           "value": 6.52
+        },
+        {
+          "time": "2026-04-19T18:00:07.170749-04:00",
+          "value": 6.54
         }
       ]
     },
@@ -553,12 +557,12 @@
       "threshold": 0.8,
       "status": "active",
       "started": "2026-04-17T20:05:03.556710-04:00",
-      "last_seen": "2026-04-19T17:00:06.712999-04:00",
-      "current_value": 0.7,
+      "last_seen": "2026-04-19T18:00:07.173768-04:00",
+      "current_value": 0.73,
       "peak_value": 0.3,
       "peak_time": "2026-04-18T21:00:08.451954-04:00",
-      "hours_active": 44.91754341777778,
-      "consecutive_hours": 22,
+      "hours_active": 45.917671407777775,
+      "consecutive_hours": 23,
       "escalated": true,
       "reopened_count": 3,
       "growth_stage": "Unknown",
@@ -726,70 +730,16 @@
         {
           "time": "2026-04-19T17:00:06.709493-04:00",
           "value": 0.7
+        },
+        {
+          "time": "2026-04-19T18:00:07.170749-04:00",
+          "value": 0.73
         }
       ],
       "duration_hours": 22.917471110555557
     }
   ],
   "resolved": [
-    {
-      "key": "Flower 2::high_vpd",
-      "room": "Flower 2",
-      "rule_id": "high_vpd",
-      "sensor": "Vapor Pressure Deficit",
-      "label": "High VPD",
-      "description": "VPD elevated \u2014 potential plant stress",
-      "severity": "warning",
-      "condition": "above",
-      "threshold": 1.6,
-      "status": "resolved",
-      "started": "2026-04-17T09:00:04.845329-04:00",
-      "last_seen": "2026-04-17T16:00:08.632568-04:00",
-      "current_value": 1.8,
-      "peak_value": 2.1,
-      "peak_time": "2026-04-17T14:00:06.701676-04:00",
-      "hours_active": 7.001052013611111,
-      "consecutive_hours": 8,
-      "escalated": true,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-17T09:00:04.845329-04:00",
-          "value": 1.8
-        },
-        {
-          "time": "2026-04-17T10:00:08.445767-04:00",
-          "value": 1.87
-        },
-        {
-          "time": "2026-04-17T11:00:07.939084-04:00",
-          "value": 2.03
-        },
-        {
-          "time": "2026-04-17T12:00:06.772594-04:00",
-          "value": 2.03
-        },
-        {
-          "time": "2026-04-17T13:00:06.679741-04:00",
-          "value": 2.0
-        },
-        {
-          "time": "2026-04-17T14:00:06.701676-04:00",
-          "value": 2.1
-        },
-        {
-          "time": "2026-04-17T15:00:09.069180-04:00",
-          "value": 2.1
-        },
-        {
-          "time": "2026-04-17T16:00:08.630067-04:00",
-          "value": 1.8
-        }
-      ],
-      "resolved_at": "2026-04-17T17:00:06.830964-04:00",
-      "duration_hours": 8.00055157861111
-    },
     {
       "key": "Flower 1::high_vpd",
       "room": "Flower 1",
