@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-19T08:00:06.316019-04:00",
-      "current_value": 6.54,
+      "last_seen": "2026-04-19T09:00:04.972471-04:00",
+      "current_value": 6.51,
       "peak_value": 3.9,
       "peak_time": "2026-04-14T07:00:18.658603-04:00",
-      "hours_active": 139.99972536694443,
-      "consecutive_hours": 93,
+      "hours_active": 140.99935216055556,
+      "consecutive_hours": 94,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-16T09:00:06.570212-04:00",
-          "value": 13.12
-        },
         {
           "time": "2026-04-16T10:00:07.933068-04:00",
           "value": 13.56
@@ -309,6 +305,10 @@
         {
           "time": "2026-04-19T08:00:06.313004-04:00",
           "value": 6.54
+        },
+        {
+          "time": "2026-04-19T09:00:04.968629-04:00",
+          "value": 6.51
         }
       ],
       "duration_hours": 44.99924074361111
@@ -325,12 +325,12 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-19T08:00:06.316019-04:00",
-      "current_value": 6.54,
-      "peak_value": 6.52,
-      "peak_time": "2026-04-18T09:00:15.538719-04:00",
-      "hours_active": 40.99923524138889,
-      "consecutive_hours": 42,
+      "last_seen": "2026-04-19T09:00:04.972471-04:00",
+      "current_value": 6.51,
+      "peak_value": 6.51,
+      "peak_time": "2026-04-19T09:00:04.968629-04:00",
+      "hours_active": 41.99886203388889,
+      "consecutive_hours": 43,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -502,6 +502,10 @@
         {
           "time": "2026-04-19T08:00:06.313004-04:00",
           "value": 6.54
+        },
+        {
+          "time": "2026-04-19T09:00:04.968629-04:00",
+          "value": 6.51
         }
       ]
     },
@@ -517,12 +521,12 @@
       "threshold": 65,
       "status": "active",
       "started": "2026-04-18T19:00:06.452649-04:00",
-      "last_seen": "2026-04-19T08:00:06.316019-04:00",
-      "current_value": 63.0,
+      "last_seen": "2026-04-19T09:00:04.972471-04:00",
+      "current_value": 64.03,
       "peak_value": 56.53,
       "peak_time": "2026-04-18T20:00:08.065703-04:00",
-      "hours_active": 12.999962058888888,
-      "consecutive_hours": 14,
+      "hours_active": 13.999588850277778,
+      "consecutive_hours": 15,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -582,6 +586,10 @@
         {
           "time": "2026-04-19T08:00:06.313004-04:00",
           "value": 63.0
+        },
+        {
+          "time": "2026-04-19T09:00:04.968629-04:00",
+          "value": 64.03
         }
       ]
     },
@@ -597,12 +605,12 @@
       "threshold": 0.8,
       "status": "active",
       "started": "2026-04-17T20:05:03.556710-04:00",
-      "last_seen": "2026-04-19T08:00:06.316019-04:00",
-      "current_value": 0.6,
+      "last_seen": "2026-04-19T09:00:04.972471-04:00",
+      "current_value": 0.63,
       "peak_value": 0.3,
       "peak_time": "2026-04-18T21:00:08.451954-04:00",
-      "hours_active": 35.917433144444445,
-      "consecutive_hours": 13,
+      "hours_active": 36.91705993777778,
+      "consecutive_hours": 14,
       "escalated": true,
       "reopened_count": 3,
       "growth_stage": "Unknown",
@@ -734,101 +742,13 @@
         {
           "time": "2026-04-19T08:00:06.313004-04:00",
           "value": 0.6
+        },
+        {
+          "time": "2026-04-19T09:00:04.968629-04:00",
+          "value": 0.63
         }
       ],
       "duration_hours": 22.917471110555557
-    },
-    {
-      "key": "Mom::substrate_dry",
-      "room": "Mom",
-      "rule_id": "substrate_dry",
-      "sensor": "Substrate VWC",
-      "label": "Substrate Dry",
-      "description": "VWC below 15% \u2014 irrigation may be insufficient",
-      "severity": "warning",
-      "condition": "below",
-      "threshold": 15,
-      "status": "active",
-      "started": "2026-04-18T23:00:10.965557-04:00",
-      "last_seen": "2026-04-19T08:00:06.316019-04:00",
-      "current_value": 7.8,
-      "peak_value": 7.8,
-      "peak_time": "2026-04-19T08:00:06.313004-04:00",
-      "hours_active": 8.998708468611111,
-      "consecutive_hours": 10,
-      "escalated": true,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-18T23:00:10.965557-04:00",
-          "value": 14.3
-        },
-        {
-          "time": "2026-04-19T00:00:02.735157-04:00",
-          "value": 11.92
-        },
-        {
-          "time": "2026-04-19T01:00:07.372120-04:00",
-          "value": 10.52
-        },
-        {
-          "time": "2026-04-19T02:00:07.955993-04:00",
-          "value": 9.62
-        },
-        {
-          "time": "2026-04-19T03:00:07.074924-04:00",
-          "value": 9.38
-        },
-        {
-          "time": "2026-04-19T04:00:07.219984-04:00",
-          "value": 8.9
-        },
-        {
-          "time": "2026-04-19T05:00:06.515559-04:00",
-          "value": 8.68
-        },
-        {
-          "time": "2026-04-19T06:00:07.519233-04:00",
-          "value": 8.22
-        },
-        {
-          "time": "2026-04-19T07:00:06.590867-04:00",
-          "value": 8.1
-        },
-        {
-          "time": "2026-04-19T08:00:06.313004-04:00",
-          "value": 7.8
-        }
-      ]
-    },
-    {
-      "key": "Mom::substrate_critical",
-      "room": "Mom",
-      "rule_id": "substrate_critical",
-      "sensor": "Substrate VWC",
-      "label": "Substrate Critically Dry",
-      "description": "VWC approaching permanent wilt point",
-      "severity": "critical",
-      "condition": "below",
-      "threshold": 8,
-      "status": "active",
-      "started": "2026-04-19T08:00:06.313004-04:00",
-      "last_seen": "2026-04-19T08:00:06.316019-04:00",
-      "current_value": 7.8,
-      "peak_value": 7.8,
-      "peak_time": "2026-04-19T08:00:06.313004-04:00",
-      "hours_active": 8.474999999999999e-07,
-      "consecutive_hours": 1,
-      "escalated": false,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-19T08:00:06.313004-04:00",
-          "value": 7.8
-        }
-      ]
     }
   ],
   "resolved": [
@@ -1177,6 +1097,102 @@
       ],
       "duration_hours": 8.0001208975,
       "resolved_at": "2026-04-19T02:00:07.955993-04:00"
+    },
+    {
+      "key": "Mom::substrate_dry",
+      "room": "Mom",
+      "rule_id": "substrate_dry",
+      "sensor": "Substrate VWC",
+      "label": "Substrate Dry",
+      "description": "VWC below 15% \u2014 irrigation may be insufficient",
+      "severity": "warning",
+      "condition": "below",
+      "threshold": 15,
+      "status": "resolved",
+      "started": "2026-04-18T23:00:10.965557-04:00",
+      "last_seen": "2026-04-19T08:00:06.316019-04:00",
+      "current_value": 7.8,
+      "peak_value": 7.8,
+      "peak_time": "2026-04-19T08:00:06.313004-04:00",
+      "hours_active": 8.998708468611111,
+      "consecutive_hours": 10,
+      "escalated": true,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-18T23:00:10.965557-04:00",
+          "value": 14.3
+        },
+        {
+          "time": "2026-04-19T00:00:02.735157-04:00",
+          "value": 11.92
+        },
+        {
+          "time": "2026-04-19T01:00:07.372120-04:00",
+          "value": 10.52
+        },
+        {
+          "time": "2026-04-19T02:00:07.955993-04:00",
+          "value": 9.62
+        },
+        {
+          "time": "2026-04-19T03:00:07.074924-04:00",
+          "value": 9.38
+        },
+        {
+          "time": "2026-04-19T04:00:07.219984-04:00",
+          "value": 8.9
+        },
+        {
+          "time": "2026-04-19T05:00:06.515559-04:00",
+          "value": 8.68
+        },
+        {
+          "time": "2026-04-19T06:00:07.519233-04:00",
+          "value": 8.22
+        },
+        {
+          "time": "2026-04-19T07:00:06.590867-04:00",
+          "value": 8.1
+        },
+        {
+          "time": "2026-04-19T08:00:06.313004-04:00",
+          "value": 7.8
+        }
+      ],
+      "resolved_at": "2026-04-19T09:00:04.968629-04:00",
+      "duration_hours": 9.998334215277778
+    },
+    {
+      "key": "Mom::substrate_critical",
+      "room": "Mom",
+      "rule_id": "substrate_critical",
+      "sensor": "Substrate VWC",
+      "label": "Substrate Critically Dry",
+      "description": "VWC approaching permanent wilt point",
+      "severity": "critical",
+      "condition": "below",
+      "threshold": 8,
+      "status": "resolved",
+      "started": "2026-04-19T08:00:06.313004-04:00",
+      "last_seen": "2026-04-19T08:00:06.316019-04:00",
+      "current_value": 7.8,
+      "peak_value": 7.8,
+      "peak_time": "2026-04-19T08:00:06.313004-04:00",
+      "hours_active": 8.474999999999999e-07,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-19T08:00:06.313004-04:00",
+          "value": 7.8
+        }
+      ],
+      "resolved_at": "2026-04-19T09:00:04.968629-04:00",
+      "duration_hours": 0.9996265927777778
     }
   ],
   "cycle_log": {
@@ -2076,6 +2092,28 @@
         "duration_hours": 1.9,
         "peak_value": 14.98,
         "peak_time": "2026-04-16T06:07:56.966461-04:00",
+        "reopened_count": 0,
+        "sensor": "Substrate VWC"
+      },
+      {
+        "label": "Substrate Dry",
+        "severity": "warning",
+        "started": "2026-04-18T23:00:10.965557-04:00",
+        "resolved": "2026-04-19T09:00:04.968629-04:00",
+        "duration_hours": 10.0,
+        "peak_value": 7.8,
+        "peak_time": "2026-04-19T08:00:06.313004-04:00",
+        "reopened_count": 0,
+        "sensor": "Substrate VWC"
+      },
+      {
+        "label": "Substrate Critically Dry",
+        "severity": "critical",
+        "started": "2026-04-19T08:00:06.313004-04:00",
+        "resolved": "2026-04-19T09:00:04.968629-04:00",
+        "duration_hours": 1.0,
+        "peak_value": 7.8,
+        "peak_time": "2026-04-19T08:00:06.313004-04:00",
         "reopened_count": 0,
         "sensor": "Substrate VWC"
       }
