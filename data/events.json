@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-20T01:00:07.771022-04:00",
-      "current_value": 6.51,
+      "last_seen": "2026-04-20T02:00:07.911582-04:00",
+      "current_value": 6.48,
       "peak_value": 3.9,
       "peak_time": "2026-04-14T07:00:18.658603-04:00",
-      "hours_active": 157.00012953472225,
-      "consecutive_hours": 110,
+      "hours_active": 158.00016857916668,
+      "consecutive_hours": 111,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-17T02:00:08.186304-04:00",
-          "value": 10.82
-        },
         {
           "time": "2026-04-17T03:00:05.638461-04:00",
           "value": 10.82
@@ -309,6 +305,10 @@
         {
           "time": "2026-04-20T01:00:07.767545-04:00",
           "value": 6.51
+        },
+        {
+          "time": "2026-04-20T02:00:07.908259-04:00",
+          "value": 6.48
         }
       ],
       "duration_hours": 44.99924074361111
@@ -325,12 +325,12 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-20T01:00:07.771022-04:00",
-      "current_value": 6.51,
-      "peak_value": 6.49,
-      "peak_time": "2026-04-19T11:00:07.484536-04:00",
-      "hours_active": 57.99963940805556,
-      "consecutive_hours": 59,
+      "last_seen": "2026-04-20T02:00:07.911582-04:00",
+      "current_value": 6.48,
+      "peak_value": 6.48,
+      "peak_time": "2026-04-20T02:00:07.908259-04:00",
+      "hours_active": 58.99967845250001,
+      "consecutive_hours": 60,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -570,6 +570,10 @@
         {
           "time": "2026-04-20T01:00:07.767545-04:00",
           "value": 6.51
+        },
+        {
+          "time": "2026-04-20T02:00:07.908259-04:00",
+          "value": 6.48
         }
       ]
     },
@@ -585,12 +589,12 @@
       "threshold": 65,
       "status": "active",
       "started": "2026-04-19T19:00:06.827958-04:00",
-      "last_seen": "2026-04-20T01:00:07.771022-04:00",
-      "current_value": 61.9,
+      "last_seen": "2026-04-20T02:00:07.911582-04:00",
+      "current_value": 61.37,
       "peak_value": 57.33,
       "peak_time": "2026-04-19T20:00:21.156018-04:00",
-      "hours_active": 6.000261971666666,
-      "consecutive_hours": 7,
+      "hours_active": 7.000301016111111,
+      "consecutive_hours": 8,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -622,6 +626,10 @@
         {
           "time": "2026-04-20T01:00:07.767545-04:00",
           "value": 61.9
+        },
+        {
+          "time": "2026-04-20T02:00:07.908259-04:00",
+          "value": 61.37
         }
       ]
     },
@@ -637,12 +645,12 @@
       "threshold": 0.8,
       "status": "active",
       "started": "2026-04-17T20:05:03.556710-04:00",
-      "last_seen": "2026-04-20T01:00:07.771022-04:00",
-      "current_value": 0.7,
+      "last_seen": "2026-04-20T02:00:07.911582-04:00",
+      "current_value": 0.67,
       "peak_value": 0.3,
       "peak_time": "2026-04-18T21:00:08.451954-04:00",
-      "hours_active": 52.917837312222225,
-      "consecutive_hours": 6,
+      "hours_active": 53.91787635638889,
+      "consecutive_hours": 7,
       "escalated": true,
       "reopened_count": 4,
       "growth_stage": "Unknown",
@@ -838,6 +846,10 @@
         {
           "time": "2026-04-20T01:00:07.767545-04:00",
           "value": 0.7
+        },
+        {
+          "time": "2026-04-20T02:00:07.908259-04:00",
+          "value": 0.67
         }
       ],
       "duration_hours": 46.91757536083334
