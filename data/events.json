@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-20T16:00:07.722455-04:00",
+      "last_seen": "2026-04-20T17:13:51.315409-04:00",
       "current_value": 5.16,
       "peak_value": 3.9,
       "peak_time": "2026-04-14T07:00:18.658603-04:00",
-      "hours_active": 172.0001160413889,
-      "consecutive_hours": 125,
+      "hours_active": 173.22889186416666,
+      "consecutive_hours": 126,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-17T17:00:06.830964-04:00",
-          "value": 6.57
-        },
         {
           "time": "2026-04-17T18:11:36.514341-04:00",
           "value": 6.57
@@ -308,6 +304,10 @@
         },
         {
           "time": "2026-04-20T16:00:07.719269-04:00",
+          "value": 5.16
+        },
+        {
+          "time": "2026-04-20T17:13:51.311223-04:00",
           "value": 5.16
         }
       ],
@@ -325,20 +325,16 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-20T16:00:07.722455-04:00",
+      "last_seen": "2026-04-20T17:13:51.315409-04:00",
       "current_value": 5.16,
       "peak_value": 5.16,
       "peak_time": "2026-04-20T12:00:10.927271-04:00",
-      "hours_active": 72.99962591500001,
-      "consecutive_hours": 74,
+      "hours_active": 74.22840173805557,
+      "consecutive_hours": 75,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-17T17:00:06.830964-04:00",
-          "value": 6.57
-        },
         {
           "time": "2026-04-17T18:11:36.514341-04:00",
           "value": 6.57
@@ -621,6 +617,10 @@
         },
         {
           "time": "2026-04-20T16:00:07.719269-04:00",
+          "value": 5.16
+        },
+        {
+          "time": "2026-04-20T17:13:51.311223-04:00",
           "value": 5.16
         }
       ]
