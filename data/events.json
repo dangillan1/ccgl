@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-21T03:00:11.308088-04:00",
-      "current_value": 5.14,
+      "last_seen": "2026-04-21T04:00:08.000316-04:00",
+      "current_value": 5.11,
       "peak_value": 3.9,
       "peak_time": "2026-04-14T07:00:18.658603-04:00",
-      "hours_active": 183.00111205055555,
-      "consecutive_hours": 136,
+      "hours_active": 184.00019322527777,
+      "consecutive_hours": 137,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-18T04:06:58.473617-04:00",
-          "value": 6.56
-        },
         {
           "time": "2026-04-18T05:07:03.012790-04:00",
           "value": 6.55
@@ -309,6 +305,10 @@
         {
           "time": "2026-04-21T03:00:11.304896-04:00",
           "value": 5.14
+        },
+        {
+          "time": "2026-04-21T04:00:07.997110-04:00",
+          "value": 5.11
         }
       ],
       "duration_hours": 44.99924074361111
@@ -325,20 +325,16 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-21T03:00:11.308088-04:00",
-      "current_value": 5.14,
-      "peak_value": 5.14,
-      "peak_time": "2026-04-20T23:00:07.952794-04:00",
-      "hours_active": 84.00062192416668,
-      "consecutive_hours": 85,
+      "last_seen": "2026-04-21T04:00:08.000316-04:00",
+      "current_value": 5.11,
+      "peak_value": 5.11,
+      "peak_time": "2026-04-21T04:00:07.997110-04:00",
+      "hours_active": 84.99970310027777,
+      "consecutive_hours": 86,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-18T04:06:58.473617-04:00",
-          "value": 6.56
-        },
         {
           "time": "2026-04-18T05:07:03.012790-04:00",
           "value": 6.55
@@ -622,6 +618,10 @@
         {
           "time": "2026-04-21T03:00:11.304896-04:00",
           "value": 5.14
+        },
+        {
+          "time": "2026-04-21T04:00:07.997110-04:00",
+          "value": 5.11
         }
       ]
     },
@@ -637,12 +637,12 @@
       "threshold": 65,
       "status": "active",
       "started": "2026-04-20T23:00:07.952794-04:00",
-      "last_seen": "2026-04-21T03:00:11.308088-04:00",
-      "current_value": 63.8,
-      "peak_value": 63.8,
-      "peak_time": "2026-04-21T03:00:11.304896-04:00",
-      "hours_active": 4.000932033611111,
-      "consecutive_hours": 5,
+      "last_seen": "2026-04-21T04:00:08.000316-04:00",
+      "current_value": 63.6,
+      "peak_value": 63.6,
+      "peak_time": "2026-04-21T04:00:07.997110-04:00",
+      "hours_active": 5.000013209444445,
+      "consecutive_hours": 6,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -666,6 +666,38 @@
         {
           "time": "2026-04-21T03:00:11.304896-04:00",
           "value": 63.8
+        },
+        {
+          "time": "2026-04-21T04:00:07.997110-04:00",
+          "value": 63.6
+        }
+      ]
+    },
+    {
+      "key": "Mom::substrate_dry",
+      "room": "Mom",
+      "rule_id": "substrate_dry",
+      "sensor": "Substrate VWC",
+      "label": "Substrate Dry",
+      "description": "VWC below 15% \u2014 irrigation may be insufficient",
+      "severity": "warning",
+      "condition": "below",
+      "threshold": 15,
+      "status": "active",
+      "started": "2026-04-21T04:00:07.997110-04:00",
+      "last_seen": "2026-04-21T04:00:08.000316-04:00",
+      "current_value": 13.9,
+      "peak_value": 13.9,
+      "peak_time": "2026-04-21T04:00:07.997110-04:00",
+      "hours_active": 8.958333333333334e-07,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-21T04:00:07.997110-04:00",
+          "value": 13.9
         }
       ]
     }
