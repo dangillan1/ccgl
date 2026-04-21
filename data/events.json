@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-20T22:09:44.269709-04:00",
-      "current_value": 5.15,
+      "last_seen": "2026-04-20T23:00:07.956508-04:00",
+      "current_value": 5.14,
       "peak_value": 3.9,
       "peak_time": "2026-04-14T07:00:18.658603-04:00",
-      "hours_active": 178.16026806777776,
-      "consecutive_hours": 131,
+      "hours_active": 179.0001810583333,
+      "consecutive_hours": 132,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-17T23:00:19.969596-04:00",
-          "value": 6.6
-        },
         {
           "time": "2026-04-18T00:05:10.419691-04:00",
           "value": 6.58
@@ -309,6 +305,10 @@
         {
           "time": "2026-04-20T22:00:10.015618-04:00",
           "value": 5.19
+        },
+        {
+          "time": "2026-04-20T23:00:07.952794-04:00",
+          "value": 5.14
         }
       ],
       "duration_hours": 44.99924074361111
@@ -325,20 +325,16 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-20T22:09:44.269709-04:00",
-      "current_value": 5.15,
-      "peak_value": 5.15,
-      "peak_time": "2026-04-20T19:06:08.307843-04:00",
-      "hours_active": 79.1597779438889,
-      "consecutive_hours": 80,
+      "last_seen": "2026-04-20T23:00:07.956508-04:00",
+      "current_value": 5.14,
+      "peak_value": 5.14,
+      "peak_time": "2026-04-20T23:00:07.952794-04:00",
+      "hours_active": 79.99969093333333,
+      "consecutive_hours": 81,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-17T23:00:19.969596-04:00",
-          "value": 6.6
-        },
         {
           "time": "2026-04-18T00:05:10.419691-04:00",
           "value": 6.58
@@ -622,6 +618,38 @@
         {
           "time": "2026-04-20T22:00:10.015618-04:00",
           "value": 5.19
+        },
+        {
+          "time": "2026-04-20T23:00:07.952794-04:00",
+          "value": 5.14
+        }
+      ]
+    },
+    {
+      "key": "Flower 2::low_temp",
+      "room": "Flower 2",
+      "rule_id": "low_temp",
+      "sensor": "Ambient Temperature",
+      "label": "Low Temperature",
+      "description": "Temperature below optimal \u2014 slowed metabolism",
+      "severity": "warning",
+      "condition": "below",
+      "threshold": 65,
+      "status": "active",
+      "started": "2026-04-20T23:00:07.952794-04:00",
+      "last_seen": "2026-04-20T23:00:07.956508-04:00",
+      "current_value": 64.8,
+      "peak_value": 64.8,
+      "peak_time": "2026-04-20T23:00:07.952794-04:00",
+      "hours_active": 1.0427777777777778e-06,
+      "consecutive_hours": 1,
+      "escalated": false,
+      "reopened_count": 0,
+      "growth_stage": "Unknown",
+      "hourly_values": [
+        {
+          "time": "2026-04-20T23:00:07.952794-04:00",
+          "value": 64.8
         }
       ]
     }
