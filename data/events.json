@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-21T02:00:07.889882-04:00",
+      "last_seen": "2026-04-21T03:00:11.308088-04:00",
       "current_value": 5.14,
       "peak_value": 3.9,
       "peak_time": "2026-04-14T07:00:18.658603-04:00",
-      "hours_active": 182.00016254916667,
-      "consecutive_hours": 135,
+      "hours_active": 183.00111205055555,
+      "consecutive_hours": 136,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-18T03:08:24.141503-04:00",
-          "value": 6.54
-        },
         {
           "time": "2026-04-18T04:06:58.473617-04:00",
           "value": 6.56
@@ -308,6 +304,10 @@
         },
         {
           "time": "2026-04-21T02:00:07.886636-04:00",
+          "value": 5.14
+        },
+        {
+          "time": "2026-04-21T03:00:11.304896-04:00",
           "value": 5.14
         }
       ],
@@ -325,20 +325,16 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-21T02:00:07.889882-04:00",
+      "last_seen": "2026-04-21T03:00:11.308088-04:00",
       "current_value": 5.14,
       "peak_value": 5.14,
       "peak_time": "2026-04-20T23:00:07.952794-04:00",
-      "hours_active": 82.99967242277778,
-      "consecutive_hours": 84,
+      "hours_active": 84.00062192416668,
+      "consecutive_hours": 85,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-18T03:08:24.141503-04:00",
-          "value": 6.54
-        },
         {
           "time": "2026-04-18T04:06:58.473617-04:00",
           "value": 6.56
@@ -622,6 +618,10 @@
         {
           "time": "2026-04-21T02:00:07.886636-04:00",
           "value": 5.14
+        },
+        {
+          "time": "2026-04-21T03:00:11.304896-04:00",
+          "value": 5.14
         }
       ]
     },
@@ -637,12 +637,12 @@
       "threshold": 65,
       "status": "active",
       "started": "2026-04-20T23:00:07.952794-04:00",
-      "last_seen": "2026-04-21T02:00:07.889882-04:00",
-      "current_value": 64.13,
-      "peak_value": 64.13,
-      "peak_time": "2026-04-21T02:00:07.886636-04:00",
-      "hours_active": 2.9999825319444446,
-      "consecutive_hours": 4,
+      "last_seen": "2026-04-21T03:00:11.308088-04:00",
+      "current_value": 63.8,
+      "peak_value": 63.8,
+      "peak_time": "2026-04-21T03:00:11.304896-04:00",
+      "hours_active": 4.000932033611111,
+      "consecutive_hours": 5,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -662,65 +662,15 @@
         {
           "time": "2026-04-21T02:00:07.886636-04:00",
           "value": 64.13
+        },
+        {
+          "time": "2026-04-21T03:00:11.304896-04:00",
+          "value": 63.8
         }
       ]
     }
   ],
   "resolved": [
-    {
-      "key": "Flower 2::high_humidity",
-      "room": "Flower 2",
-      "rule_id": "high_humidity",
-      "sensor": "Ambient Humidity",
-      "label": "High Humidity",
-      "description": "Elevated humidity increases botrytis risk in flower",
-      "severity": "warning",
-      "condition": "above",
-      "threshold": 70,
-      "status": "resolved",
-      "started": "2026-04-18T18:00:07.520825-04:00",
-      "last_seen": "2026-04-19T01:00:07.375098-04:00",
-      "current_value": 72.23,
-      "peak_value": 83.83,
-      "peak_time": "2026-04-18T21:00:08.451954-04:00",
-      "hours_active": 6.999959522777778,
-      "consecutive_hours": 6,
-      "escalated": true,
-      "reopened_count": 1,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-18T18:00:07.520825-04:00",
-          "value": 72.63
-        },
-        {
-          "time": "2026-04-18T20:00:08.065703-04:00",
-          "value": 70.47
-        },
-        {
-          "time": "2026-04-18T21:00:08.451954-04:00",
-          "value": 83.83
-        },
-        {
-          "time": "2026-04-18T22:00:09.467097-04:00",
-          "value": 76.8
-        },
-        {
-          "time": "2026-04-18T23:00:10.965557-04:00",
-          "value": 74.53
-        },
-        {
-          "time": "2026-04-19T00:00:02.735157-04:00",
-          "value": 73.3
-        },
-        {
-          "time": "2026-04-19T01:00:07.372120-04:00",
-          "value": 72.23
-        }
-      ],
-      "duration_hours": 8.0001208975,
-      "resolved_at": "2026-04-19T02:00:07.955993-04:00"
-    },
     {
       "key": "Mom::substrate_dry",
       "room": "Mom",
