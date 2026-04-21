@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-20T20:07:32.341809-04:00",
-      "current_value": 5.16,
+      "last_seen": "2026-04-20T21:00:08.792085-04:00",
+      "current_value": 5.18,
       "peak_value": 3.9,
       "peak_time": "2026-04-14T07:00:18.658603-04:00",
-      "hours_active": 176.12362141916668,
-      "consecutive_hours": 129,
+      "hours_active": 177.00041316166664,
+      "consecutive_hours": 130,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-17T21:00:05.113547-04:00",
-          "value": 6.61
-        },
         {
           "time": "2026-04-17T22:00:49.214391-04:00",
           "value": 6.59
@@ -309,6 +305,10 @@
         {
           "time": "2026-04-20T20:07:32.338226-04:00",
           "value": 5.16
+        },
+        {
+          "time": "2026-04-20T21:00:08.788624-04:00",
+          "value": 5.18
         }
       ],
       "duration_hours": 44.99924074361111
@@ -325,20 +325,16 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-20T20:07:32.341809-04:00",
-      "current_value": 5.16,
+      "last_seen": "2026-04-20T21:00:08.792085-04:00",
+      "current_value": 5.18,
       "peak_value": 5.15,
       "peak_time": "2026-04-20T19:06:08.307843-04:00",
-      "hours_active": 77.12313129305555,
-      "consecutive_hours": 78,
+      "hours_active": 77.99992303527779,
+      "consecutive_hours": 79,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-17T21:00:05.113547-04:00",
-          "value": 6.61
-        },
         {
           "time": "2026-04-17T22:00:49.214391-04:00",
           "value": 6.59
@@ -622,6 +618,10 @@
         {
           "time": "2026-04-20T20:07:32.338226-04:00",
           "value": 5.16
+        },
+        {
+          "time": "2026-04-20T21:00:08.788624-04:00",
+          "value": 5.18
         }
       ]
     }
