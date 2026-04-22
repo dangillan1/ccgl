@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-22T17:10:49.185778-04:00",
+      "last_seen": "2026-04-22T18:01:07.937124-04:00",
       "current_value": 0.0,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 221.17830029833334,
-      "consecutive_hours": 174,
+      "hours_active": 222.01684233861113,
+      "consecutive_hours": 175,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-19T18:00:07.170749-04:00",
-          "value": 6.54
-        },
         {
           "time": "2026-04-19T19:00:06.827958-04:00",
           "value": 6.53
@@ -308,6 +304,10 @@
         },
         {
           "time": "2026-04-22T17:10:49.182742-04:00",
+          "value": 0.0
+        },
+        {
+          "time": "2026-04-22T18:01:07.934142-04:00",
           "value": 0.0
         }
       ],
@@ -325,20 +325,16 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-22T17:10:49.185778-04:00",
+      "last_seen": "2026-04-22T18:01:07.937124-04:00",
       "current_value": 0.0,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 122.17781017194444,
-      "consecutive_hours": 123,
+      "hours_active": 123.01635221222222,
+      "consecutive_hours": 124,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-19T18:00:07.170749-04:00",
-          "value": 6.54
-        },
         {
           "time": "2026-04-19T19:00:06.827958-04:00",
           "value": 6.53
@@ -621,6 +617,10 @@
         },
         {
           "time": "2026-04-22T17:10:49.182742-04:00",
+          "value": 0.0
+        },
+        {
+          "time": "2026-04-22T18:01:07.934142-04:00",
           "value": 0.0
         }
       ]
