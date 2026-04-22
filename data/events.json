@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-22T14:00:08.506297-04:00",
+      "last_seen": "2026-04-22T15:00:00.751180-04:00",
       "current_value": 0.0,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 218.00033377527777,
-      "consecutive_hours": 171,
+      "hours_active": 218.9981795761111,
+      "consecutive_hours": 172,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-19T15:00:06.051472-04:00",
-          "value": 6.56
-        },
         {
           "time": "2026-04-19T16:00:02.520551-04:00",
           "value": 6.54
@@ -308,6 +304,10 @@
         },
         {
           "time": "2026-04-22T14:00:08.503285-04:00",
+          "value": 0.0
+        },
+        {
+          "time": "2026-04-22T15:00:00.748128-04:00",
           "value": 0.0
         }
       ],
@@ -325,20 +325,16 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-22T14:00:08.506297-04:00",
+      "last_seen": "2026-04-22T15:00:00.751180-04:00",
       "current_value": 0.0,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 118.9998436488889,
-      "consecutive_hours": 120,
+      "hours_active": 119.99768944972222,
+      "consecutive_hours": 121,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-19T15:00:06.051472-04:00",
-          "value": 6.56
-        },
         {
           "time": "2026-04-19T16:00:02.520551-04:00",
           "value": 6.54
@@ -621,6 +617,10 @@
         },
         {
           "time": "2026-04-22T14:00:08.503285-04:00",
+          "value": 0.0
+        },
+        {
+          "time": "2026-04-22T15:00:00.748128-04:00",
           "value": 0.0
         }
       ]
