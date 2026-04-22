@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-22T11:00:09.747431-04:00",
-      "current_value": 6.67,
+      "last_seen": "2026-04-22T12:00:11.017005-04:00",
+      "current_value": 0.0,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 215.00067853472223,
-      "consecutive_hours": 168,
+      "hours_active": 216.00103119444444,
+      "consecutive_hours": 169,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-19T12:00:07.756899-04:00",
-          "value": 6.54
-        },
         {
           "time": "2026-04-19T13:00:06.103675-04:00",
           "value": 6.52
@@ -309,6 +305,10 @@
         {
           "time": "2026-04-22T11:00:09.744284-04:00",
           "value": 6.67
+        },
+        {
+          "time": "2026-04-22T12:00:11.013677-04:00",
+          "value": 0.0
         }
       ],
       "duration_hours": 44.99924074361111
@@ -325,20 +325,16 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-22T11:00:09.747431-04:00",
-      "current_value": 6.67,
+      "last_seen": "2026-04-22T12:00:11.017005-04:00",
+      "current_value": 0.0,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 116.00018840833333,
-      "consecutive_hours": 117,
+      "hours_active": 117.00054106833333,
+      "consecutive_hours": 118,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-19T12:00:07.756899-04:00",
-          "value": 6.54
-        },
         {
           "time": "2026-04-19T13:00:06.103675-04:00",
           "value": 6.52
@@ -622,45 +618,15 @@
         {
           "time": "2026-04-22T11:00:09.744284-04:00",
           "value": 6.67
+        },
+        {
+          "time": "2026-04-22T12:00:11.013677-04:00",
+          "value": 0.0
         }
       ]
     }
   ],
   "resolved": [
-    {
-      "key": "Flower 1::high_temp",
-      "room": "Flower 1",
-      "rule_id": "high_temp",
-      "sensor": "Ambient Temperature",
-      "label": "High Temperature",
-      "description": "Temperature elevated \u2014 heat stress risk",
-      "severity": "warning",
-      "condition": "above",
-      "threshold": 85,
-      "status": "resolved",
-      "started": "2026-04-20T10:00:07.480425-04:00",
-      "last_seen": "2026-04-20T11:00:07.493235-04:00",
-      "current_value": 86.5,
-      "peak_value": 88.17,
-      "peak_time": "2026-04-20T10:00:07.480425-04:00",
-      "hours_active": 1.0000035680555557,
-      "consecutive_hours": 2,
-      "escalated": false,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-20T10:00:07.480425-04:00",
-          "value": 88.17
-        },
-        {
-          "time": "2026-04-20T11:00:07.489598-04:00",
-          "value": 86.5
-        }
-      ],
-      "resolved_at": "2026-04-20T12:00:10.927271-04:00",
-      "duration_hours": 2.0009574719444445
-    },
     {
       "key": "Flower 2::low_temp",
       "room": "Flower 2",
