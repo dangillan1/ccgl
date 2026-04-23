@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-23T10:08:51.493065-04:00",
+      "last_seen": "2026-04-23T11:07:20.227835-04:00",
       "current_value": 0.0,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 238.1456078777778,
-      "consecutive_hours": 191,
+      "hours_active": 239.12025642611113,
+      "consecutive_hours": 192,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-20T11:00:07.489598-04:00",
-          "value": 6.5
-        },
         {
           "time": "2026-04-20T12:00:10.927271-04:00",
           "value": 5.16
@@ -308,6 +304,10 @@
         },
         {
           "time": "2026-04-23T10:08:51.489770-04:00",
+          "value": 0.0
+        },
+        {
+          "time": "2026-04-23T11:07:20.224011-04:00",
           "value": 0.0
         }
       ],
@@ -325,20 +325,16 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-23T10:08:51.493065-04:00",
+      "last_seen": "2026-04-23T11:07:20.227835-04:00",
       "current_value": 0.0,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 139.14511775138888,
-      "consecutive_hours": 140,
+      "hours_active": 140.1197663,
+      "consecutive_hours": 141,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-20T11:00:07.489598-04:00",
-          "value": 6.5
-        },
         {
           "time": "2026-04-20T12:00:10.927271-04:00",
           "value": 5.16
@@ -621,6 +617,10 @@
         },
         {
           "time": "2026-04-23T10:08:51.489770-04:00",
+          "value": 0.0
+        },
+        {
+          "time": "2026-04-23T11:07:20.224011-04:00",
           "value": 0.0
         }
       ]
