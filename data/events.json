@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-23T11:07:20.227835-04:00",
+      "last_seen": "2026-04-23T12:10:40.112240-04:00",
       "current_value": 0.0,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 239.12025642611113,
-      "consecutive_hours": 192,
+      "hours_active": 240.17577987111113,
+      "consecutive_hours": 193,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-20T12:00:10.927271-04:00",
-          "value": 5.16
-        },
         {
           "time": "2026-04-20T13:00:06.444511-04:00",
           "value": 5.18
@@ -308,6 +304,10 @@
         },
         {
           "time": "2026-04-23T11:07:20.224011-04:00",
+          "value": 0.0
+        },
+        {
+          "time": "2026-04-23T12:10:40.108796-04:00",
           "value": 0.0
         }
       ],
@@ -325,20 +325,16 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-23T11:07:20.227835-04:00",
+      "last_seen": "2026-04-23T12:10:40.112240-04:00",
       "current_value": 0.0,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 140.1197663,
-      "consecutive_hours": 141,
+      "hours_active": 141.175289745,
+      "consecutive_hours": 142,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-20T12:00:10.927271-04:00",
-          "value": 5.16
-        },
         {
           "time": "2026-04-20T13:00:06.444511-04:00",
           "value": 5.18
@@ -622,41 +618,15 @@
         {
           "time": "2026-04-23T11:07:20.224011-04:00",
           "value": 0.0
+        },
+        {
+          "time": "2026-04-23T12:10:40.108796-04:00",
+          "value": 0.0
         }
       ]
     }
   ],
   "resolved": [
-    {
-      "key": "Flower 2::high_vpd",
-      "room": "Flower 2",
-      "rule_id": "high_vpd",
-      "sensor": "Vapor Pressure Deficit",
-      "label": "High VPD",
-      "description": "VPD elevated \u2014 potential plant stress",
-      "severity": "warning",
-      "condition": "above",
-      "threshold": 1.6,
-      "status": "resolved",
-      "started": "2026-04-21T11:00:17.306912-04:00",
-      "last_seen": "2026-04-21T11:00:17.310371-04:00",
-      "current_value": 1.8,
-      "peak_value": 1.8,
-      "peak_time": "2026-04-21T11:00:17.306912-04:00",
-      "hours_active": 9.655555555555555e-07,
-      "consecutive_hours": 1,
-      "escalated": false,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-21T11:00:17.306912-04:00",
-          "value": 1.8
-        }
-      ],
-      "resolved_at": "2026-04-21T12:00:11.752403-04:00",
-      "duration_hours": 0.9984571058333334
-    },
     {
       "key": "Flower 1::high_humidity",
       "room": "Flower 1",
