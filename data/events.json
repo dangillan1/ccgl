@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-23T09:00:03.609452-04:00",
+      "last_seen": "2026-04-23T10:08:51.493065-04:00",
       "current_value": 0.0,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 236.99897354083333,
-      "consecutive_hours": 190,
+      "hours_active": 238.1456078777778,
+      "consecutive_hours": 191,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-20T10:00:07.480425-04:00",
-          "value": 6.51
-        },
         {
           "time": "2026-04-20T11:00:07.489598-04:00",
           "value": 6.5
@@ -308,6 +304,10 @@
         },
         {
           "time": "2026-04-23T09:00:03.606164-04:00",
+          "value": 0.0
+        },
+        {
+          "time": "2026-04-23T10:08:51.489770-04:00",
           "value": 0.0
         }
       ],
@@ -325,20 +325,16 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-23T09:00:03.609452-04:00",
+      "last_seen": "2026-04-23T10:08:51.493065-04:00",
       "current_value": 0.0,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 137.99848341444445,
-      "consecutive_hours": 139,
+      "hours_active": 139.14511775138888,
+      "consecutive_hours": 140,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-20T10:00:07.480425-04:00",
-          "value": 6.51
-        },
         {
           "time": "2026-04-20T11:00:07.489598-04:00",
           "value": 6.5
@@ -622,57 +618,15 @@
         {
           "time": "2026-04-23T09:00:03.606164-04:00",
           "value": 0.0
+        },
+        {
+          "time": "2026-04-23T10:08:51.489770-04:00",
+          "value": 0.0
         }
       ]
     }
   ],
   "resolved": [
-    {
-      "key": "Mom::substrate_dry",
-      "room": "Mom",
-      "rule_id": "substrate_dry",
-      "sensor": "Substrate VWC",
-      "label": "Substrate Dry",
-      "description": "VWC below 15% \u2014 irrigation may be insufficient",
-      "severity": "warning",
-      "condition": "below",
-      "threshold": 15,
-      "status": "resolved",
-      "started": "2026-04-21T04:00:07.997110-04:00",
-      "last_seen": "2026-04-21T08:00:37.585998-04:00",
-      "current_value": 9.3,
-      "peak_value": 9.3,
-      "peak_time": "2026-04-21T08:00:37.582438-04:00",
-      "hours_active": 4.0082191425,
-      "consecutive_hours": 5,
-      "escalated": true,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-21T04:00:07.997110-04:00",
-          "value": 13.9
-        },
-        {
-          "time": "2026-04-21T05:00:07.826803-04:00",
-          "value": 12.68
-        },
-        {
-          "time": "2026-04-21T06:00:05.178832-04:00",
-          "value": 11.6
-        },
-        {
-          "time": "2026-04-21T07:00:12.644364-04:00",
-          "value": 10.2
-        },
-        {
-          "time": "2026-04-21T08:00:37.582438-04:00",
-          "value": 9.3
-        }
-      ],
-      "resolved_at": "2026-04-21T09:00:07.846251-04:00",
-      "duration_hours": 4.999958111666667
-    },
     {
       "key": "Flower 2::high_vpd",
       "room": "Flower 2",
