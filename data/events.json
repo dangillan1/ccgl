@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-25T15:00:16.718473-04:00",
+      "last_seen": "2026-04-25T16:00:09.117322-04:00",
       "current_value": 0.0,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 291.00261493805556,
-      "consecutive_hours": 244,
+      "hours_active": 292.0005035072222,
+      "consecutive_hours": 245,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-22T16:13:28.488081-04:00",
-          "value": 0.0
-        },
         {
           "time": "2026-04-22T17:10:49.182742-04:00",
           "value": 0.0
@@ -308,6 +304,10 @@
         },
         {
           "time": "2026-04-25T15:00:16.714796-04:00",
+          "value": 0.0
+        },
+        {
+          "time": "2026-04-25T16:00:09.113876-04:00",
           "value": 0.0
         }
       ],
@@ -325,20 +325,16 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-25T15:00:16.718473-04:00",
+      "last_seen": "2026-04-25T16:00:09.117322-04:00",
       "current_value": 0.0,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 192.00212481138888,
-      "consecutive_hours": 193,
+      "hours_active": 193.00001338055554,
+      "consecutive_hours": 194,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-22T16:13:28.488081-04:00",
-          "value": 0.0
-        },
         {
           "time": "2026-04-22T17:10:49.182742-04:00",
           "value": 0.0
@@ -622,6 +618,10 @@
         {
           "time": "2026-04-25T15:00:16.714796-04:00",
           "value": 0.0
+        },
+        {
+          "time": "2026-04-25T16:00:09.113876-04:00",
+          "value": 0.0
         }
       ]
     },
@@ -637,12 +637,12 @@
       "threshold": 70,
       "status": "active",
       "started": "2026-04-25T15:00:16.714796-04:00",
-      "last_seen": "2026-04-25T15:00:16.718473-04:00",
-      "current_value": 70.33,
-      "peak_value": 70.33,
-      "peak_time": "2026-04-25T15:00:16.714796-04:00",
-      "hours_active": 1.0241666666666667e-06,
-      "consecutive_hours": 1,
+      "last_seen": "2026-04-25T16:00:09.117322-04:00",
+      "current_value": 70.73,
+      "peak_value": 70.73,
+      "peak_time": "2026-04-25T16:00:09.113876-04:00",
+      "hours_active": 0.9978895933333334,
+      "consecutive_hours": 2,
       "escalated": false,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -650,41 +650,15 @@
         {
           "time": "2026-04-25T15:00:16.714796-04:00",
           "value": 70.33
+        },
+        {
+          "time": "2026-04-25T16:00:09.113876-04:00",
+          "value": 70.73
         }
       ]
     }
   ],
   "resolved": [
-    {
-      "key": "Flower 1::high_humidity",
-      "room": "Flower 1",
-      "rule_id": "high_humidity",
-      "sensor": "Ambient Humidity",
-      "label": "High Humidity",
-      "description": "Elevated humidity increases botrytis risk in flower",
-      "severity": "warning",
-      "condition": "above",
-      "threshold": 70,
-      "status": "resolved",
-      "started": "2026-04-23T15:00:06.851284-04:00",
-      "last_seen": "2026-04-23T15:00:06.855043-04:00",
-      "current_value": 70.23,
-      "peak_value": 70.23,
-      "peak_time": "2026-04-23T15:00:06.851284-04:00",
-      "hours_active": 1.0475e-06,
-      "consecutive_hours": 1,
-      "escalated": false,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-23T15:00:06.851284-04:00",
-          "value": 70.23
-        }
-      ],
-      "resolved_at": "2026-04-23T16:00:07.361693-04:00",
-      "duration_hours": 1.0001417966666666
-    },
     {
       "key": "Flower 2::high_humidity",
       "room": "Flower 2",
