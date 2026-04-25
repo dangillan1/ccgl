@@ -12,20 +12,16 @@
       "threshold": 15,
       "status": "active",
       "started": "2026-04-13T12:00:07.304717-04:00",
-      "last_seen": "2026-04-24T22:07:13.821148-04:00",
+      "last_seen": "2026-04-24T23:12:33.781341-04:00",
       "current_value": 5.16,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 274.1184767963889,
-      "consecutive_hours": 227,
+      "hours_active": 275.2073546258333,
+      "consecutive_hours": 228,
       "escalated": true,
       "reopened_count": 2,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-21T23:00:09.119439-04:00",
-          "value": 0.0
-        },
         {
           "time": "2026-04-22T00:00:08.212632-04:00",
           "value": 0.0
@@ -308,6 +304,10 @@
         },
         {
           "time": "2026-04-24T22:07:13.817495-04:00",
+          "value": 5.16
+        },
+        {
+          "time": "2026-04-24T23:12:33.777967-04:00",
           "value": 5.16
         }
       ],
@@ -325,20 +325,16 @@
       "threshold": 8,
       "status": "active",
       "started": "2026-04-17T15:00:09.069180-04:00",
-      "last_seen": "2026-04-24T22:07:13.821148-04:00",
+      "last_seen": "2026-04-24T23:12:33.781341-04:00",
       "current_value": 5.16,
       "peak_value": 0.0,
       "peak_time": "2026-04-21T13:00:08.613923-04:00",
-      "hours_active": 175.11798666944446,
-      "consecutive_hours": 176,
+      "hours_active": 176.20686449916667,
+      "consecutive_hours": 177,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
       "hourly_values": [
-        {
-          "time": "2026-04-21T23:00:09.119439-04:00",
-          "value": 0.0
-        },
         {
           "time": "2026-04-22T00:00:08.212632-04:00",
           "value": 0.0
@@ -622,6 +618,10 @@
         {
           "time": "2026-04-24T22:07:13.817495-04:00",
           "value": 5.16
+        },
+        {
+          "time": "2026-04-24T23:12:33.777967-04:00",
+          "value": 5.16
         }
       ]
     },
@@ -637,12 +637,12 @@
       "threshold": 70,
       "status": "active",
       "started": "2026-04-23T15:00:06.851284-04:00",
-      "last_seen": "2026-04-24T22:07:13.821148-04:00",
+      "last_seen": "2026-04-24T23:12:33.781341-04:00",
       "current_value": 90.3,
       "peak_value": 90.3,
       "peak_time": "2026-04-23T17:00:05.667499-04:00",
-      "hours_active": 31.118602743055554,
-      "consecutive_hours": 32,
+      "hours_active": 32.20748057388889,
+      "consecutive_hours": 33,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -774,6 +774,10 @@
         {
           "time": "2026-04-24T22:07:13.817495-04:00",
           "value": 90.3
+        },
+        {
+          "time": "2026-04-24T23:12:33.777967-04:00",
+          "value": 90.3
         }
       ]
     },
@@ -789,12 +793,12 @@
       "threshold": 0.8,
       "status": "active",
       "started": "2026-04-23T15:00:06.851284-04:00",
-      "last_seen": "2026-04-24T22:07:13.821148-04:00",
+      "last_seen": "2026-04-24T23:12:33.781341-04:00",
       "current_value": 0.3,
       "peak_value": 0.3,
       "peak_time": "2026-04-23T17:00:05.667499-04:00",
-      "hours_active": 31.118602748055554,
-      "consecutive_hours": 32,
+      "hours_active": 32.20748057777778,
+      "consecutive_hours": 33,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -926,6 +930,10 @@
         {
           "time": "2026-04-24T22:07:13.817495-04:00",
           "value": 0.3
+        },
+        {
+          "time": "2026-04-24T23:12:33.777967-04:00",
+          "value": 0.3
         }
       ]
     },
@@ -941,12 +949,12 @@
       "threshold": 85,
       "status": "active",
       "started": "2026-04-23T17:00:05.667499-04:00",
-      "last_seen": "2026-04-24T22:07:13.821148-04:00",
+      "last_seen": "2026-04-24T23:12:33.781341-04:00",
       "current_value": 90.3,
       "peak_value": 90.3,
       "peak_time": "2026-04-23T17:00:05.667499-04:00",
-      "hours_active": 29.118931574444446,
-      "consecutive_hours": 30,
+      "hours_active": 30.207809405,
+      "consecutive_hours": 31,
       "escalated": true,
       "reopened_count": 0,
       "growth_stage": "Unknown",
@@ -1070,41 +1078,15 @@
         {
           "time": "2026-04-24T22:07:13.817495-04:00",
           "value": 90.3
+        },
+        {
+          "time": "2026-04-24T23:12:33.777967-04:00",
+          "value": 90.3
         }
       ]
     }
   ],
   "resolved": [
-    {
-      "key": "Flower 2::high_humidity",
-      "room": "Flower 2",
-      "rule_id": "high_humidity",
-      "sensor": "Ambient Humidity",
-      "label": "High Humidity",
-      "description": "Elevated humidity increases botrytis risk in flower",
-      "severity": "warning",
-      "condition": "above",
-      "threshold": 70,
-      "status": "resolved",
-      "started": "2026-04-22T21:16:23.806463-04:00",
-      "last_seen": "2026-04-22T21:16:23.809929-04:00",
-      "current_value": 73.57,
-      "peak_value": 73.57,
-      "peak_time": "2026-04-22T21:16:23.806463-04:00",
-      "hours_active": 9.658333333333333e-07,
-      "consecutive_hours": 1,
-      "escalated": false,
-      "reopened_count": 0,
-      "growth_stage": "Unknown",
-      "hourly_values": [
-        {
-          "time": "2026-04-22T21:16:23.806463-04:00",
-          "value": 73.57
-        }
-      ],
-      "resolved_at": "2026-04-22T22:16:46.121285-04:00",
-      "duration_hours": 1.0061985816666668
-    },
     {
       "key": "Flower 2::low_temp",
       "room": "Flower 2",
